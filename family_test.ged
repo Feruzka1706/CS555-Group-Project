@@ -1,0 +1,70 @@
+0 NOTE Prepared by Group 1 team members: Joshua Silva, Benjamin Wolgang, Varsha Anumala, Anuj Patel, and Feruza Jonzokova - fictional family created for the CS 555 GEDCOM project
+1 SOUR Family Echo
+2 WWW http://www.familyecho.com
+1 DATE 10 MAR 1948
+2 NAME Test /Person/
+0 I1 INDI
+1 NAME Michael /Johnson/
+1 SEX M
+1 BIRT
+2 DATE 10 MAR 1948
+1 FAMS F1
+0 I2 INDI
+1 NAME Helen /Davis/
+1 SEX F
+1 BIRT
+2 DATE 22 AUG 1950
+1 FAMS F1
+0 I3 INDI
+1 NAME Daniel /Johnson/
+1 SEX M
+1 BIRT
+2 DATE 17 SEP 1972
+1 FAMC F1
+1 FAMS F2
+1 FAMS F3
+0 I4 INDI
+1 NAME Rachel /Lee/
+1 SEX F
+1 BIRT
+2 DATE 12 JAN 1974
+1 DEAT
+2 DATE 14 FEB 2010
+1 FAMS F2
+0 I5 INDI
+1 NAME Emma /Johnson/
+1 SEX F
+1 BIRT
+2 DATE 3 OCT 1998
+1 FAMC F2
+0 I6 INDI
+1 NAME Laura /Brown/
+1 SEX F
+1 BIRT
+2 DATE 30 NOV 1975
+1 FAMS F3
+0 I7 INDI
+1 NAME Noah /Johnson/
+1 SEX M
+1 BIRT
+2 DATE 25 APR 2014
+1 FAMC F3
+0 F1 FAM
+1 MARR
+2 DATE 5 JUN 1970
+1 HUSB I1
+1 WIFE I2
+1 CHIL I3
+0 F2 FAM
+1 MARR
+2 DATE 20 MAY 1996
+1 HUSB I3
+1 WIFE I4
+1 CHIL I5
+0 F3 FAM
+1 MARR
+2 DATE 9 JUL 2012
+1 HUSB I3
+1 WIFE I6
+1 CHIL I7
+0 TRLR
