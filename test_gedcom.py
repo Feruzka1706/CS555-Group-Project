@@ -1,3 +1,12 @@
+"""
+Prepared by Group 1 team members:
+- Joshua Silva
+- Benjamin Wolgang
+- Varsha Anumala
+- Anuj Patel
+- Feruza Jonzokova
+"""
+
 from prettytable import PrettyTable
 from datetime import date
 
@@ -119,7 +128,7 @@ def main():
             currLineNum += 1
          
     with open('output.txt', 'w') as outputFile:
-        #put husband and wife names in families table
+        # put husband and wife names in families table
         for i in range(len(familiesTable._rows)):
             row = familiesTable._rows[i]
             husbandId = row[3]
@@ -127,8 +136,20 @@ def main():
             familiesTable._rows[i][4] = individuals[husbandId]
             familiesTable._rows[i][6] = individuals[wifeId]
 
+        # make long columns wrap so the table is not too wide
+        individualsTable.max_width["Name"] = 18
+        individualsTable.max_width["Child"] = 12
+        individualsTable.max_width["Spouse"] = 15
+
+        familiesTable.max_width["Husband Name"] = 18
+        familiesTable.max_width["Wife Name"] = 18
+        familiesTable.max_width["Children"] = 12
+
+        # write to output.txt
         outputFile.write(individualsTable.get_string())
+        outputFile.write("\n\n")
         outputFile.write(familiesTable.get_string())
+
 
 ############ HELPER FUNCTIONS ##########
 
