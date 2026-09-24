@@ -9,6 +9,7 @@ Prepared by Group 1 team members:
 
 from prettytable import PrettyTable
 from datetime import date
+import sys
 
 # used to validate tags in main()
 tags = {
@@ -21,22 +22,32 @@ tags = {
 # these will be printed in the output.txt file.
 errors = []
 
+
 def main():
-    #instantiate tables
+    # instantiate tables
     individualsTable = PrettyTable(["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"])
     familiesTable = PrettyTable(["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"])
     individualsTable.title = "Individuals"
     familiesTable.title = "Families"
-    individuals = dict() #store all individuals
-    families = dict() #store all families
 
-    with open('family_test.ged', mode='r', encoding='utf-8-sig') as inputFile:
-        currLineNum = 0 #this is used to make sure dates correspond to the line above it
+    individuals = dict()  # store all individuals
+    families = dict()     # store all families
 
-        #instantiate values
+    # Allows the program to run against any GEDCOM input file.
+    # Example: python3 test_gedcom.py family_test.ged
+    # If no file is provided, it defaults to family_test.ged.
+    if len(sys.argv) > 1:
+        gedcomFileName = sys.argv[1]
+    else:
+        gedcomFileName = "family_test.ged"
+
+    with open(gedcomFileName, mode='r', encoding='utf-8-sig') as inputFile:
+        currLineNum = 0  # this is used to make sure dates correspond to the line above it
+
+        # instantiate values
         alive = "Y"
-        name = gender = birthday = age = death = child = spouse = "NA" #individual row
-        married = divorced = husbandId = husbandName = wifeId = wifeName = children = "NA" #family row
+        name = gender = birthday = age = death = child = spouse = "NA"  # individual row
+        married = divorced = husbandId = husbandName = wifeId = wifeName = children = "NA"  # family row
 
         indRecord = False
         famRecord = False
@@ -47,29 +58,35 @@ def main():
 
         for line in inputFile:
             line = line.strip()
+
             if line == '':
                 continue
+
             level, tag, *arguments = line.split()
 
             if len(arguments) > 0 and level == '0' and (arguments[0] == 'INDI' or arguments[0] == 'FAM'):
                 tempTag = tag
                 tag = arguments[0]
                 arguments[0] = tempTag
-            #if this is not a valid tag, ignore this tag
+
+            # if this is not a valid tag, ignore this tag
             if level not in tags or tag not in tags[level]:
                 currLineNum += 1
                 continue
 
-            #at the beginning OR end of an individual record
+            # at the beginning OR end of an individual record
             if tag == 'INDI' and not indRecord:
                 indRecord = True
                 currentInd = arguments[0]
                 individuals[currentInd] = dict()
+
             elif level == '0' and indRecord:
                 age = getAge(birthday, death)
-                #add row to individuals table
+
+                # add row to individuals table
                 individualsTable.add_row([currentInd, name, gender, birthday, age, alive, death, str(child), str(spouse)])
-                #update individuals dict
+
+                # update individuals dict
                 individuals[currentInd].update({
                     "age": age,
                     "gender": gender,
@@ -79,17 +96,19 @@ def main():
                     "child": child,
                     "spouse": spouse
                 })
+
                 alive = "Y"
                 name = gender = birthday = age = death = child = spouse = "NA"
+
                 if tag != "INDI":
-                    #new record is not an individual record
+                    # new record is not an individual record
                     indRecord = False
                 else:
-                    #new individual record found
+                    # new individual record found
                     currentInd = arguments[0]
                     individuals[currentInd] = dict()
 
-            #at the beginning OR end of a family record
+            # at the beginning OR end of a family record
             if tag == 'FAM' and not famRecord:
                 famRecord = True
                 currentFam = arguments[0]
@@ -98,99 +117,148 @@ def main():
                     "WIFE": "",
                     "CHIL": set(),
                     "MARR": "",
-                    "DIV": ""
+                    "DIV": "",
+                    "MARR_LINE": "",
+                    "DIV_LINE": ""
                 }
+
             elif level == '0' and famRecord:
                 familiesTable.add_row([currentFam, married, divorced, husbandId, husbandName, wifeId, wifeName, str(children)])
 
-                #check for errors AFTER looking through whole fam record
-                if (compareDates(married, date.today().isoformat()) > 0):
-                    errors.append(f"Error US01: Marriage date of {husbandName} ({husbandId}) and {wifeName} ({wifeId}) from Family {currentFam} occurs after current date")
-                if (divorced != 'NA' and compareDates(divorced, date.today().isoformat()) > 0):
-                    errors.append(f"Error US01: Divorce date of {husbandName} ({husbandId}) and {wifeName} ({wifeId}) from Family {currentFam} occurs after current date")
+                # check for errors AFTER looking through whole fam record
+                if married != "NA" and compareDates(married, date.today().isoformat()) > 0:
+                    errors.append(
+                        f"ERROR: FAMILY: US01: {families[currentFam].get('MARR_LINE', '')}: {currentFam}: "
+                        f"Marriage date {married} occurs after current date"
+                    )
+
+                if divorced != 'NA' and compareDates(divorced, date.today().isoformat()) > 0:
+                    errors.append(
+                        f"ERROR: FAMILY: US01: {families[currentFam].get('DIV_LINE', '')}: {currentFam}: "
+                        f"Divorce date {divorced} occurs after current date"
+                    )
 
                 married = divorced = husbandId = husbandName = wifeId = wifeName = children = "NA"
+
                 if tag != "FAM":
-                    #next record is not a family record
+                    # next record is not a family record
                     famRecord = False
                 else:
-                    #new family record found
+                    # new family record found
                     currentFam = arguments[0]
                     families[currentFam] = {
                         "HUSB": "",
                         "WIFE": "",
                         "CHIL": set(),
                         "MARR": "",
-                        "DIV": ""
+                        "DIV": "",
+                        "MARR_LINE": "",
+                        "DIV_LINE": ""
                     }
 
-            #tag cases
+            # tag cases
             match tag:
                 case "NAME":
                     name = " ".join(arguments)
-                    individuals[currentInd]["name"] = name #name can be accessed in the below checks
+                    individuals[currentInd]["name"] = name  # name can be accessed in the below checks
+
                 case "SEX":
                     gender = arguments[0]
+
                 case "FAMC":
-                    if (child == 'NA'):
+                    if child == 'NA':
                         child = {arguments[0]}
                     else:
                         child.add(arguments[0])
+
                 case "FAMS":
-                    if (spouse == 'NA'):
+                    if spouse == 'NA':
                         spouse = {arguments[0]}
                     else:
                         spouse.add(arguments[0])
+
                 case "BIRT" | "DEAT" | "MARR" | "DIV":
                     dateToUpdate = tag
                     prevDateLine = currLineNum
+
                 case "DATE":
                     gedcomDate = getDate(arguments)
                     today = date.today().isoformat()
+
                     match dateToUpdate:
                         case "BIRT":
-                            if (compareDates(gedcomDate, today) > 0):
-                                errors.append(f"Error US01: Birth date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
-                            if (prevDateLine == currLineNum - 1):
+                            if compareDates(gedcomDate, today) > 0:
+                                errors.append(
+                                    f"ERROR: INDIVIDUAL: US01: {currLineNum + 1}: {currentInd}: "
+                                    f"Birthday {gedcomDate} occurs in the future"
+                                )
+
+                            if prevDateLine == currLineNum - 1:
                                 birthday = gedcomDate
+
                         case "DEAT":
-                            if (compareDates(gedcomDate, today) > 0):
-                                errors.append(f"Error US01: Death date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
-                            if (prevDateLine == currLineNum - 1):
+                            if compareDates(gedcomDate, today) > 0:
+                                errors.append(
+                                    f"ERROR: INDIVIDUAL: US01: {currLineNum + 1}: {currentInd}: "
+                                    f"Death {gedcomDate} occurs in the future"
+                                )
+
+                            if prevDateLine == currLineNum - 1:
                                 death = gedcomDate
                                 alive = "N"
+
                         case "MARR":
                             families[currentFam]["MARR"] = gedcomDate
-                            if (prevDateLine == currLineNum - 1):
+                            families[currentFam]["MARR_LINE"] = currLineNum + 1
+
+                            if prevDateLine == currLineNum - 1:
                                 married = gedcomDate
+
                         case "DIV":
                             families[currentFam]["DIV"] = gedcomDate
-                            if (prevDateLine == currLineNum - 1):
+                            families[currentFam]["DIV_LINE"] = currLineNum + 1
+
+                            if prevDateLine == currLineNum - 1:
                                 divorced = gedcomDate
+
                 case "HUSB":
                     husbandId = arguments[0]
                     husbandName = individuals[husbandId]["name"]
                     families[currentFam]["HUSB"] = husbandId
+
                 case "WIFE":
                     wifeId = arguments[0]
                     wifeName = individuals[wifeId]["name"]
                     families[currentFam]["WIFE"] = wifeId
+
                 case "CHIL":
                     children = set()
+
                     for child in arguments:
                         children.add(child)
                         families[currentFam]["CHIL"].add(child)
 
             currLineNum += 1
-         
+
+    # FJ stories:
+    # US05: Marriage before death
+    # US10: Marriage after 14
+    validate_us05_marriage_before_death(families, individuals)
+    validate_us10_marriage_after_14(families, individuals)
+
     with open('output.txt', 'w') as outputFile:
-        # put husband and wife names in families table (just in case individuals were defined after families in the gedcom file)
+        # put husband and wife names in families table
+        # just in case individuals were defined after families in the gedcom file
         for i in range(len(familiesTable._rows)):
             row = familiesTable._rows[i]
             husbandId = row[3]
             wifeId = row[5]
-            familiesTable._rows[i][4] = individuals[husbandId]["name"]
-            familiesTable._rows[i][6] = individuals[wifeId]["name"]
+
+            if husbandId in individuals:
+                familiesTable._rows[i][4] = individuals[husbandId].get("name", "NA")
+
+            if wifeId in individuals:
+                familiesTable._rows[i][6] = individuals[wifeId].get("name", "NA")
 
         # make long columns wrap so the table is not too wide
         individualsTable.max_width["Name"] = 18
@@ -206,6 +274,7 @@ def main():
         outputFile.write("\n\n")
         outputFile.write(familiesTable.get_string())
         outputFile.write("\n\n")
+
         for error in errors:
             outputFile.write(f"{error}\n")
 
@@ -227,37 +296,149 @@ def getDate(arguments):
         "NOV": "11",
         "DEC": "12"
     }
+
     day, month, year = arguments
-    if (len(day) == 1):
+
+    if len(day) == 1:
         day = f"0{day}"
+
     monthNum = months[month]
+
     return f"{year}-{monthNum}-{day}"
+
 
 def compareDates(dateStrA, dateStrB):
     yearA, monthA, dayA = dateStrA.split('-')
     yearB, monthB, dayB = dateStrB.split('-')
+
     dateA = date(int(yearA), int(monthA), int(dayA))
     dateB = date(int(yearB), int(monthB), int(dayB))
+
     diff = dateA - dateB
     days = diff.days
-    if (days < 0):
+
+    if days < 0:
         return -1
-    elif (days > 0):
+    elif days > 0:
         return 1
     else:
         return 0
 
+
 def getAge(birth, curr):
     birthYear, birthMonth, birthDay = birth.split('-')
     birthDate = date(int(birthYear), int(birthMonth), int(birthDay))
+
     currDate = date.today()
+
     if curr != "NA":
         deathYear, deathMonth, deathDay = curr.split('-')
         currDate = date(int(deathYear), int(deathMonth), int(deathDay))
+
     diff = currDate - birthDate
     days = diff.days
     age = int(days / 365)
+
     return age
+
+
+def getAgeOnDate(birthDateString, compareDateString):
+    birthYear, birthMonth, birthDay = birthDateString.split('-')
+    compareYear, compareMonth, compareDay = compareDateString.split('-')
+
+    birthDate = date(int(birthYear), int(birthMonth), int(birthDay))
+    compareDate = date(int(compareYear), int(compareMonth), int(compareDay))
+
+    age = compareDate.year - birthDate.year
+
+    # If birthday has not happened yet in the marriage year, subtract 1.
+    if (compareDate.month, compareDate.day) < (birthDate.month, birthDate.day):
+        age -= 1
+
+    return age
+
+
+############ FJ USER STORY VALIDATIONS ##########
+
+def validate_us05_marriage_before_death(families, individuals):
+    """
+    US05: Marriage should occur before death of either spouse.
+    """
+    for familyId, family in families.items():
+        married = family.get("MARR", "")
+
+        if married == "" or married == "NA":
+            continue
+
+        marriageLine = family.get("MARR_LINE", "")
+        husbandId = family.get("HUSB", "")
+        wifeId = family.get("WIFE", "")
+
+        husband = individuals.get(husbandId)
+        wife = individuals.get(wifeId)
+
+        if husband is not None:
+            husbandDeath = husband.get("death", "NA")
+
+            if husbandDeath != "NA" and compareDates(married, husbandDeath) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US05: {marriageLine}: {familyId}: "
+                    f"Married {married} after husband's ({husbandId}) death on {husbandDeath}"
+                )
+
+        if wife is not None:
+            wifeDeath = wife.get("death", "NA")
+
+            if wifeDeath != "NA" and compareDates(married, wifeDeath) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US05: {marriageLine}: {familyId}: "
+                    f"Married {married} after wife's ({wifeId}) death on {wifeDeath}"
+                )
+
+
+def validate_us10_marriage_after_14(families, individuals):
+    """
+    US10: Marriage should be at least 14 years after birth of both spouses.
+    """
+    for familyId, family in families.items():
+        married = family.get("MARR", "")
+
+        if married == "" or married == "NA":
+            continue
+
+        marriageLine = family.get("MARR_LINE", "")
+        husbandId = family.get("HUSB", "")
+        wifeId = family.get("WIFE", "")
+
+        husband = individuals.get(husbandId)
+        wife = individuals.get(wifeId)
+
+        if husband is not None:
+            husbandBirth = husband.get("birthday", "NA")
+
+            if husbandBirth != "NA":
+                husbandAgeAtMarriage = getAgeOnDate(husbandBirth, married)
+
+                if husbandAgeAtMarriage < 14:
+                    errors.append(
+                        f"ERROR: FAMILY: US10: {marriageLine}: {familyId}: "
+                        f"Husband's ({husbandId}) age {husbandAgeAtMarriage} is less than 14 "
+                        f"at marriage on {married}"
+                    )
+
+        if wife is not None:
+            wifeBirth = wife.get("birthday", "NA")
+
+            if wifeBirth != "NA":
+                wifeAgeAtMarriage = getAgeOnDate(wifeBirth, married)
+
+                if wifeAgeAtMarriage < 14:
+                    errors.append(
+                        f"ERROR: FAMILY: US10: {marriageLine}: {familyId}: "
+                        f"Wife's ({wifeId}) age {wifeAgeAtMarriage} is less than 14 "
+                        f"at marriage on {married}"
+                    )
+
 
 ################
 
