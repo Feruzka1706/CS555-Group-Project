@@ -358,7 +358,7 @@ def getAgeOnDate(birthDateString, compareDateString):
     return age
 
 
-############ FJ USER STORY VALIDATIONS ##########
+############ USER STORY US05 & US10 VALIDATIONS ##########
 
 def validate_us05_marriage_before_death(families, individuals):
     """
