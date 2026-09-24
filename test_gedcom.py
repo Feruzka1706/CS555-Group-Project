@@ -17,6 +17,10 @@ tags = {
     '2': {'DATE'}
 }
 
+# any errors in the gedcom file will be added to this array.
+# these will be printed in the output.txt file.
+errors = []
+
 def main():
     #instantiate tables
     individualsTable = PrettyTable(["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"])
@@ -59,16 +63,26 @@ def main():
             if tag == 'INDI' and not indRecord:
                 indRecord = True
                 currentInd = arguments[0]
+                individuals[currentInd] = dict()
             elif level == '0' and indRecord:
                 age = getAge(birthday, death)
                 individualsTable.add_row([currentInd, name, gender, birthday, age, alive, death, str(child), str(spouse)])
-                individuals[currentInd] = name
+                individuals[currentInd].update({
+                    "age": age,
+                    "gender": gender,
+                    "birthday": birthday,
+                    "alive": alive,
+                    "death": death,
+                    "child": child,
+                    "spouse": spouse
+                })
                 alive = "Y"
                 name = gender = birthday = age = death = child = spouse = "NA"
                 if tag != "INDI":
                     indRecord = False
                 else:
                     currentInd = arguments[0]
+                    individuals[currentInd] = dict()
 
             #at the beginning OR end of a family record
             if tag == 'FAM' and not famRecord:
@@ -86,6 +100,7 @@ def main():
             match tag:
                 case "NAME":
                     name = " ".join(arguments)
+                    individuals[currentInd]["name"] = name #name can be accessed in the below checks
                 case "SEX":
                     gender = arguments[0]
                 case "FAMC":
@@ -102,20 +117,30 @@ def main():
                     dateToUpdate = tag
                     prevDateLine = currLineNum
                 case "DATE":
+                    gedcomDate = getDate(arguments)
+                    today = date.today().isoformat()
                     match dateToUpdate:
                         case "BIRT":
+                            if (compareDates(gedcomDate, today) > 0):
+                                errors.append(f"Error US01: Birth date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
                             if (prevDateLine == currLineNum - 1):
-                                birthday = getDate(arguments)
+                                birthday = gedcomDate
                         case "DEAT":
+                            if (compareDates(gedcomDate, today) > 0):
+                                errors.append(f"Error US01: Death date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
                             if (prevDateLine == currLineNum - 1):
-                                death = getDate(arguments)
+                                death = gedcomDate
                                 alive = "N"
                         case "MARR":
+                            if (compareDates(gedcomDate, today) > 0):
+                                errors.append(f"Error US01: Marriage date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
                             if (prevDateLine == currLineNum - 1):
-                                married = getDate(arguments)
+                                married = gedcomDate
                         case "DIV":
+                            if (compareDates(gedcomDate, today) > 0):
+                                errors.append(f"Error US01: Divorce date of {individuals[currentInd]['name']} ({currentInd}) occurs after current date")
                             if (prevDateLine == currLineNum - 1):
-                                divorced = getDate(arguments)
+                                divorced = gedcomDate
                 case "HUSB":
                     husbandId = arguments[0]
                 case "WIFE":
@@ -133,8 +158,8 @@ def main():
             row = familiesTable._rows[i]
             husbandId = row[3]
             wifeId = row[5]
-            familiesTable._rows[i][4] = individuals[husbandId]
-            familiesTable._rows[i][6] = individuals[wifeId]
+            familiesTable._rows[i][4] = individuals[husbandId]["name"]
+            familiesTable._rows[i][6] = individuals[wifeId]["name"]
 
         # make long columns wrap so the table is not too wide
         individualsTable.max_width["Name"] = 18
@@ -149,6 +174,9 @@ def main():
         outputFile.write(individualsTable.get_string())
         outputFile.write("\n\n")
         outputFile.write(familiesTable.get_string())
+        outputFile.write("\n\n")
+        for error in errors:
+            outputFile.write(f"{error}\n")
 
 
 ############ HELPER FUNCTIONS ##########
@@ -173,6 +201,20 @@ def getDate(arguments):
         day = f"0{day}"
     monthNum = months[month]
     return f"{year}-{monthNum}-{day}"
+
+def compareDates(dateStrA, dateStrB):
+    yearA, monthA, dayA = dateStrA.split('-')
+    yearB, monthB, dayB = dateStrB.split('-')
+    dateA = date(int(yearA), int(monthA), int(dayA))
+    dateB = date(int(yearB), int(monthB), int(dayB))
+    diff = dateA - dateB
+    days = diff.days
+    if (days < 0):
+        return -1
+    elif (days > 0):
+        return 1
+    else:
+        return 0
 
 def getAge(birth, curr):
     birthYear, birthMonth, birthDay = birth.split('-')
