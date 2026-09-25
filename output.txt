@@ -10,7 +10,7 @@
 |  I5 |   Emma /Johnson/   |   F    | 1998-10-03 |  27 |   Y   |     NA     | {'F2'} |      NA      |
 |  I6 |   Laura /Brown/    |   F    | 1975-11-30 |  50 |   Y   |     NA     |   NA   |    {'F3'}    |
 |  I7 |   Noah /Johnson/   |   M    | 2014-04-25 |  12 |   Y   |     NA     | {'F3'} |      NA      |
-|  I8 | Robert /DeadBefore |   M    | 1980-01-01 |  30 |   N   | 2010-01-01 |   I7   |    {'F4'}    |
+|  I8 | Robert /DeadBefore |   M    | 1980-01-01 |  30 |   N   | 2010-01-01 |   NA   |    {'F4'}    |
 |     |     Marriage/      |        |            |     |       |            |        |              |
 |  I9 |       Susan        |   F    | 1982-01-01 |  44 |   Y   |     NA     |   NA   |    {'F4'}    |
 |     |   /LateMarriage/   |        |            |     |       |            |        |              |
@@ -20,24 +20,37 @@
 |     |   /AliveSpouse/    |        |            |     |       |            |        |              |
 | I13 | Anna /DeadBeforeMa |   F    | 1975-05-01 |  30 |   N   | 2005-05-01 |   NA   |    {'F6'}    |
 |     |      rriage/       |        |            |     |       |            |        |              |
+| I14 | Mark /DeadBeforeDi |   M    | 1960-01-01 |  55 |   N   | 2015-01-01 |   NA   |    {'F7'}    |
+|     |       vorce/       |        |            |     |       |            |        |              |
+| I15 |       Linda        |   F    | 1962-01-01 |  64 |   Y   |     NA     |   NA   |    {'F7'}    |
+|     |   /DivorcedLate/   |        |            |     |       |            |        |              |
+| I16 |       Walter       |   M    | 1800-01-01 | 160 |   N   | 1960-01-01 |   NA   |      NA      |
+|     |  /TooOldAtDeath/   |        |            |     |       |            |        |              |
+| I17 |       Martha       |   F    | 1850-01-01 | 176 |   Y   |     NA     |   NA   |      NA      |
+|     |   /TooOldAlive/    |        |            |     |       |            |        |              |
 +-----+--------------------+--------+------------+-----+-------+------------+--------+--------------+
 
-+--------------------------------------------------------------------------------------------------------+
-|                                                Families                                                |
-+----+------------+----------+------------+--------------------+---------+--------------------+----------+
-| ID |  Married   | Divorced | Husband ID |    Husband Name    | Wife ID |     Wife Name      | Children |
-+----+------------+----------+------------+--------------------+---------+--------------------+----------+
-| F1 | 1970-06-05 |    NA    |     I1     | Michael /Johnson/  |    I2   |   Helen /Davis/    |  {'I3'}  |
-| F2 | 1996-05-20 |    NA    |     I3     |  Daniel /Johnson/  |    I4   |    Rachel /Lee/    |  {'I5'}  |
-| F3 | 2012-07-09 |    NA    |     I3     |  Daniel /Johnson/  |    I6   |   Laura /Brown/    |  {'I7'}  |
-| F4 | 2015-01-01 |    NA    |     I8     | Robert /DeadBefore |    I9   |       Susan        |    NA    |
-|    |            |          |            |     Marriage/      |         |   /LateMarriage/   |          |
-| F5 | 2020-01-01 |    NA    |    I10     |  Young /Husband/   |   I11   |    Young /Wife/    |    NA    |
-| F6 | 2010-05-01 |    NA    |    I12     |       Thomas       |   I13   | Anna /DeadBeforeMa |    NA    |
-|    |            |          |            |   /AliveSpouse/    |         |      rriage/       |          |
-+----+------------+----------+------------+--------------------+---------+--------------------+----------+
++----------------------------------------------------------------------------------------------------------+
+|                                                 Families                                                 |
++----+------------+------------+------------+--------------------+---------+--------------------+----------+
+| ID |  Married   |  Divorced  | Husband ID |    Husband Name    | Wife ID |     Wife Name      | Children |
++----+------------+------------+------------+--------------------+---------+--------------------+----------+
+| F1 | 1970-06-05 |     NA     |     I1     | Michael /Johnson/  |    I2   |   Helen /Davis/    |  {'I3'}  |
+| F2 | 1996-05-20 |     NA     |     I3     |  Daniel /Johnson/  |    I4   |    Rachel /Lee/    |  {'I5'}  |
+| F3 | 2012-07-09 |     NA     |     I3     |  Daniel /Johnson/  |    I6   |   Laura /Brown/    |  {'I7'}  |
+| F4 | 2015-01-01 |     NA     |     I8     | Robert /DeadBefore |    I9   |       Susan        |    NA    |
+|    |            |            |            |     Marriage/      |         |   /LateMarriage/   |          |
+| F5 | 2020-01-01 |     NA     |    I10     |  Young /Husband/   |   I11   |    Young /Wife/    |    NA    |
+| F6 | 2010-05-01 |     NA     |    I12     |       Thomas       |   I13   | Anna /DeadBeforeMa |    NA    |
+|    |            |            |            |   /AliveSpouse/    |         |      rriage/       |          |
+| F7 | 1990-06-01 | 2018-06-01 |    I14     | Mark /DeadBeforeDi |   I15   |       Linda        |    NA    |
+|    |            |            |            |       vorce/       |         |   /DivorcedLate/   |          |
++----+------------+------------+------------+--------------------+---------+--------------------+----------+
 
 ERROR: FAMILY: US05: 99: F4: Married 2015-01-01 after husband's (I8) death on 2010-01-01
 ERROR: FAMILY: US05: 141: F6: Married 2010-05-01 after wife's (I13) death on 2005-05-01
 ERROR: FAMILY: US10: 119: F5: Husband's (I10) age 10 is less than 14 at marriage on 2020-01-01
 ERROR: FAMILY: US10: 119: F5: Wife's (I11) age 9 is less than 14 at marriage on 2020-01-01
+ERROR: FAMILY: US06: 166: F7: Divorced 2018-06-01 after husband's (I14) death on 2015-01-01
+ERROR: INDIVIDUAL: US07: 177: I16: More than 150 years old at death - Birth 1800-01-01: Death 1960-01-01
+ERROR: INDIVIDUAL: US07: 184: I17: More than 150 years old - Birth 1850-01-01
