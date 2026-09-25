@@ -42,8 +42,6 @@ def main():
         gedcomFileName = "family_test.ged"
 
     with open(gedcomFileName, mode='r', encoding='utf-8-sig') as inputFile:
-        currLineNum = 0  # this is used to make sure dates correspond to the line above it
-
         # instantiate values
         alive = "Y"
         name = gender = birthday = age = death = child = spouse = "NA"  # individual row
@@ -56,7 +54,9 @@ def main():
         dateToUpdate = ""
         prevDateLine = -1
 
-        for line in inputFile:
+        # Use enumerate so currLineNum matches the actual GEDCOM file line number,
+        # including blank lines.
+        for currLineNum, line in enumerate(inputFile, start=1):
             line = line.strip()
 
             if line == '':
@@ -71,7 +71,6 @@ def main():
 
             # if this is not a valid tag, ignore this tag
             if level not in tags or tag not in tags[level]:
-                currLineNum += 1
                 continue
 
             # at the beginning OR end of an individual record
@@ -189,7 +188,7 @@ def main():
                         case "BIRT":
                             if compareDates(gedcomDate, today) > 0:
                                 errors.append(
-                                    f"ERROR: INDIVIDUAL: US01: {currLineNum + 1}: {currentInd}: "
+                                    f"ERROR: INDIVIDUAL: US01: {currLineNum}: {currentInd}: "
                                     f"Birthday {gedcomDate} occurs in the future"
                                 )
 
@@ -199,7 +198,7 @@ def main():
                         case "DEAT":
                             if compareDates(gedcomDate, today) > 0:
                                 errors.append(
-                                    f"ERROR: INDIVIDUAL: US01: {currLineNum + 1}: {currentInd}: "
+                                    f"ERROR: INDIVIDUAL: US01: {currLineNum}: {currentInd}: "
                                     f"Death {gedcomDate} occurs in the future"
                                 )
 
@@ -209,14 +208,14 @@ def main():
 
                         case "MARR":
                             families[currentFam]["MARR"] = gedcomDate
-                            families[currentFam]["MARR_LINE"] = currLineNum + 1
+                            families[currentFam]["MARR_LINE"] = currLineNum
 
                             if prevDateLine == currLineNum - 1:
                                 married = gedcomDate
 
                         case "DIV":
                             families[currentFam]["DIV"] = gedcomDate
-                            families[currentFam]["DIV_LINE"] = currLineNum + 1
+                            families[currentFam]["DIV_LINE"] = currLineNum
 
                             if prevDateLine == currLineNum - 1:
                                 divorced = gedcomDate
@@ -238,9 +237,7 @@ def main():
                         children.add(child)
                         families[currentFam]["CHIL"].add(child)
 
-            currLineNum += 1
 
-    # FJ stories:
     # US05: Marriage before death
     # US10: Marriage after 14
     validate_us05_marriage_before_death(families, individuals)
