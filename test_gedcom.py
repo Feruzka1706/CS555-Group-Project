@@ -130,23 +130,11 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                         match dateToUpdate:
                             case "BIRT":
-                                if compareDates(gedcomDate, today) > 0:
-                                    errors.append(
-                                        f"ERROR: INDIVIDUAL: US01: {currLineNum}: {currentInd}: "
-                                        f"Birthday {gedcomDate} occurs in the future"
-                                    )
-
                                 if isEventDate:
                                     individual["birthday"] = gedcomDate
                                     individual["BIRT_LINE"] = currLineNum
 
                             case "DEAT":
-                                if compareDates(gedcomDate, today) > 0:
-                                    errors.append(
-                                        f"ERROR: INDIVIDUAL: US01: {currLineNum}: {currentInd}: "
-                                        f"Death {gedcomDate} occurs in the future"
-                                    )
-
                                 if isEventDate:
                                     individual["death"] = gedcomDate
                                     individual["DEAT_LINE"] = currLineNum
@@ -178,13 +166,6 @@ def parseGedcom(gedcomFileName, individuals, families):
                         if prevDateLine == currLineNum - 1 and dateToUpdate in ("MARR", "DIV"):
                             family[dateToUpdate] = gedcomDate
                             family[f"{dateToUpdate}_LINE"] = currLineNum
-
-                            if compareDates(gedcomDate, today) > 0:
-                                eventName = "Marriage" if dateToUpdate == "MARR" else "Divorce"
-                                errors.append(
-                                    f"ERROR: FAMILY: US01: {currLineNum}: {currentFam}: "
-                                    f"{eventName} date {gedcomDate} occurs after current date"
-                                )
 
     # ages are calculated once every record has been read
     for individual in individuals.values():
@@ -254,6 +235,10 @@ def main():
 
     parseGedcom(gedcomFileName, individuals, families)
 
+    # US01: Dates (birth, marriage, divorce, death) before current date
+    # US02: Birth before marriage
+    validate_us01_dates_before_current_date(families, individuals)
+    validate_us_02_birth_before_marriage(families, individuals)
     # US05: Marriage before death
     # US10: Marriage after 14
     validate_us05_marriage_before_death(families, individuals)
@@ -352,6 +337,91 @@ def getAgeOnDate(birthDateString, compareDateString):
         age -= 1
 
     return age
+
+############ USER STORY US01 & US02 VALIDATIONS ##########
+
+def validate_us01_dates_before_current_date(families, individuals):
+    """
+    US01: Dates (birth, marriage, divorce, death) should not be after the current date
+    """
+    today = date.today().isoformat()
+
+    # Check birthday and death date for every individual
+    for indId, individual in individuals.items():
+        birthday = individual.get("birthday", "NA")
+
+        if birthday != "NA":
+            birthdayLine = individual.get("BIRT_LINE", "NA")
+
+            if birthdayLine != "NA" and compareDates(birthday, today) > 0:
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US01: {birthdayLine}: {indId}: "
+                    f"Birthday {birthday} occurs in the future"
+                )
+        
+        death = individual.get("death", "NA")
+        if death == "NA":
+            continue
+
+        deathLine = individual.get("DEAT_LINE", "NA")
+
+        if deathLine != "NA" and compareDates(death, today) > 0:
+            errors.append(
+                f"ERROR: INDIVIDUAL: US01: {deathLine}: {indId}: "
+                f"Death {death} occurs in the future"
+            )
+
+    # Check marriage and divorce date for every family
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+
+        if married == "NA":
+            continue
+
+        marriageLine = family.get("MARR_LINE", "NA")
+        if marriageLine != "NA" and compareDates(married, today) > 0:
+            errors.append(
+                f"ERROR: FAMILY: US01: {marriageLine}: {familyId}: "
+                f"Marriage date {married} occurs in the future"
+            )
+
+        divorce = family.get("DIV", "NA")
+
+        if divorce == "NA":
+            continue
+
+        divorceLine = family.get("DIV_LINE", "NA")
+        if divorceLine != "NA" and compareDates(divorce, today) > 0:
+            errors.append(
+                f"ERROR: FAMILY: US01: {divorceLine}: {familyId}: "
+                f"Divorce date {divorce} occurs in the future"
+            )
+
+def validate_us_02_birth_before_marriage(families, individuals):
+    """
+    US02: Birth should occur before marriage of an individual
+    """
+    for indId, individual in individuals.items():
+        birthday = individual.get("birthday", "NA")
+        birthdayLine = "NA"
+
+        if birthday != "NA":
+            birthdayLine = individual.get("BIRT_LINE", "NA")
+
+        spouseFamilies = individual.get("spouse", set())
+        if (len(spouseFamilies) == 0):
+            continue
+
+        for familyId in spouseFamilies:
+            family = families.get(familyId, None)
+            if family is None:
+                continue
+            married = family.get("MARR", "NA")
+            if married != "NA" and compareDates(birthday, married) >= 0:
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US02: {birthdayLine}: {indId}: "
+                    f"Birth date {birthday} occurs on or after marriage date {married}"
+                )
 
 
 ############ USER STORY US05 & US10 VALIDATIONS ##########
