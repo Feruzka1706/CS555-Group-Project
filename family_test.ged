@@ -183,4 +183,62 @@
 1 BIRT
 2 DATE 1 JAN 1850
 
+0 NOTE US01: death after today's date
+0 I18 INDI
+1 NAME Bob /BornAndDiedAfterToday/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1998
+1 DEAT
+2 DATE 1 JAN 2075
+1 FAMS F8
+
+0 NOTE I18's wife
+0 I19 INDI
+1 NAME Mariana /Jackson/
+1 SEX F
+1 BIRT
+2 DATE 1 FEB 1999
+1 FAMS F8
+
+0 NOTE US01: Born after current date
+0 I20 INDI
+1 NAME Draco /BornAndDiedAfterToday/
+1 SEX M
+1 BIRT
+2 DATE 10 MAR 2029
+1 FAMC F8
+
+0 NOTE US01: Marriage and divorce after current date
+0 F8 FAM
+1 MARR
+2 DATE 1 JUN 2030
+1 DIV
+2 DATE 1 JUN 2045
+1 HUSB I18
+1 WIFE I19
+1 CHIL I20
+
+0 NOTE US02: Birth after marriage
+0 I21 INDI
+1 NAME Molly /BirthAfterMarriage/
+1 SEX F
+1 BIRT
+2 DATE 2 FEB 2010
+1 FAMS F9
+
+0 NOTE I21's husband
+0 I22 INDI
+1 NAME Bruno /Mars/
+1 SEX M
+1 BIRT
+2 DATE 2 MAR 1990
+1 FAMS F9
+
+0 F9 FAM
+1 MARR
+2 DATE 1 JUN 2009
+1 HUSB I22
+1 WIFE I21
+
 0 TRLR
