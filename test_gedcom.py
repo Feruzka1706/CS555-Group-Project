@@ -238,7 +238,7 @@ def main():
     # US01: Dates (birth, marriage, divorce, death) before current date
     # US02: Birth before marriage
     validate_us01_dates_before_current_date(families, individuals)
-    validate_us_02_birth_before_marriage(families, individuals)
+    validate_us02_birth_before_marriage(families, individuals)
     # US05: Marriage before death
     # US10: Marriage after 14
     validate_us05_marriage_before_death(families, individuals)
@@ -397,7 +397,7 @@ def validate_us01_dates_before_current_date(families, individuals):
                 f"Divorce date {divorce} occurs in the future"
             )
 
-def validate_us_02_birth_before_marriage(families, individuals):
+def validate_us02_birth_before_marriage(families, individuals):
     """
     US02: Birth should occur before marriage of an individual
     """
