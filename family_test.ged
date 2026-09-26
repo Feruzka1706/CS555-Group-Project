@@ -142,4 +142,45 @@
 1 HUSB I12
 1 WIFE I13
 
+0 NOTE US06: divorce after husband's death
+0 I14 INDI
+1 NAME Mark /DeadBeforeDivorce/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1960
+1 DEAT
+2 DATE 1 JAN 2015
+1 FAMS F7
+
+0 I15 INDI
+1 NAME Linda /DivorcedLate/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1962
+1 FAMS F7
+
+0 F7 FAM
+1 MARR
+2 DATE 1 JUN 1990
+1 DIV
+2 DATE 1 JUN 2018
+1 HUSB I14
+1 WIFE I15
+
+0 NOTE US07: dead person older than 150 at death
+0 I16 INDI
+1 NAME Walter /TooOldAtDeath/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1800
+1 DEAT
+2 DATE 1 JAN 1960
+
+0 NOTE US07: living person older than 150
+0 I17 INDI
+1 NAME Martha /TooOldAlive/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1850
+
 0 TRLR
