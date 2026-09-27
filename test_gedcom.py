@@ -125,7 +125,6 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                     case "DATE":
                         gedcomDate = getDate(arguments)
-                        today = date.today().isoformat()
                         isEventDate = prevDateLine == currLineNum - 1
 
                         match dateToUpdate:
@@ -409,8 +408,10 @@ def validate_us02_birth_before_marriage(families, individuals):
         birthday = individual.get("birthday", "NA")
         birthdayLine = "NA"
 
-        if birthday != "NA":
-            birthdayLine = individual.get("BIRT_LINE", "NA")
+        if birthday == "NA":
+            continue
+
+        birthdayLine = individual.get("BIRT_LINE", "NA")
 
         spouseFamilies = individual.get("spouse", set())
         if (len(spouseFamilies) == 0):
