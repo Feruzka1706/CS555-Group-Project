@@ -125,7 +125,6 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                     case "DATE":
                         gedcomDate = getDate(arguments)
-                        today = date.today().isoformat()
                         isEventDate = prevDateLine == currLineNum - 1
 
                         match dateToUpdate:
@@ -247,6 +246,10 @@ def main():
     # US07: Less than 150 years old
     validate_us06_divorce_before_death(families, individuals)
     validate_us07_less_than_150_years_old(individuals)
+    # US08: Birth before marriage of parents
+    # US09: Birth before death of parents
+    validate_us08_birth_before_marriage_of_parents(families, individuals)
+    validate_us09_birth_before_death_of_parents(families, individuals)
 
     individualsTable, familiesTable = buildTables(individuals, families)
 
@@ -405,8 +408,10 @@ def validate_us02_birth_before_marriage(families, individuals):
         birthday = individual.get("birthday", "NA")
         birthdayLine = "NA"
 
-        if birthday != "NA":
-            birthdayLine = individual.get("BIRT_LINE", "NA")
+        if birthday == "NA":
+            continue
+
+        birthdayLine = individual.get("BIRT_LINE", "NA")
 
         spouseFamilies = individual.get("spouse", set())
         if (len(spouseFamilies) == 0):
@@ -569,6 +574,92 @@ def validate_us07_less_than_150_years_old(individuals, today=None):
                 errors.append(
                     f"ERROR: INDIVIDUAL: US07: {individual.get('BIRT_LINE', 'NA')}: {indId}: "
                     f"More than 150 years old - Birth {birthday}"
+                )
+
+
+############ USER STORY US08 & US09 VALIDATIONS ##########
+
+def addMonthsToDate(dateString, months):
+    year, month, day = dateString.split('-')
+    year, month, day = int(year), int(month), int(day)
+
+    monthIndex = month - 1 + months
+    year = year + monthIndex // 12
+    month = monthIndex % 12 + 1
+
+    # if the new month is shorter (e.g. May 31 + 9 months), use its last day
+    while True:
+        try:
+            return date(year, month, day).isoformat()
+        except ValueError:
+            day -= 1
+
+
+def validate_us08_birth_before_marriage_of_parents(families, individuals):
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+        divorced = family.get("DIV", "NA")
+
+        for childId in sorted(family.get("CHIL", set()), key=lambda x: (len(x), x)):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            childBirth = child.get("birthday", "NA")
+
+            if childBirth == "NA":
+                continue
+
+            childBirthLine = child.get("BIRT_LINE", "NA")
+
+            if married != "NA" and compareDates(childBirth, married) < 0:
+                errors.append(
+                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"Child {childId} born {childBirth} before marriage on {married}"
+                )
+
+            if divorced != "NA" and compareDates(childBirth, addMonthsToDate(divorced, 9)) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"Child {childId} born {childBirth} more than 9 months after divorce on {divorced}"
+                )
+
+
+def validate_us09_birth_before_death_of_parents(families, individuals):
+    for familyId, family in families.items():
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+
+        husband = individuals.get(husbandId)
+        wife = individuals.get(wifeId)
+
+        fatherDeath = husband.get("death", "NA") if husband is not None else "NA"
+        motherDeath = wife.get("death", "NA") if wife is not None else "NA"
+
+        for childId in sorted(family.get("CHIL", set()), key=lambda x: (len(x), x)):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            childBirth = child.get("birthday", "NA")
+
+            if childBirth == "NA":
+                continue
+
+            childBirthLine = child.get("BIRT_LINE", "NA")
+
+            if motherDeath != "NA" and compareDates(childBirth, motherDeath) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US09: {childBirthLine}: {familyId}: "
+                    f"Child {childId} born {childBirth} after mother's ({wifeId}) death on {motherDeath}"
+                )
+
+            if fatherDeath != "NA" and compareDates(childBirth, addMonthsToDate(fatherDeath, 9)) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US09: {childBirthLine}: {familyId}: "
+                    f"Child {childId} born {childBirth} more than 9 months after father's ({husbandId}) death on {fatherDeath}"
                 )
 
 
