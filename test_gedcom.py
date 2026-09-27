@@ -159,7 +159,6 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                     case "DATE":
                         gedcomDate = getDate(arguments)
-                        today = date.today().isoformat()
 
                         # only keep the date if it directly follows MARR / DIV
                         if prevDateLine == currLineNum - 1 and dateToUpdate in ("MARR", "DIV"):
@@ -609,7 +608,6 @@ def validate_us03_birth_before_death(individuals):
 
         # Birth must occur before death.
         if compareDates(birthday, death) >= 0:
-            """ print("US03 ERROR FOUND FOR:", indId) """
             errors.append(
                 f"ERROR: INDIVIDUAL: US03: {individual.get('DEAT_LINE', 'NA')}: "
                 f"{indId}: Birth {birthday} occurs on or after death {death}"
