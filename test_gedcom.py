@@ -159,7 +159,6 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                     case "DATE":
                         gedcomDate = getDate(arguments)
-                        today = date.today().isoformat()
 
                         # only keep the date if it directly follows MARR / DIV
                         if prevDateLine == currLineNum - 1 and dateToUpdate in ("MARR", "DIV"):
@@ -238,6 +237,10 @@ def main():
     # US02: Birth before marriage
     validate_us01_dates_before_current_date(families, individuals)
     validate_us02_birth_before_marriage(families, individuals)
+    # US03: Birth before death
+    # US04: Marriage before divorce
+    validate_us03_birth_before_death(individuals)
+    validate_us04_marriage_before_divorce(families)
     # US05: Marriage before death
     # US10: Marriage after 14
     validate_us05_marriage_before_death(families, individuals)
@@ -575,7 +578,40 @@ def validate_us07_less_than_150_years_old(individuals, today=None):
                     f"ERROR: INDIVIDUAL: US07: {individual.get('BIRT_LINE', 'NA')}: {indId}: "
                     f"More than 150 years old - Birth {birthday}"
                 )
+############ USER STORY US03 & US04 VALIDATIONS ##########
+def validate_us04_marriage_before_divorce(families):
+    """ US04: Marriage should occur before divorce of spouses, and divorce can only occur after marriage """
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+        divorced = family.get("DIV", "NA")
 
+        # Skip families that do not have both marriage and divorce dates.
+        if married == "NA" or divorced == "NA":
+            continue
+
+        # Marriage must occur before divorce.
+        if compareDates(married, divorced) >= 0:
+            errors.append(
+                f"ERROR: FAMILY: US04: {family.get('DIV_LINE', 'NA')}: "
+                f"{familyId}: Divorce {divorced} occurs on or before marriage {married}"
+            )
+
+def validate_us03_birth_before_death(individuals):
+    """ US03: Birth should occur before death of an individual """
+    for indId, individual in individuals.items():
+        birthday = individual.get("birthday", "NA")
+        death = individual.get("death", "NA")
+
+        # Skip individuals who do not have both dates.
+        if birthday == "NA" or death == "NA":
+            continue
+
+        # Birth must occur before death.
+        if compareDates(birthday, death) >= 0:
+            errors.append(
+                f"ERROR: INDIVIDUAL: US03: {individual.get('DEAT_LINE', 'NA')}: "
+                f"{indId}: Birth {birthday} occurs on or after death {death}"
+            )
 
 ############ USER STORY US08 & US09 VALIDATIONS ##########
 
