@@ -364,7 +364,7 @@ def validate_us01_dates_before_current_date(families, individuals):
                     f"ERROR: INDIVIDUAL: US01: {birthdayLine}: {indId}: "
                     f"Birthday {birthday} occurs in the future"
                 )
-        
+
         death = individual.get("death", "NA")
         if death == "NA":
             continue
@@ -473,6 +473,9 @@ def validate_us05_marriage_before_death(families, individuals):
 def validate_us10_marriage_after_14(families, individuals):
     """
     US10: Marriage should be at least 14 years after birth of both spouses.
+
+    If a spouse was born on or after the marriage date, that is already handled by US02.
+    US10 skips that spouse to avoid duplicate errors or negative-age messages.
     """
     for familyId, family in families.items():
         married = family.get("MARR", "")
@@ -491,6 +494,9 @@ def validate_us10_marriage_after_14(families, individuals):
             husbandBirth = husband.get("birthday", "NA")
 
             if husbandBirth != "NA":
+                if compareDates(husbandBirth, married) >= 0:
+                    continue
+
                 husbandAgeAtMarriage = getAgeOnDate(husbandBirth, married)
 
                 if husbandAgeAtMarriage < 14:
@@ -504,6 +510,9 @@ def validate_us10_marriage_after_14(families, individuals):
             wifeBirth = wife.get("birthday", "NA")
 
             if wifeBirth != "NA":
+                if compareDates(wifeBirth, married) >= 0:
+                    continue
+
                 wifeAgeAtMarriage = getAgeOnDate(wifeBirth, married)
 
                 if wifeAgeAtMarriage < 14:
@@ -697,6 +706,85 @@ def validate_us09_birth_before_death_of_parents(families, individuals):
                     f"ERROR: FAMILY: US09: {childBirthLine}: {familyId}: "
                     f"Child {childId} born {childBirth} more than 9 months after father's ({husbandId}) death on {fatherDeath}"
                 )
+
+
+############ USER STORY US29 & US30 LIST FUNCTIONS ##########
+
+def sortIds(ids):
+    """
+    Sort GEDCOM IDs in readable order.
+    Example: I2 comes before I10.
+    """
+    return sorted(ids, key=lambda value: (len(value), value))
+
+
+def validate_us29_list_deceased(individuals):
+    """
+    US29: List all deceased individuals in a GEDCOM file.
+
+    This is a list story, not an error story.
+    It returns the IDs of all individuals with a death date.
+    """
+    deceasedIndividuals = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if individual.get("death", "NA") != "NA":
+            deceasedIndividuals.append(indId)
+
+    return deceasedIndividuals
+
+
+def validate_us30_list_living_married(families, individuals):
+    """
+    US30: List all living married people in a GEDCOM file.
+
+    This is a list story, not an error story.
+    It returns the IDs of all living people who are currently married.
+    Divorced people and widowed people are not included.
+    """
+    livingMarriedPeople = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if individual.get("death", "NA") != "NA":
+            continue
+
+        spouseFamilies = individual.get("spouse", set())
+
+        for familyId in sortIds(spouseFamilies):
+            family = families.get(familyId)
+
+            if family is None:
+                continue
+
+            married = family.get("MARR", "NA")
+            divorced = family.get("DIV", "NA")
+
+            if married == "NA" or divorced != "NA":
+                continue
+
+            otherSpouseId = "NA"
+
+            if family.get("HUSB", "NA") == indId:
+                otherSpouseId = family.get("WIFE", "NA")
+            elif family.get("WIFE", "NA") == indId:
+                otherSpouseId = family.get("HUSB", "NA")
+
+            otherSpouse = individuals.get(otherSpouseId)
+
+            if otherSpouse is None:
+                continue
+
+            if otherSpouse.get("death", "NA") != "NA":
+                continue
+
+            livingMarriedPeople.append(indId)
+            break
+
+    return livingMarriedPeople
 
 
 ################
