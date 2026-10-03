@@ -78,16 +78,54 @@
 |     |            |            |            |     terToday/      |         |                    |              |
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
-| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I27',    |
+| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
+|     |            |            |            |                    |         |                    |    'I27',    |
 |     |            |            |            |                    |         |                    |    'I28',    |
-|     |            |            |            |                    |         |                    |    'I26',    |
-|     |            |            |            |                    |         |                    |    'I25'}    |
+|     |            |            |            |                    |         |                    |    'I26'}    |
 | F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
 |     |            |            |            |                    |         |                    |    'I31',    |
 |     |            |            |            |                    |         |                    |    'I33'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
+
++---------------------------------------+
+|       US29: Deceased Individuals      |
++-----+--------------------+------------+
+|  ID |        Name        | Death Date |
++-----+--------------------+------------+
+|  I4 |    Rachel /Lee/    | 2010-02-14 |
+|  I8 | Robert /DeadBefore | 2010-01-01 |
+|     |     Marriage/      |            |
+| I13 | Anna /DeadBeforeMa | 2005-05-01 |
+|     |      rriage/       |            |
+| I14 | Mark /DeadBeforeDi | 2015-01-01 |
+|     |       vorce/       |            |
+| I16 |       Walter       | 1960-01-01 |
+|     |  /TooOldAtDeath/   |            |
+| I18 | Bob /BornAndDiedAf | 2075-01-01 |
+|     |     terToday/      |            |
+| I29 |   Thomas /Lewis/   | 2000-01-01 |
+| I30 |   Sarah /Moore/    | 2005-01-01 |
+| I34 |       Regina       | 1977-01-01 |
+|     | /BirthBeforeDeath/ |            |
++-----+--------------------+------------+
+
++--------------------------------------+
+|   US30: Living Married Individuals   |
++-----+--------------------+-----------+
+|  ID |        Name        | Family ID |
++-----+--------------------+-----------+
+|  I1 | Michael /Johnson/  |     F1    |
+|  I2 |   Helen /Davis/    |     F1    |
+|  I3 |  Daniel /Johnson/  |     F3    |
+|  I6 |   Laura /Brown/    |     F3    |
+| I10 |  Young /Husband/   |     F5    |
+| I11 |    Young /Wife/    |     F5    |
+| I21 | Molly /BirthAfterM |     F9    |
+|     |      arriage/      |           |
+| I22 |    Bruno /Mars/    |     F9    |
++-----+--------------------+-----------+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
 ERROR: INDIVIDUAL: US01: 209: I20: Birthday 2029-03-10 occurs in the future

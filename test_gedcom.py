@@ -34,8 +34,8 @@ def newIndividual():
         "death": "NA",
         "BIRT_LINE": "NA",  # line number of the birth DATE
         "DEAT_LINE": "NA",  # line number of the death DATE
-        "child": set(),   # FAMC family IDs
-        "spouse": set()   # FAMS family IDs
+        "child": set(),      # FAMC family IDs
+        "spouse": set()      # FAMS family IDs
     }
 
 
@@ -219,6 +219,47 @@ def buildTables(individuals, families):
     return individualsTable, familiesTable
 
 
+def build_report_table(title, columns, rows):
+    """
+    Generic report table builder for list/report user stories.
+    Example list/report stories: US29, US30, US31, US32, US33, etc.
+    """
+    reportTable = PrettyTable(columns)
+    reportTable.title = title
+
+    for row in rows:
+        reportTable.add_row(row)
+
+    for column in columns:
+        reportTable.max_width[column] = 18
+
+    return reportTable
+
+
+def buildReportTables(individuals, families):
+    """
+    Build all list/report story tables.
+    These are not error-validation stories.
+    """
+    reportTables = []
+
+    reportTables.append(build_us29_deceased_table(individuals))
+    reportTables.append(build_us30_living_married_table(families, individuals))
+
+    # Future list/report story examples:
+    # reportTables.append(build_us31_living_single_table(individuals))
+    # reportTables.append(build_us32_multiple_births_table(families, individuals))
+    # reportTables.append(build_us33_orphans_table(families, individuals))
+    # reportTables.append(build_us34_large_age_differences_table(families, individuals))
+    # reportTables.append(build_us35_recent_births_table(individuals))
+    # reportTables.append(build_us36_recent_deaths_table(individuals))
+    # reportTables.append(build_us37_recent_survivors_table(families, individuals))
+    # reportTables.append(build_us38_upcoming_birthdays_table(individuals))
+    # reportTables.append(build_us39_upcoming_anniversaries_table(families, individuals))
+
+    return reportTables
+
+
 def main():
     individuals = dict()  # store all individuals
     families = dict()     # store all families
@@ -237,30 +278,39 @@ def main():
     # US02: Birth before marriage
     validate_us01_dates_before_current_date(families, individuals)
     validate_us02_birth_before_marriage(families, individuals)
+
     # US03: Birth before death
     # US04: Marriage before divorce
     validate_us03_birth_before_death(individuals)
     validate_us04_marriage_before_divorce(families)
+
     # US05: Marriage before death
     # US10: Marriage after 14
     validate_us05_marriage_before_death(families, individuals)
     validate_us10_marriage_after_14(families, individuals)
+
     # US06: Divorce before death
     # US07: Less than 150 years old
     validate_us06_divorce_before_death(families, individuals)
     validate_us07_less_than_150_years_old(individuals)
+
     # US08: Birth before marriage of parents
     # US09: Birth before death of parents
     validate_us08_birth_before_marriage_of_parents(families, individuals)
     validate_us09_birth_before_death_of_parents(families, individuals)
 
     individualsTable, familiesTable = buildTables(individuals, families)
+    reportTables = buildReportTables(individuals, families)
 
     with open('output.txt', 'w') as outputFile:
         outputFile.write(individualsTable.get_string())
         outputFile.write("\n\n")
         outputFile.write(familiesTable.get_string())
         outputFile.write("\n\n")
+
+        for reportTable in reportTables:
+            outputFile.write(reportTable.get_string())
+            outputFile.write("\n\n")
 
         for error in errors:
             outputFile.write(f"{error}\n")
@@ -344,11 +394,12 @@ def getAgeOnDate(birthDateString, compareDateString):
 
     return age
 
+
 ############ USER STORY US01 & US02 VALIDATIONS ##########
 
 def validate_us01_dates_before_current_date(families, individuals):
     """
-    US01: Dates (birth, marriage, divorce, death) should not be after the current date
+    US01: Dates (birth, marriage, divorce, death) should not be after the current date.
     """
     today = date.today().isoformat()
 
@@ -381,50 +432,50 @@ def validate_us01_dates_before_current_date(families, individuals):
     for familyId, family in families.items():
         married = family.get("MARR", "NA")
 
-        if married == "NA":
-            continue
+        if married != "NA":
+            marriageLine = family.get("MARR_LINE", "NA")
 
-        marriageLine = family.get("MARR_LINE", "NA")
-        if marriageLine != "NA" and compareDates(married, today) > 0:
-            errors.append(
-                f"ERROR: FAMILY: US01: {marriageLine}: {familyId}: "
-                f"Marriage date {married} occurs in the future"
-            )
+            if marriageLine != "NA" and compareDates(married, today) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US01: {marriageLine}: {familyId}: "
+                    f"Marriage date {married} occurs in the future"
+                )
 
         divorce = family.get("DIV", "NA")
 
-        if divorce == "NA":
-            continue
+        if divorce != "NA":
+            divorceLine = family.get("DIV_LINE", "NA")
 
-        divorceLine = family.get("DIV_LINE", "NA")
-        if divorceLine != "NA" and compareDates(divorce, today) > 0:
-            errors.append(
-                f"ERROR: FAMILY: US01: {divorceLine}: {familyId}: "
-                f"Divorce date {divorce} occurs in the future"
-            )
+            if divorceLine != "NA" and compareDates(divorce, today) > 0:
+                errors.append(
+                    f"ERROR: FAMILY: US01: {divorceLine}: {familyId}: "
+                    f"Divorce date {divorce} occurs in the future"
+                )
+
 
 def validate_us02_birth_before_marriage(families, individuals):
     """
-    US02: Birth should occur before marriage of an individual
+    US02: Birth should occur before marriage of an individual.
     """
     for indId, individual in individuals.items():
         birthday = individual.get("birthday", "NA")
-        birthdayLine = "NA"
 
         if birthday == "NA":
             continue
 
         birthdayLine = individual.get("BIRT_LINE", "NA")
-
         spouseFamilies = individual.get("spouse", set())
-        if (len(spouseFamilies) == 0):
+
+        if len(spouseFamilies) == 0:
             continue
 
         for familyId in spouseFamilies:
             family = families.get(familyId, None)
             if family is None:
                 continue
+
             married = family.get("MARR", "NA")
+
             if married != "NA" and compareDates(birthday, married) >= 0:
                 errors.append(
                     f"ERROR: INDIVIDUAL: US02: {birthdayLine}: {indId}: "
@@ -587,9 +638,12 @@ def validate_us07_less_than_150_years_old(individuals, today=None):
                     f"ERROR: INDIVIDUAL: US07: {individual.get('BIRT_LINE', 'NA')}: {indId}: "
                     f"More than 150 years old - Birth {birthday}"
                 )
+
+
 ############ USER STORY US03 & US04 VALIDATIONS ##########
+
 def validate_us04_marriage_before_divorce(families):
-    """ US04: Marriage should occur before divorce of spouses, and divorce can only occur after marriage """
+    """US04: Marriage should occur before divorce of spouses, and divorce can only occur after marriage."""
     for familyId, family in families.items():
         married = family.get("MARR", "NA")
         divorced = family.get("DIV", "NA")
@@ -605,8 +659,9 @@ def validate_us04_marriage_before_divorce(families):
                 f"{familyId}: Divorce {divorced} occurs on or before marriage {married}"
             )
 
+
 def validate_us03_birth_before_death(individuals):
-    """ US03: Birth should occur before death of an individual """
+    """US03: Birth should occur before death of an individual."""
     for indId, individual in individuals.items():
         birthday = individual.get("birthday", "NA")
         death = individual.get("death", "NA")
@@ -621,6 +676,7 @@ def validate_us03_birth_before_death(individuals):
                 f"ERROR: INDIVIDUAL: US03: {individual.get('DEAT_LINE', 'NA')}: "
                 f"{indId}: Birth {birthday} occurs on or after death {death}"
             )
+
 
 ############ USER STORY US08 & US09 VALIDATIONS ##########
 
@@ -722,7 +778,7 @@ def validate_us29_list_deceased(individuals):
     """
     US29: List all deceased individuals in a GEDCOM file.
 
-    This is a list story, not an error story.
+    This is a list/report story, not an error-validation story.
     It returns the IDs of all individuals with a death date.
     """
     deceasedIndividuals = []
@@ -740,51 +796,113 @@ def validate_us30_list_living_married(families, individuals):
     """
     US30: List all living married people in a GEDCOM file.
 
-    This is a list story, not an error story.
+    This is a list/report story, not an error-validation story.
     It returns the IDs of all living people who are currently married.
     Divorced people and widowed people are not included.
     """
     livingMarriedPeople = []
 
     for indId in sortIds(individuals.keys()):
-        individual = individuals[indId]
+        currentFamilyIds = get_current_married_family_ids(indId, families, individuals)
 
-        if individual.get("death", "NA") != "NA":
-            continue
-
-        spouseFamilies = individual.get("spouse", set())
-
-        for familyId in sortIds(spouseFamilies):
-            family = families.get(familyId)
-
-            if family is None:
-                continue
-
-            married = family.get("MARR", "NA")
-            divorced = family.get("DIV", "NA")
-
-            if married == "NA" or divorced != "NA":
-                continue
-
-            otherSpouseId = "NA"
-
-            if family.get("HUSB", "NA") == indId:
-                otherSpouseId = family.get("WIFE", "NA")
-            elif family.get("WIFE", "NA") == indId:
-                otherSpouseId = family.get("HUSB", "NA")
-
-            otherSpouse = individuals.get(otherSpouseId)
-
-            if otherSpouse is None:
-                continue
-
-            if otherSpouse.get("death", "NA") != "NA":
-                continue
-
+        if len(currentFamilyIds) > 0:
             livingMarriedPeople.append(indId)
-            break
 
     return livingMarriedPeople
+
+
+def build_us29_deceased_table(individuals):
+    """
+    Build output table for US29: List all deceased individuals.
+    """
+    rows = []
+
+    for indId in validate_us29_list_deceased(individuals):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("death", "NA")
+        ])
+
+    return build_report_table(
+        "US29: Deceased Individuals",
+        ["ID", "Name", "Death Date"],
+        rows
+    )
+
+
+def get_current_married_family_ids(indId, families, individuals):
+    """
+    Return current married family IDs for one living individual.
+    A current married family has a marriage date, no divorce date,
+    and the other spouse is also living.
+    """
+    currentFamilyIds = []
+    individual = individuals.get(indId)
+
+    if individual is None:
+        return currentFamilyIds
+
+    if individual.get("death", "NA") != "NA":
+        return currentFamilyIds
+
+    spouseFamilies = individual.get("spouse", set())
+
+    for familyId in sortIds(spouseFamilies):
+        family = families.get(familyId)
+
+        if family is None:
+            continue
+
+        married = family.get("MARR", "NA")
+        divorced = family.get("DIV", "NA")
+
+        if married == "NA" or divorced != "NA":
+            continue
+
+        otherSpouseId = "NA"
+
+        if family.get("HUSB", "NA") == indId:
+            otherSpouseId = family.get("WIFE", "NA")
+        elif family.get("WIFE", "NA") == indId:
+            otherSpouseId = family.get("HUSB", "NA")
+
+        otherSpouse = individuals.get(otherSpouseId)
+
+        if otherSpouse is None:
+            continue
+
+        if otherSpouse.get("death", "NA") != "NA":
+            continue
+
+        currentFamilyIds.append(familyId)
+
+    return currentFamilyIds
+
+
+def build_us30_living_married_table(families, individuals):
+    """
+    Build output table for US30: List all living married individuals.
+    """
+    rows = []
+
+    for indId in validate_us30_list_living_married(families, individuals):
+        individual = individuals[indId]
+        currentFamilyIds = get_current_married_family_ids(indId, families, individuals)
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            ", ".join(currentFamilyIds)
+        ])
+
+    return build_report_table(
+        "US30: Living Married Individuals",
+        ["ID", "Name", "Family ID"],
+        rows
+    )
 
 
 ################
