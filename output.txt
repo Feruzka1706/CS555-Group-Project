@@ -1,63 +1,88 @@
-+----------------------------------------------------------------------------------------------------+
-|                                            Individuals                                             |
-+-----+--------------------+--------+------------+-----+-------+------------+---------+--------------+
-|  ID |        Name        | Gender |  Birthday  | Age | Alive |   Death    |  Child  |    Spouse    |
-+-----+--------------------+--------+------------+-----+-------+------------+---------+--------------+
-|  I1 | Michael /Johnson/  |   M    | 1948-03-10 |  78 |   Y   |     NA     |    NA   |    {'F1'}    |
-|  I2 |   Helen /Davis/    |   F    | 1950-08-22 |  76 |   Y   |     NA     |    NA   |    {'F1'}    |
-|  I3 |  Daniel /Johnson/  |   M    | 1972-09-17 |  54 |   Y   |     NA     |  {'F1'} | {'F3', 'F2'} |
-|  I4 |    Rachel /Lee/    |   F    | 1974-01-12 |  36 |   N   | 2010-02-14 |    NA   |    {'F2'}    |
-|  I5 |   Emma /Johnson/   |   F    | 1998-10-03 |  28 |   Y   |     NA     |  {'F2'} |      NA      |
-|  I6 |   Laura /Brown/    |   F    | 1975-11-30 |  50 |   Y   |     NA     |    NA   |    {'F3'}    |
-|  I7 |   Noah /Johnson/   |   M    | 2014-04-25 |  12 |   Y   |     NA     |  {'F3'} |      NA      |
-|  I8 | Robert /DeadBefore |   M    | 1980-01-01 |  30 |   N   | 2010-01-01 |    NA   |    {'F4'}    |
-|     |     Marriage/      |        |            |     |       |            |         |              |
-|  I9 |       Susan        |   F    | 1982-01-01 |  44 |   Y   |     NA     |    NA   |    {'F4'}    |
-|     |   /LateMarriage/   |        |            |     |       |            |         |              |
-| I10 |  Young /Husband/   |   M    | 2010-01-01 |  16 |   Y   |     NA     |    NA   |    {'F5'}    |
-| I11 |    Young /Wife/    |   F    | 2011-01-01 |  15 |   Y   |     NA     |    NA   |    {'F5'}    |
-| I12 |       Thomas       |   M    | 1970-05-01 |  56 |   Y   |     NA     |    NA   |    {'F6'}    |
-|     |   /AliveSpouse/    |        |            |     |       |            |         |              |
-| I13 | Anna /DeadBeforeMa |   F    | 1975-05-01 |  30 |   N   | 2005-05-01 |    NA   |    {'F6'}    |
-|     |      rriage/       |        |            |     |       |            |         |              |
-| I14 | Mark /DeadBeforeDi |   M    | 1960-01-01 |  55 |   N   | 2015-01-01 |    NA   |    {'F7'}    |
-|     |       vorce/       |        |            |     |       |            |         |              |
-| I15 |       Linda        |   F    | 1962-01-01 |  64 |   Y   |     NA     |    NA   |    {'F7'}    |
-|     |   /DivorcedLate/   |        |            |     |       |            |         |              |
-| I16 |       Walter       |   M    | 1800-01-01 | 160 |   N   | 1960-01-01 |    NA   |      NA      |
-|     |  /TooOldAtDeath/   |        |            |     |       |            |         |              |
-| I17 |       Martha       |   F    | 1850-01-01 | 176 |   Y   |     NA     |    NA   |      NA      |
-|     |   /TooOldAlive/    |        |            |     |       |            |         |              |
-| I18 | Bob /BornAndDiedAf |   M    | 1998-01-01 |  77 |   N   | 2075-01-01 |    NA   |    {'F8'}    |
-|     |     terToday/      |        |            |     |       |            |         |              |
-| I19 | Mariana /Jackson/  |   F    | 1999-02-01 |  27 |   Y   |     NA     |    NA   |    {'F8'}    |
-| I20 | Draco /BornAndDied |   M    | 2029-03-10 |  -2 |   Y   |     NA     |  {'F8'} |      NA      |
-|     |    AfterToday/     |        |            |     |       |            |         |              |
-| I21 | Molly /BirthAfterM |   F    | 2010-02-02 |  16 |   Y   |     NA     |    NA   |    {'F9'}    |
-|     |      arriage/      |        |            |     |       |            |         |              |
-| I22 |    Bruno /Mars/    |   M    | 1990-03-02 |  36 |   Y   |     NA     |    NA   |    {'F9'}    |
-| I23 |   Peter /Walker/   |   M    | 1970-05-06 |  56 |   Y   |     NA     |    NA   |   {'F10'}    |
-| I24 |   Emily /Harris/   |   F    | 1972-09-15 |  54 |   Y   |     NA     |    NA   |   {'F10'}    |
-| I25 | Liam /BornBeforeMa |   M    | 1999-01-01 |  27 |   Y   |     NA     | {'F10'} |      NA      |
-|     |      rriage/       |        |            |     |       |            |         |              |
-| I26 |   Mason /Walker/   |   M    | 2005-03-01 |  21 |   Y   |     NA     | {'F10'} |      NA      |
-| I27 |    Zoe /Walker/    |   F    | 2010-08-01 |  16 |   Y   |     NA     | {'F10'} |      NA      |
-| I28 | Ella /BornLateAfte |   F    | 2010-12-01 |  15 |   Y   |     NA     | {'F10'} |      NA      |
-|     |     rDivorce/      |        |            |     |       |            |         |              |
-| I29 |   Thomas /Lewis/   |   M    | 1960-03-30 |  39 |   N   | 2000-01-01 |    NA   |   {'F11'}    |
-| I30 |   Sarah /Moore/    |   F    | 1962-12-12 |  42 |   N   | 2005-01-01 |    NA   |   {'F11'}    |
-| I31 |    Ryan /Lewis/    |   M    | 2000-06-01 |  26 |   Y   |     NA     | {'F11'} |      NA      |
-| I32 | Anna /BornLateAfte |   F    | 2001-03-01 |  25 |   Y   |     NA     | {'F11'} |      NA      |
-|     |      rFather/      |        |            |     |       |            |         |              |
-| I33 | Ben /BornAfterPare |   M    | 2006-06-01 |  20 |   Y   |     NA     | {'F11'} |      NA      |
-|     |      ntsDied/      |        |            |     |       |            |         |              |
-| I34 |       Regina       |   F    | 1980-01-01 |  -3 |   N   | 1977-01-01 |    NA   |      NA      |
-|     | /BirthBeforeDeath/ |        |            |     |       |            |         |              |
-| I35 | Susana /MarriageBe |   F    | 1980-01-01 |  46 |   Y   |     NA     |    NA   |   {'F12'}    |
-|     |    foreDivorce/    |        |            |     |       |            |         |              |
-| I36 | Vic /MarriageBefor |   M    | 1978-01-01 |  48 |   Y   |     NA     |    NA   |   {'F12'}    |
-|     |     eDivorce/      |        |            |     |       |            |         |              |
-+-----+--------------------+--------+------------+-----+-------+------------+---------+--------------+
++------------------------------------------------------------------------------------------------------+
+|                                             Individuals                                              |
++-----+--------------------+--------+------------+-----+-------+------------+---------+----------------+
+|  ID |        Name        | Gender |  Birthday  | Age | Alive |   Death    |  Child  |     Spouse     |
++-----+--------------------+--------+------------+-----+-------+------------+---------+----------------+
+|  I1 | Michael /Johnson/  |   M    | 1948-03-10 |  78 |   Y   |     NA     |    NA   |     {'F1'}     |
+|  I2 |   Helen /Davis/    |   F    | 1950-08-22 |  76 |   Y   |     NA     |    NA   |     {'F1'}     |
+|  I3 |  Daniel /Johnson/  |   M    | 1972-09-17 |  54 |   Y   |     NA     |  {'F1'} |  {'F3', 'F2'}  |
+|  I4 |    Rachel /Lee/    |   F    | 1974-01-12 |  36 |   N   | 2010-02-14 |    NA   |     {'F2'}     |
+|  I5 |   Emma /Johnson/   |   F    | 1998-10-03 |  28 |   Y   |     NA     |  {'F2'} |       NA       |
+|  I6 |   Laura /Brown/    |   F    | 1975-11-30 |  50 |   Y   |     NA     |    NA   |     {'F3'}     |
+|  I7 |   Noah /Johnson/   |   M    | 2014-04-25 |  12 |   Y   |     NA     |  {'F3'} |       NA       |
+|  I8 | Robert /DeadBefore |   M    | 1980-01-01 |  30 |   N   | 2010-01-01 |    NA   |     {'F4'}     |
+|     |     Marriage/      |        |            |     |       |            |         |                |
+|  I9 |       Susan        |   F    | 1982-01-01 |  44 |   Y   |     NA     |    NA   |     {'F4'}     |
+|     |   /LateMarriage/   |        |            |     |       |            |         |                |
+| I10 |  Young /Husband/   |   M    | 2010-01-01 |  16 |   Y   |     NA     |    NA   |     {'F5'}     |
+| I11 |    Young /Wife/    |   F    | 2011-01-01 |  15 |   Y   |     NA     |    NA   |     {'F5'}     |
+| I12 |       Thomas       |   M    | 1970-05-01 |  56 |   Y   |     NA     |    NA   |     {'F6'}     |
+|     |   /AliveSpouse/    |        |            |     |       |            |         |                |
+| I13 | Anna /DeadBeforeMa |   F    | 1975-05-01 |  30 |   N   | 2005-05-01 |    NA   |     {'F6'}     |
+|     |      rriage/       |        |            |     |       |            |         |                |
+| I14 | Mark /DeadBeforeDi |   M    | 1960-01-01 |  55 |   N   | 2015-01-01 |    NA   |     {'F7'}     |
+|     |       vorce/       |        |            |     |       |            |         |                |
+| I15 |       Linda        |   F    | 1962-01-01 |  64 |   Y   |     NA     |    NA   |     {'F7'}     |
+|     |   /DivorcedLate/   |        |            |     |       |            |         |                |
+| I16 |       Walter       |   M    | 1800-01-01 | 160 |   N   | 1960-01-01 |    NA   |       NA       |
+|     |  /TooOldAtDeath/   |        |            |     |       |            |         |                |
+| I17 |       Martha       |   F    | 1850-01-01 | 176 |   Y   |     NA     |    NA   |       NA       |
+|     |   /TooOldAlive/    |        |            |     |       |            |         |                |
+| I18 | Bob /BornAndDiedAf |   M    | 1998-01-01 |  77 |   N   | 2075-01-01 |    NA   |     {'F8'}     |
+|     |     terToday/      |        |            |     |       |            |         |                |
+| I19 | Mariana /Jackson/  |   F    | 1999-02-01 |  27 |   Y   |     NA     |    NA   |     {'F8'}     |
+| I20 | Draco /BornAndDied |   M    | 2029-03-10 |  -2 |   Y   |     NA     |  {'F8'} |       NA       |
+|     |    AfterToday/     |        |            |     |       |            |         |                |
+| I21 | Molly /BirthAfterM |   F    | 2010-02-02 |  16 |   Y   |     NA     |    NA   |     {'F9'}     |
+|     |      arriage/      |        |            |     |       |            |         |                |
+| I22 |    Bruno /Mars/    |   M    | 1990-03-02 |  36 |   Y   |     NA     |    NA   |     {'F9'}     |
+| I23 |   Peter /Walker/   |   M    | 1970-05-06 |  56 |   Y   |     NA     |    NA   |    {'F10'}     |
+| I24 |   Emily /Harris/   |   F    | 1972-09-15 |  54 |   Y   |     NA     |    NA   |    {'F10'}     |
+| I25 | Liam /BornBeforeMa |   M    | 1999-01-01 |  27 |   Y   |     NA     | {'F10'} |       NA       |
+|     |      rriage/       |        |            |     |       |            |         |                |
+| I26 |   Mason /Walker/   |   M    | 2005-03-01 |  21 |   Y   |     NA     | {'F10'} |       NA       |
+| I27 |    Zoe /Walker/    |   F    | 2010-08-01 |  16 |   Y   |     NA     | {'F10'} |       NA       |
+| I28 | Ella /BornLateAfte |   F    | 2010-12-01 |  15 |   Y   |     NA     | {'F10'} |       NA       |
+|     |     rDivorce/      |        |            |     |       |            |         |                |
+| I29 |   Thomas /Lewis/   |   M    | 1960-03-30 |  39 |   N   | 2000-01-01 |    NA   |    {'F11'}     |
+| I30 |   Sarah /Moore/    |   F    | 1962-12-12 |  42 |   N   | 2005-01-01 |    NA   |    {'F11'}     |
+| I31 |    Ryan /Lewis/    |   M    | 2000-06-01 |  26 |   Y   |     NA     | {'F11'} |       NA       |
+| I32 | Anna /BornLateAfte |   F    | 2001-03-01 |  25 |   Y   |     NA     | {'F11'} |       NA       |
+|     |      rFather/      |        |            |     |       |            |         |                |
+| I33 | Ben /BornAfterPare |   M    | 2006-06-01 |  20 |   Y   |     NA     | {'F11'} |       NA       |
+|     |      ntsDied/      |        |            |     |       |            |         |                |
+| I34 |       Regina       |   F    | 1980-01-01 |  -3 |   N   | 1977-01-01 |    NA   |       NA       |
+|     | /BirthBeforeDeath/ |        |            |     |       |            |         |                |
+| I35 | Susana /MarriageBe |   F    | 1980-01-01 |  46 |   Y   |     NA     |    NA   |    {'F12'}     |
+|     |    foreDivorce/    |        |            |     |       |            |         |                |
+| I36 | Vic /MarriageBefor |   M    | 1978-01-01 |  48 |   Y   |     NA     |    NA   |    {'F12'}     |
+|     |     eDivorce/      |        |            |     |       |            |         |                |
+| I37 |       George       |   M    | 1960-01-01 |  66 |   Y   |     NA     |    NA   | {'F13', 'F14'} |
+|     | /MarriedDaughter/  |        |            |     |       |            |         |                |
+| I38 |   Karen /Smith/    |   F    | 1962-01-01 |  46 |   N   | 2008-01-01 |    NA   |    {'F13'}     |
+| I39 |       Julia        |   F    | 1990-01-01 |  36 |   Y   |     NA     | {'F13'} |    {'F14'}     |
+|     |  /MarriedFather/   |        |            |     |       |            |         |                |
+| I40 |   Henry /Clark/    |   M    | 1930-01-01 |  70 |   N   | 2000-01-01 |    NA   |    {'F15'}     |
+| I41 |      Dorothy       |   F    | 1932-01-01 |  94 |   Y   |     NA     |    NA   | {'F15', 'F17'} |
+|     | /MarriedGrandson/  |        |            |     |       |            |         |                |
+| I42 |   Frank /Clark/    |   M    | 1955-01-01 |  71 |   Y   |     NA     | {'F15'} |    {'F16'}     |
+| I43 |   Nancy /White/    |   F    | 1957-01-01 |  69 |   Y   |     NA     |    NA   |    {'F16'}     |
+| I44 | Kevin /MarriedGran |   M    | 1980-01-01 |  46 |   Y   |     NA     | {'F16'} |    {'F17'}     |
+|     |      dmother/      |        |            |     |       |            |         |                |
+| I45 |    Paul /Green/    |   M    | 1945-01-01 |  81 |   Y   |     NA     |    NA   |    {'F18'}     |
+| I46 |    Ruth /Hall/     |   F    | 1947-01-01 |  79 |   Y   |     NA     |    NA   |    {'F18'}     |
+| I47 |        Adam        |   M    | 1972-01-01 |  54 |   Y   |     NA     | {'F18'} |    {'F19'}     |
+|     |  /MarriedSister/   |        |            |     |       |            |         |                |
+| I48 |       Grace        |   F    | 1975-01-01 |  51 |   Y   |     NA     | {'F18'} |    {'F19'}     |
+|     |  /MarriedBrother/  |        |            |     |       |            |         |                |
+| I49 |   Victor /King/    |   M    | 1938-01-01 |  88 |   Y   |     NA     |    NA   | {'F21', 'F20'} |
+| I50 |   Irene /Scott/    |   F    | 1940-01-01 |  86 |   Y   |     NA     |    NA   |    {'F20'}     |
+| I51 | Leo /MarriedHalfSi |   M    | 1962-01-01 |  64 |   Y   |     NA     | {'F20'} |    {'F22'}     |
+|     |       ster/        |        |            |     |       |            |         |                |
+| I52 |   Diane /Young/    |   F    | 1942-01-01 |  84 |   Y   |     NA     |    NA   |    {'F21'}     |
+| I53 | Mia /MarriedHalfBr |   F    | 1970-01-01 |  56 |   Y   |     NA     | {'F21'} |    {'F22'}     |
+|     |       other/       |        |            |     |       |            |         |                |
++-----+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
 |                                                    Families                                                   |
@@ -78,15 +103,32 @@
 |     |            |            |            |     terToday/      |         |                    |              |
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
-| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
+| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I28',    |
+|     |            |            |            |                    |         |                    |    'I25',    |
 |     |            |            |            |                    |         |                    |    'I27',    |
-|     |            |            |            |                    |         |                    |    'I28',    |
 |     |            |            |            |                    |         |                    |    'I26'}    |
 | F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
 |     |            |            |            |                    |         |                    |    'I31',    |
 |     |            |            |            |                    |         |                    |    'I33'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
+| F13 | 1985-06-01 |     NA     |    I37     |       George       |   I38   |   Karen /Smith/    |   {'I39'}    |
+|     |            |            |            | /MarriedDaughter/  |         |                    |              |
+| F14 | 2012-06-01 |     NA     |    I37     |       George       |   I39   |       Julia        |      NA      |
+|     |            |            |            | /MarriedDaughter/  |         |  /MarriedFather/   |              |
+| F15 | 1950-06-01 |     NA     |    I40     |   Henry /Clark/    |   I41   |      Dorothy       |   {'I42'}    |
+|     |            |            |            |                    |         | /MarriedGrandson/  |              |
+| F16 | 1978-06-01 |     NA     |    I42     |   Frank /Clark/    |   I43   |   Nancy /White/    |   {'I44'}    |
+| F17 | 2005-06-01 |     NA     |    I44     | Kevin /MarriedGran |   I41   |      Dorothy       |      NA      |
+|     |            |            |            |      dmother/      |         | /MarriedGrandson/  |              |
+| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I47',    |
+|     |            |            |            |                    |         |                    |    'I48'}    |
+| F19 | 2000-06-01 |     NA     |    I47     |        Adam        |   I48   |       Grace        |      NA      |
+|     |            |            |            |  /MarriedSister/   |         |  /MarriedBrother/  |              |
+| F20 | 1960-06-01 | 1965-06-01 |    I49     |   Victor /King/    |   I50   |   Irene /Scott/    |   {'I51'}    |
+| F21 | 1967-06-01 |     NA     |    I49     |   Victor /King/    |   I52   |   Diane /Young/    |   {'I53'}    |
+| F22 | 1995-06-01 |     NA     |    I51     | Leo /MarriedHalfSi |   I53   | Mia /MarriedHalfBr |      NA      |
+|     |            |            |            |       ster/        |         |       other/       |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +---------------------------------------+
@@ -109,6 +151,8 @@
 | I30 |   Sarah /Moore/    | 2005-01-01 |
 | I34 |       Regina       | 1977-01-01 |
 |     | /BirthBeforeDeath/ |            |
+| I38 |   Karen /Smith/    | 2008-01-01 |
+| I40 |   Henry /Clark/    | 2000-01-01 |
 +-----+--------------------+------------+
 
 +--------------------------------------+
@@ -125,6 +169,28 @@
 | I21 | Molly /BirthAfterM |     F9    |
 |     |      arriage/      |           |
 | I22 |    Bruno /Mars/    |     F9    |
+| I37 |       George       |    F14    |
+|     | /MarriedDaughter/  |           |
+| I39 |       Julia        |    F14    |
+|     |  /MarriedFather/   |           |
+| I41 |      Dorothy       |    F17    |
+|     | /MarriedGrandson/  |           |
+| I42 |   Frank /Clark/    |    F16    |
+| I43 |   Nancy /White/    |    F16    |
+| I44 | Kevin /MarriedGran |    F17    |
+|     |      dmother/      |           |
+| I45 |    Paul /Green/    |    F18    |
+| I46 |    Ruth /Hall/     |    F18    |
+| I47 |        Adam        |    F19    |
+|     |  /MarriedSister/   |           |
+| I48 |       Grace        |    F19    |
+|     |  /MarriedBrother/  |           |
+| I49 |   Victor /King/    |    F21    |
+| I51 | Leo /MarriedHalfSi |    F22    |
+|     |       ster/        |           |
+| I52 |   Diane /Young/    |    F21    |
+| I53 | Mia /MarriedHalfBr |    F22    |
+|     |       other/       |           |
 +-----+--------------------+-----------+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
@@ -147,3 +213,7 @@ ERROR: FAMILY: US08: 288: F10: Child I28 born 2010-12-01 more than 9 months afte
 ERROR: FAMILY: US09: 335: F11: Child I32 born 2001-03-01 more than 9 months after father's (I29) death on 2000-01-01
 ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 after mother's (I30) death on 2005-01-01
 ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 more than 9 months after father's (I29) death on 2000-01-01
+ERROR: FAMILY: US17: 422: F14: Husband (I37) is married to his descendant, wife (I39)
+ERROR: FAMILY: US17: 483: F17: Wife (I41) is married to her descendant, husband (I44)
+ERROR: FAMILY: US18: 528: F19: Husband (I47) and wife (I48) are siblings
+ERROR: FAMILY: US18: 589: F22: Husband (I51) and wife (I53) are half-siblings
