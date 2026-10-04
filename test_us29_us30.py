@@ -160,7 +160,10 @@ class TestUS30ListLivingMarried(unittest.TestCase):
         # and I50 is divorced (F20), so they are not listed.
         self.assertEqual(livingMarried, ["I1", "I2", "I3", "I6", "I10", "I11", "I21", "I22",
                                          "I37", "I39", "I41", "I42", "I43", "I44", "I45", "I46",
-                                         "I47", "I48", "I49", "I51", "I52", "I53"])
+                                         "I47", "I48", "I49", "I51", "I52", "I53", "I60", "I61",
+                                         "I62", "I63", "I64", "I65", "I66", "I67", "I68", "I69",
+                                         "I70", "I71", "I72", "I73", "I74", "I75", "I76", "I77",
+                                         "I78", "I79"])
         self.assertEqual(gedcom.errors, [])
 
 

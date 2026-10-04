@@ -306,6 +306,11 @@ def main():
     validate_us17_no_marriages_to_descendants(families)
     validate_us18_siblings_should_not_marry(families)
 
+    # US19: First cousins should not marry
+    # US20: Aunts and uncles should not marry their nieces or nephews
+    validate_us19_first_cousins_should_not_marry(families)
+    validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
 
@@ -1026,6 +1031,105 @@ def validate_us18_siblings_should_not_marry(families):
             f"ERROR: FAMILY: US18: {getFamilyLine(family)}: {familyId}: "
             f"Husband ({husbandId}) and wife ({wifeId}) are {relationship}"
         )
+
+############ USER STORY US19 & US20 VALIDATIONS ##########
+
+def validate_us19_first_cousins_should_not_marry(families):
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+        if married == "NA":
+            continue
+
+        marriageLine = family.get("MARR_LINE", "NA")
+        if marriageLine == "NA":
+            continue
+
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        husbandFamilyIds, husbandParentIds = getParents(husbandId, families)
+        wifeFamilyIds, wifeParentIds = getParents(wifeId, families)
+
+        #if siblings
+        if husbandFamilyIds & wifeFamilyIds:
+            continue
+
+        husbandParentFamilyIds = set()
+        wifeParentFamilyIds = set()
+
+        for id in husbandParentIds:
+            parentFamilyIds, _ = getParents(id, families)
+            husbandParentFamilyIds |= parentFamilyIds
+
+        for id in wifeParentIds:
+            parentFamilyIds, _ = getParents(id, families)
+            wifeParentFamilyIds |= parentFamilyIds
+
+        familyIntersect = husbandParentFamilyIds & wifeParentFamilyIds
+
+        if (len(familyIntersect) != 0):
+            errors.append(
+                f"ERROR: FAMILY: US19: {marriageLine}: {familyId}: "
+                f"Husband ({husbandId}) and wife ({wifeId}) are first cousins"
+            )
+
+#checks if candidateId is a sibling or half-sibling of one of personId's parents
+def isAuntOrUncleOf(candidateId, personId, families):
+    _, candidateParentIds = getParents(candidateId, families)
+    _, parentIds = getParents(personId, families)
+
+    for parentId in parentIds:
+        if parentId == candidateId: #candidate is the parent, skip
+            continue
+        _, parentParentIds = getParents(parentId, families)
+        if parentParentIds & candidateParentIds: #share at least one parent
+            return True
+
+    return False
+
+# returns aunt/nephew, uncle/niece, or None (if no such relation exists)
+def getAuntUncleRelation(personAId, personBId, families):
+    if isAuntOrUncleOf(personAId, personBId, families):
+        return personAId, personBId
+    if isAuntOrUncleOf(personBId, personAId, families):
+        return personBId, personAId
+    return None
+
+def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals):
+     for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+        if married == "NA":
+            continue
+
+        marriageLine = family.get("MARR_LINE", "NA")
+        if marriageLine == "NA":
+            continue
+
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        auntUncleRelation = getAuntUncleRelation(husbandId, wifeId, families)
+
+        if auntUncleRelation:
+            personAId = auntUncleRelation[0]
+            personBId = auntUncleRelation[1]
+            personA = individuals.get(personAId, "NA")
+            personB = individuals.get(personBId, "NA")
+            if (personA != "NA" and personB != "NA"):
+                if (personA.get("gender", "NA") == "M"):
+                    errors.append(
+                        f"ERROR: FAMILY: US20: {marriageLine}: {familyId}: "
+                        f"An uncle ({personAId}) is married to his niece ({personBId})"
+                    )
+                else:
+                    errors.append(
+                        f"ERROR: FAMILY: US20: {marriageLine}: {familyId}: "
+                        f"An aunt ({personAId}) is married to her nephew ({personBId})"
+                    )
 
 
 ################
