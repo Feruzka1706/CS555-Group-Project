@@ -133,11 +133,11 @@
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
 | F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I27',    |
-|     |            |            |            |                    |         |                    |    'I25',    |
+|     |            |            |            |                    |         |                    |    'I28',    |
 |     |            |            |            |                    |         |                    |    'I26',    |
-|     |            |            |            |                    |         |                    |    'I28'}    |
-| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
-|     |            |            |            |                    |         |                    |    'I33',    |
+|     |            |            |            |                    |         |                    |    'I25'}    |
+| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I33',    |
+|     |            |            |            |                    |         |                    |    'I32',    |
 |     |            |            |            |                    |         |                    |    'I31'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
@@ -150,8 +150,8 @@
 | F16 | 1978-06-01 |     NA     |    I42     |   Frank /Clark/    |   I43   |   Nancy /White/    |   {'I44'}    |
 | F17 | 2005-06-01 |     NA     |    I44     | Kevin /MarriedGran |   I41   |      Dorothy       |      NA      |
 |     |            |            |            |      dmother/      |         | /MarriedGrandson/  |              |
-| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I48',    |
-|     |            |            |            |                    |         |                    |    'I47'}    |
+| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I47',    |
+|     |            |            |            |                    |         |                    |    'I48'}    |
 | F19 | 2000-06-01 |     NA     |    I47     |        Adam        |   I48   |       Grace        |      NA      |
 |     |            |            |            |  /MarriedSister/   |         |  /MarriedBrother/  |              |
 | F20 | 1960-06-01 | 1965-06-01 |    I49     |   Victor /King/    |   I50   |   Irene /Scott/    |   {'I51'}    |
@@ -172,8 +172,8 @@
 |     |            |            |            |  /StacieHusband/   |         |                    |              |
 | F36 | 2023-02-01 |     NA     |    I70     |   Adrian /Uncle/   |   I73   |      Kristen       |      NA      |
 |     |            |            |            |                    |         |  /MarriedToUncle/  |              |
-| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I76',    |
-|     |            |            |            |                    |         |                    |    'I77'}    |
+| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I77',    |
+|     |            |            |            |                    |         |                    |    'I76'}    |
 | F38 | 2002-02-01 |     NA     |    I77     |      Charley       |   I78   |      Barbara       |   {'I79'}    |
 |     |            |            |            |  /KarleeBrother/   |         |   /CharleyWife/    |              |
 | F39 | 2024-02-01 |     NA     |    I79     |      Patrick       |   I76   |   Karlee /Aunt/    |      NA      |
