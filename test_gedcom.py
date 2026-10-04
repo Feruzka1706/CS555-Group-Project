@@ -1056,10 +1056,6 @@ def validate_us19_first_cousins_should_not_marry(families):
         if married == "NA":
             continue
 
-        marriageLine = family.get("MARR_LINE", "NA")
-        if marriageLine == "NA":
-            continue
-
         husbandId = family.get("HUSB", "NA")
         wifeId = family.get("WIFE", "NA")
         if husbandId == "NA" or wifeId == "NA":
