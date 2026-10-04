@@ -100,7 +100,7 @@ class TestUS19FirstCousinsCannotMarry(unittest.TestCase):
         self.assertEqual(gedcom.errors, [])
 
     def test_siblings_married(self):
-        #J1 and J2 are siblings
+        #S1 and S2 are siblings
         families = {
             "F1": makeFamily("I1", "I2", "2000-01-01", "NA", {"S1", "S2"}),
             "F2": makeFamily("S1", "S2", "2024-01-01", "NA"), #siblings married
@@ -108,103 +108,92 @@ class TestUS19FirstCousinsCannotMarry(unittest.TestCase):
         gedcom.validate_us19_first_cousins_should_not_marry(families)
         self.assertEqual(gedcom.errors, [])
 
+    def test_half_siblings_married(self):
+        #I3 and I5 are half siblings. This is valid.
+        families = {
+            "F1": makeFamily("I1", "I2", "1980-01-01", "1985-01-01", {"I3"}),
+            "F2": makeFamily("I1", "I4", "1990-01-01", "NA", {"I5"}), 
+            "F3": makeFamily("I3", "I5", "2024-01-01", "NA") 
+        }
+        gedcom.validate_us19_first_cousins_should_not_marry(families)
+        self.assertEqual(gedcom.errors, [])
+
+    def test_half_first_cousins_marry(self):
+        # I3 and I5 are half-siblings (same father I1, different mothers).
+        # Their children I7 and I9 are first cousins. This is invalid.
+        families = {
+            "F1": makeFamily("I1", "I2", "1960-01-01", "1968-01-01", {"I3"}),
+            "F2": makeFamily("I1", "I4", "1975-01-01", "NA", {"I5"}),
+            "F3": makeFamily("I3", "I6", "2000-01-01", "NA",  {"I7"}),
+            "F4": makeFamily("I5", "I8", "2001-01-01", "NA", {"I9"}),
+            "F5": makeFamily("I7", "I9", "2025-01-01"),
+        }
+        gedcom.validate_us19_first_cousins_should_not_marry(families)
+        self.assertEqual(gedcom.errors, [
+            'ERROR: FAMILY: US19: 40: F5: Husband (I7) and wife (I9) are half-first cousins'
+        ])
+
+
 class TestUS20AuntsUnclesCannotMarryNiecesNephews(unittest.TestCase):
         
     def setUp(self):
         gedcom.errors.clear()
 
     def test_aunt_married_to_nephew(self):
-        individuals = {
-            "I1": makeIndividual("2002-01-01", child={"F1"}, gender="M"), #child A
-            "I2": makeIndividual("1970-01-01", spouse="F1", child={"F3"}, gender="F"), #mom of child A
-            "I3": makeIndividual("1970-01-01", spouse="F1", gender="M"), #dad of child A
-
-            "J1": makeIndividual("2002-01-01", child={"F2"}, gender="M"), #child B
-            "J2": makeIndividual("1970-01-01", spouse="F2", child={"F3"}, gender="F"), #mom of child B, sister of I2
-
-            "K1": makeIndividual("1950-01-01", spouse="F3", gender="M"), #dad of I2 and J2
-            "K2": makeIndividual("1950-01-01", spouse="F3", gender="F"), #mom of I2 and J2
-        }
         families = {
             "F1": makeFamily("I3", "I2", "2000-01-01", "NA", {"I1"}),
             "F2": makeFamily("I1", "J2", "2022-01-01", "NA", {"J1"}),
             "F3": makeFamily("K1", "K2", "2000-01-01", "NA", {"I2", "J2"}),
         }
 
-        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
         self.assertEqual(gedcom.errors, [
             'ERROR: FAMILY: US20: 40: F2: An aunt (J2) is married to her nephew (I1)'
         ])
 
     def test_uncle_married_to_niece(self):
-        individuals = {
-            "K1": makeIndividual("1920-01-01", spouse="F3", gender="M"), #dad of I2 and J1
-            "K2": makeIndividual("1920-01-01", spouse="F3", gender="F"), #mom of I2 and J1
-
-            "I2": makeIndividual("1948-01-01", spouse="F1", child={"F3"}, gender="F"), #mom of I1, sister of J1
-            "I3": makeIndividual("1946-01-01", spouse="F1", gender="M"), #dad of I1
-            "J1": makeIndividual("1950-01-01", spouse="F4", child={"F3"}, gender="M"), #uncle of I1, brother of I2
-
-            "I1": makeIndividual("1975-01-01", spouse="F4", child={"F1"}, gender="F"), #niece, daughter of I2 and I3
-        }
         families = {
             "F3": makeFamily("K1", "K2", "1945-01-01", "NA", {"I2", "J1"}),
             "F1": makeFamily("I3", "I2", "1972-01-01", "NA", {"I1"}),
             "F4": makeFamily("J1", "I1", "2000-01-01", "NA"), #uncle married to niece
         }
 
-        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
+        self.assertEqual(gedcom.errors, [
+            'ERROR: FAMILY: US20: 40: F4: An uncle (J1) is married to his niece (I1)'
+        ])
+
+    def test_uncle_married_to_niece(self):
+        families = {
+            "F3": makeFamily("K1", "K2", "1945-01-01", "NA", {"I2", "J1"}),
+            "F1": makeFamily("I3", "I2", "1972-01-01", "NA", {"I1"}),
+            "F4": makeFamily("J1", "I1", "2000-01-01", "NA"), #uncle married to niece
+        }
+
+        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
         self.assertEqual(gedcom.errors, [
             'ERROR: FAMILY: US20: 40: F4: An uncle (J1) is married to his niece (I1)'
         ])
 
     #same test as in US19, but this does not return any errors for US20
     def test_first_cousins_married(self):
-        individuals = {
-            "I1": makeIndividual("2002-01-01", spouse="F4", child={"F1"}), #child A
-            "I2": makeIndividual("1970-01-01", spouse="F1", child={"F3"}), #mom of child A
-            "I3": makeIndividual("1970-01-01", spouse="F1"), #dad of child A
-
-            "J1": makeIndividual("2002-01-01", spouse="F4", child={"F2"}), #child B
-            "J2": makeIndividual("1970-01-01", spouse="F2", child={"F3"}), #mom of child B, sister of I2
-            "J3": makeIndividual("1970-01-01", spouse="F2"), #dad of child B
-
-            "K1": makeIndividual("1950-01-01", spouse="F3"), #dad of I2 and J2
-            "K2": makeIndividual("1950-01-01", spouse="F3"), #mom of I2 and J2
-        }
         families = {
             "F1": makeFamily("I3", "I2", "2000-01-01", "NA", {"I1"}),
             "F2": makeFamily("J3", "J2", "2000-01-01", "NA", {"J1"}),
             "F3": makeFamily("K1", "K2", "2000-01-01", "NA", {"I2", "J2"}),
             "F4": makeFamily("I1", "J1", "2021-01-01", "NA")
         }
-        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
         self.assertEqual(gedcom.errors, [])
 
     def test_half_uncle_paternal_side_married_to_niece(self):
-        # J1 is I3's half-brother (same mother K2, different fathers), so J1 is
-        # I1's uncle on her father's side. J1 marries I1, so an error is expected.
-        individuals = {
-            "K1": makeIndividual("1920-01-01", spouse="F3", gender="M"), #first husband of K2, dad of I3
-            "K2": makeIndividual("1925-01-01", gender="F"), #mom of I3 and J1
-            "K3": makeIndividual("1925-01-01", spouse="F5", gender="M"), #second husband of K2, dad of J1
-
-            "I3": makeIndividual("1946-01-01", spouse="F1", child={"F3"}, gender="M"), #dad of I1, half-brother of J1
-            "I2": makeIndividual("1948-01-01", spouse="F1", gender="F"), #mom of I1
-            "J1": makeIndividual("1950-01-01", spouse="F4", child={"F5"}, gender="M"), #half-uncle of I1
-
-            "I1": makeIndividual("1975-01-01", spouse="F4", child={"F1"}, gender="F"), #niece, daughter of I3 and I2
-        }
-        # makeIndividual only takes one spouse family, so K2's two marriages are set here
-        individuals["K2"]["spouse"] = {"F3", "F5"}
-
         families = {
             "F3": makeFamily("K1", "K2", "1945-01-01", "1948-06-01", {"I3"}), #first marriage, ended in divorce
             "F5": makeFamily("K3", "K2", "1949-01-01", "NA", {"J1"}), #second marriage
             "F1": makeFamily("I3", "I2", "1972-01-01", "NA", {"I1"}),
             "F4": makeFamily("J1", "I1", "2000-01-01", "NA"), #half-uncle married to niece
         }
-        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
         self.assertEqual(gedcom.errors, [
             'ERROR: FAMILY: US20: 40: F4: An uncle (J1) is married to his niece (I1)'
         ])

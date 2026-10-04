@@ -309,7 +309,7 @@ def main():
     # US19: First cousins should not marry
     # US20: Aunts and uncles should not marry their nieces or nephews
     validate_us19_first_cousins_should_not_marry(families)
-    validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals)
+    validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -1034,7 +1034,23 @@ def validate_us18_siblings_should_not_marry(families):
 
 ############ USER STORY US19 & US20 VALIDATIONS ##########
 
+def getGrandparents(personId, families):
+    """IDs of all grandparents of personId (parents of their parents)."""
+    _, parentIds = getParents(personId, families)
+    grandparentIds = set()
+
+    for parentId in parentIds:
+        _, parentParentIds = getParents(parentId, families)
+        grandparentIds |= parentParentIds
+
+    return grandparentIds
+
 def validate_us19_first_cousins_should_not_marry(families):
+    """
+    US19: First cousins should not marry one another.
+    First cousins each have one parent with the same family id.
+    Half-first cousins don't have parents that share the same id, they each have a parent that share one parent.
+    """
     for familyId, family in families.items():
         married = family.get("MARR", "NA")
         if married == "NA":
@@ -1051,28 +1067,36 @@ def validate_us19_first_cousins_should_not_marry(families):
 
         husbandFamilyIds, husbandParentIds = getParents(husbandId, families)
         wifeFamilyIds, wifeParentIds = getParents(wifeId, families)
+        husbandGrandparentIds = getGrandparents(husbandId, families)
+        wifeGrandparentIds = getGrandparents(wifeId, families)
 
         #if siblings
-        if husbandFamilyIds & wifeFamilyIds:
+        if husbandFamilyIds & wifeFamilyIds or husbandParentIds & wifeParentIds:
             continue
 
         husbandParentFamilyIds = set()
         wifeParentFamilyIds = set()
 
-        for id in husbandParentIds:
-            parentFamilyIds, _ = getParents(id, families)
+        for husbandParentId in husbandParentIds:
+            parentFamilyIds, _ = getParents(husbandParentId, families)
             husbandParentFamilyIds |= parentFamilyIds
 
-        for id in wifeParentIds:
-            parentFamilyIds, _ = getParents(id, families)
+        for wifeParentId in wifeParentIds:
+            parentFamilyIds, _ = getParents(wifeParentId, families)
             wifeParentFamilyIds |= parentFamilyIds
 
         familyIntersect = husbandParentFamilyIds & wifeParentFamilyIds
+        grandparentsIntersect = wifeGrandparentIds & husbandGrandparentIds
 
         if (len(familyIntersect) != 0):
             errors.append(
-                f"ERROR: FAMILY: US19: {marriageLine}: {familyId}: "
+                f"ERROR: FAMILY: US19: {getFamilyLine(family)}: {familyId}: "
                 f"Husband ({husbandId}) and wife ({wifeId}) are first cousins"
+            )
+        elif (len(familyIntersect) == 0 and len(grandparentsIntersect) != 0):
+            errors.append(
+                f"ERROR: FAMILY: US19: {getFamilyLine(family)}: {familyId}: "
+                f"Husband ({husbandId}) and wife ({wifeId}) are half-first cousins"
             )
 
 #checks if candidateId is a sibling or half-sibling of one of personId's parents
@@ -1097,14 +1121,13 @@ def getAuntUncleRelation(personAId, personBId, families):
         return personBId, personAId
     return None
 
-def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, individuals):
-     for familyId, family in families.items():
+def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families):
+    """
+    US20: Aunts and uncles should not marry their nieces or nephews.
+    """
+    for familyId, family in families.items():
         married = family.get("MARR", "NA")
         if married == "NA":
-            continue
-
-        marriageLine = family.get("MARR_LINE", "NA")
-        if marriageLine == "NA":
             continue
 
         husbandId = family.get("HUSB", "NA")
@@ -1117,19 +1140,24 @@ def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families, i
         if auntUncleRelation:
             personAId = auntUncleRelation[0]
             personBId = auntUncleRelation[1]
-            personA = individuals.get(personAId, "NA")
-            personB = individuals.get(personBId, "NA")
-            if (personA != "NA" and personB != "NA"):
-                if (personA.get("gender", "NA") == "M"):
-                    errors.append(
-                        f"ERROR: FAMILY: US20: {marriageLine}: {familyId}: "
-                        f"An uncle ({personAId}) is married to his niece ({personBId})"
-                    )
-                else:
-                    errors.append(
-                        f"ERROR: FAMILY: US20: {marriageLine}: {familyId}: "
-                        f"An aunt ({personAId}) is married to her nephew ({personBId})"
-                    )
+
+            #make error string
+            startString =  f"ERROR: FAMILY: US20: {getFamilyLine(family)}: {familyId}: "
+            personAString = f"An aunt or uncle ({personAId}) is married to his/her " #default string
+            personBString = f"niece or nephew ({personBId})" #default string
+
+            if (personAId == husbandId):
+                personAString = f"An uncle ({personAId}) is married to his "
+            elif (personAId == wifeId):
+                personAString = f"An aunt ({personAId}) is married to her "
+
+            if (personBId == husbandId):
+                personBString = f"nephew ({personBId})"
+            elif (personBId == wifeId):
+                personBString = f"niece ({personBId})"
+
+            resultString = startString + personAString + personBString
+            errors.append(resultString)
 
 
 ################
