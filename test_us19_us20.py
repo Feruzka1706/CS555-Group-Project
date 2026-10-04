@@ -119,7 +119,7 @@ class TestUS19FirstCousinsCannotMarry(unittest.TestCase):
         self.assertEqual(gedcom.errors, [])
 
     def test_half_first_cousins_marry(self):
-        # I3 and I5 are half-siblings (same father I1, different mothers).
+        # I3 and I5 are half-siblings.
         # Their children I7 and I9 are first cousins. This is invalid.
         families = {
             "F1": makeFamily("I1", "I2", "1960-01-01", "1968-01-01", {"I3"}),
