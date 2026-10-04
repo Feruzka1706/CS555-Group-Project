@@ -48,7 +48,8 @@ def newFamily():
         "MARR": "NA",
         "DIV": "NA",
         "MARR_LINE": "NA",
-        "DIV_LINE": "NA"
+        "DIV_LINE": "NA",
+        "FAM_LINE": "NA"  # line number of the "0 Fxx FAM" line
     }
 
 
@@ -100,6 +101,7 @@ def parseGedcom(gedcomFileName, individuals, families):
                 elif tag == 'FAM':
                     currentFam = arguments[0]
                     families[currentFam] = newFamily()
+                    families[currentFam]["FAM_LINE"] = currLineNum
                 continue
 
             # tags that belong to an individual record
@@ -303,6 +305,10 @@ def main():
     # US12: Parents not too old
     validate_us11_no_bigamy(families)
     validate_us12_parents_not_too_old(families, individuals)
+    # US17: No marriages to descendants
+    # US18: Siblings should not marry
+    validate_us17_no_marriages_to_descendants(families)
+    validate_us18_siblings_should_not_marry(families)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -1027,6 +1033,122 @@ def validate_us12_parents_not_too_old(families, individuals):
                             f"Father ({fatherId}) was {fatherAge} years old when "
                             f"child ({childId}) was born on {childBirth}"
                         )
+
+
+############ USER STORY US17 & US18 VALIDATIONS ##########
+
+def getFamilyLine(family):
+    """Line number to report for a family error: the marriage DATE line,
+    or the "0 Fxx FAM" line if the family has no marriage date."""
+    marriageLine = family.get("MARR_LINE", "NA")
+
+    if marriageLine != "NA":
+        return marriageLine
+
+    return family.get("FAM_LINE", "NA")
+
+
+def getChildren(personId, families):
+    """All children of personId, from every family where they are a spouse."""
+    children = set()
+
+    for family in families.values():
+        if personId != "NA" and personId in (family.get("HUSB"), family.get("WIFE")):
+            children.update(family.get("CHIL", set()))
+
+    return children
+
+
+def getDescendants(personId, families):
+    """All descendants of personId (children, grandchildren, ...)."""
+    descendants = set()
+    toVisit = list(getChildren(personId, families))
+
+    while toVisit:
+        currentId = toVisit.pop()
+
+        # skip anyone already seen, so bad data with a cycle can't loop forever
+        if currentId in descendants:
+            continue
+
+        descendants.add(currentId)
+        toVisit.extend(getChildren(currentId, families))
+
+    return descendants
+
+
+def getParents(personId, families):
+    """The family IDs and parent IDs for personId, from the families' CHIL lists."""
+    parentFamilies = set()
+    parents = set()
+
+    for familyId, family in families.items():
+        if personId in family.get("CHIL", set()):
+            parentFamilies.add(familyId)
+
+            for role in ("HUSB", "WIFE"):
+                parentId = family.get(role, "NA")
+
+                if parentId != "NA":
+                    parents.add(parentId)
+
+    return parentFamilies, parents
+
+
+def validate_us17_no_marriages_to_descendants(families):
+    """
+    US17: Parents should not marry any of their descendants.
+    Checks children, grandchildren and further generations.
+    """
+    for familyId, family in families.items():
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        familyLine = getFamilyLine(family)
+
+        if wifeId in getDescendants(husbandId, families):
+            errors.append(
+                f"ERROR: FAMILY: US17: {familyLine}: {familyId}: "
+                f"Husband ({husbandId}) is married to his descendant, wife ({wifeId})"
+            )
+
+        if husbandId in getDescendants(wifeId, families):
+            errors.append(
+                f"ERROR: FAMILY: US17: {familyLine}: {familyId}: "
+                f"Wife ({wifeId}) is married to her descendant, husband ({husbandId})"
+            )
+
+
+def validate_us18_siblings_should_not_marry(families):
+    """
+    US18: Siblings should not marry one another.
+    Siblings are children of the same family. Half-siblings (one shared
+    parent, different families) are also reported.
+    """
+    for familyId, family in families.items():
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        husbandFamilies, husbandParents = getParents(husbandId, families)
+        wifeFamilies, wifeParents = getParents(wifeId, families)
+
+        if husbandFamilies & wifeFamilies:
+            relationship = "siblings"
+        elif husbandParents & wifeParents:
+            relationship = "half-siblings"
+        else:
+            continue
+
+        errors.append(
+            f"ERROR: FAMILY: US18: {getFamilyLine(family)}: {familyId}: "
+            f"Husband ({husbandId}) and wife ({wifeId}) are {relationship}"
+        )
 
 
 ################

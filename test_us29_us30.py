@@ -72,7 +72,9 @@ class TestUS29ListDeceased(unittest.TestCase):
 
         deceased = gedcom.validate_us29_list_deceased(individuals)
 
-        self.assertEqual(deceased, ["I4", "I8", "I13", "I14", "I16", "I18", "I29", "I30", "I34"])
+        # I38 and I40 are from the US17 test data
+        self.assertEqual(deceased, ["I4", "I8", "I13", "I14", "I16", "I18", "I29", "I30", "I34",
+                                    "I38", "I40"])
         self.assertEqual(gedcom.errors, [])
 
 
@@ -154,7 +156,11 @@ class TestUS30ListLivingMarried(unittest.TestCase):
 
         livingMarried = gedcom.validate_us30_list_living_married(families, individuals)
 
-        self.assertEqual(livingMarried, ["I1", "I2", "I3", "I6", "I10", "I11", "I21", "I22"])
+        # I37-I53 are from the US17 / US18 test data. I38 and I40 are deceased,
+        # and I50 is divorced (F20), so they are not listed.
+        self.assertEqual(livingMarried, ["I1", "I2", "I3", "I6", "I10", "I11", "I21", "I22",
+                                         "I37", "I39", "I41", "I42", "I43", "I44", "I45", "I46",
+                                         "I47", "I48", "I49", "I51", "I52", "I53"])
         self.assertEqual(gedcom.errors, [])
 
 
