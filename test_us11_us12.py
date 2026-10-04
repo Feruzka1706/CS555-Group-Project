@@ -5,11 +5,11 @@ import Group_Project as Group_project
 class TestUS11(unittest.TestCase):
 
     def setUp(self):
-        # Clear the error list before each test.
+        #clear the error list before each test
         Group_project.errors.clear()
 
-    # Test 1: Bigamy should be detected when a person
-    # gets married to another spouse before the first marriage ends.
+    #test 1: Bigamy should be detected when a person
+    #gets married to another spouse before the first marriage ends
     def test_bigamy(self):
         families = {
             "F1": {
@@ -41,8 +41,8 @@ class TestUS11(unittest.TestCase):
         self.assertIn("US11", Group_project.errors[0])
         self.assertIn("I1", Group_project.errors[0])
 
-    # Test 2: A second marriage after the first marriage ends
-    # should NOT be considered bigamy.
+    #test 2: A second marriage after the first marriage ends
+    #should NOT be considered bigamy
     def test_no_bigamy_after_divorce(self):
         families = {
             "F1": {
@@ -76,11 +76,11 @@ class TestUS11(unittest.TestCase):
 class TestUS12(unittest.TestCase):
 
     def setUp(self):
-        # Clear the error list before each test.
+        #clear the error list before each test
         Group_project.errors.clear()
 
-    # Test 1: Mother is 60 years old when the child is born.
-    # This should produce a US12 error.
+    #test 1: mom is 60 years old when the child is born
+    #produces a US12 error
     def test_mother_too_old(self):
         families = {
             "F1": {
@@ -121,8 +121,8 @@ class TestUS12(unittest.TestCase):
         self.assertIn("Mother", Group_project.errors[0])
         self.assertIn("I2", Group_project.errors[0])
 
-    # Test 2: Father is 80 years old when the child is born.
-    # This should produce a US12 error.
+    #test 2: father is 80 years old when the child is born
+    #produce a US12 error
     def test_father_too_old(self):
         families = {
             "F1": {
@@ -163,8 +163,8 @@ class TestUS12(unittest.TestCase):
         self.assertIn("Father", Group_project.errors[0])
         self.assertIn("I1", Group_project.errors[0])
 
-    # Test 3: Both parents are within the allowed age limits.
-    # This should NOT produce an error.
+    #test 3: both parents are within the allowed age limits
+    #should NOT produce an error
     def test_parents_not_too_old(self):
         families = {
             "F1": {
