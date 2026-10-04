@@ -163,18 +163,6 @@ class TestUS20AuntsUnclesCannotMarryNiecesNephews(unittest.TestCase):
             'ERROR: FAMILY: US20: 40: F4: An uncle (J1) is married to his niece (I1)'
         ])
 
-    def test_uncle_married_to_niece(self):
-        families = {
-            "F3": makeFamily("K1", "K2", "1945-01-01", "NA", {"I2", "J1"}),
-            "F1": makeFamily("I3", "I2", "1972-01-01", "NA", {"I1"}),
-            "F4": makeFamily("J1", "I1", "2000-01-01", "NA"), #uncle married to niece
-        }
-
-        gedcom.validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
-        self.assertEqual(gedcom.errors, [
-            'ERROR: FAMILY: US20: 40: F4: An uncle (J1) is married to his niece (I1)'
-        ])
-
     #same test as in US19, but this does not return any errors for US20
     def test_first_cousins_married(self):
         families = {

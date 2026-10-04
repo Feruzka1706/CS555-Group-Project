@@ -1052,9 +1052,6 @@ def validate_us19_first_cousins_should_not_marry(families):
     Half-first cousins don't have parents that share the same id, they each have a parent that share one parent.
     """
     for familyId, family in families.items():
-        married = family.get("MARR", "NA")
-        if married == "NA":
-            continue
 
         husbandId = family.get("HUSB", "NA")
         wifeId = family.get("WIFE", "NA")
@@ -1095,8 +1092,10 @@ def validate_us19_first_cousins_should_not_marry(families):
                 f"Husband ({husbandId}) and wife ({wifeId}) are half-first cousins"
             )
 
-#checks if candidateId is a sibling or half-sibling of one of personId's parents
 def isAuntOrUncleOf(candidateId, personId, families):
+    """
+    Checks if candidateId is a sibling or half-sibling of one of personId's parents
+    """
     _, candidateParentIds = getParents(candidateId, families)
     _, parentIds = getParents(personId, families)
 
@@ -1109,8 +1108,10 @@ def isAuntOrUncleOf(candidateId, personId, families):
 
     return False
 
-# returns aunt/nephew, uncle/niece, or None (if no such relation exists)
 def getAuntUncleRelation(personAId, personBId, families):
+    """
+    Returns aunt/nephew, uncle/niece, or None (if no such relation exists)
+    """
     if isAuntOrUncleOf(personAId, personBId, families):
         return personAId, personBId
     if isAuntOrUncleOf(personBId, personAId, families):
@@ -1122,9 +1123,6 @@ def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families):
     US20: Aunts and uncles should not marry their nieces or nephews.
     """
     for familyId, family in families.items():
-        married = family.get("MARR", "NA")
-        if married == "NA":
-            continue
 
         husbandId = family.get("HUSB", "NA")
         wifeId = family.get("WIFE", "NA")
