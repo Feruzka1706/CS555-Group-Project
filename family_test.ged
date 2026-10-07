@@ -795,6 +795,72 @@
 1 FAMC F38
 1 FAMS F39
 
+0 NOTE US11: valid remarriage after spouse dies
+0 I80 INDI
+1 NAME Robert /ValidRemarriage/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1970
+1 FAMS F40
+1 FAMS F41
+
+0 I81 INDI
+1 NAME Susan /DeceasedSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1972
+1 DEAT
+2 DATE 1 JAN 2005
+1 FAMS F40
+
+0 I82 INDI
+1 NAME Linda /SecondSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1975
+1 FAMS F41
+
+0 F40 FAM
+1 MARR
+2 DATE 1 JAN 2000
+1 HUSB I80
+1 WIFE I81
+
+0 F41 FAM
+1 MARR
+2 DATE 1 JAN 2010
+1 HUSB I80
+1 WIFE I82
+
+0 NOTE US12: parents are within the allowed age limits
+0 I83 INDI
+1 NAME Michael /ValidFather/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1950
+1 FAMS F42
+
+0 I84 INDI
+1 NAME Jennifer /ValidMother/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1955
+1 FAMS F42
+
+0 I85 INDI
+1 NAME Kevin /ValidChild/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F42
+
+0 F42 FAM
+1 HUSB I83
+1 WIFE I84
+1 CHIL I85
+1 MARR
+2 DATE 1 JAN 1999
+
 0 F37 FAM
 1 MARR
 2 DATE 1 FEB 1979
@@ -816,163 +882,38 @@
 1 HUSB I79
 1 WIFE I76
 
-
-0 NOTE US11: Person has overlapping marriages
-0 I80 INDI
-1 NAME Robert /Bigamy/
-1 SEX M
-1 BIRT
-2 DATE 1 JAN 1970
-1 FAMS F40
-1 FAMS F41
-
-0 I81 INDI
-1 NAME Susan /FirstSpouse/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1972
-1 FAMS F40
-
-0 I82 INDI
-1 NAME Linda /SecondSpouse/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1975
-1 FAMS F41
-
-0 F40 FAM
-1 MARR
-2 DATE 1 JAN 2000
-1 HUSB I80
-1 WIFE I81
-
-0 F41 FAM
-1 MARR
-2 DATE 1 JAN 2005
-1 HUSB I80
-1 WIFE I82
-
-
-0 NOTE US11: Person has two marriages that do not overlap
-0 I83 INDI
-1 NAME James /ValidMultipleMarriage/
-1 SEX M
-1 BIRT
-2 DATE 1 JAN 1965
-1 FAMS F42
-1 FAMS F43
-
-0 I84 INDI
-1 NAME Mary /FirstValidSpouse/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1967
-1 FAMS F42
-
-0 I85 INDI
-1 NAME Lisa /SecondValidSpouse/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1970
-1 FAMS F43
-
-0 F42 FAM
-1 MARR
-2 DATE 1 JAN 1990
-1 DIV
-2 DATE 1 JAN 2000
-1 HUSB I83
-1 WIFE I84
-
-0 F43 FAM
-1 MARR
-2 DATE 1 JAN 2005
-1 HUSB I83
-1 WIFE I85
-
-
-0 NOTE US12: Mom is 60 years old when kid is born
+0 NOTE US35: born 20 SEP 2026, within 30 days of 3 OCT 2026 (listed)
 0 I86 INDI
-1 NAME Yennifer/TooOldMother/
+1 NAME Lily /RecentBirth/
 1 SEX F
 1 BIRT
-2 DATE 1 JAN 1940
-1 FAMS F44
+2 DATE 20 SEP 2026
 
+0 NOTE US35: born 2 SEP 2026, 31 days before 3 OCT 2026 (not listed)
 0 I87 INDI
-1 NAME John /MotherAgeTest/
+1 NAME Noah /NotRecentBirth/
 1 SEX M
 1 BIRT
-2 DATE 1 JAN 2000
-1 FAMC F44
+2 DATE 2 SEP 2026
 
-0 F44 FAM
-1 HUSB I88
-1 WIFE I86
-1 CHIL I87
-
+0 NOTE US36: died 25 SEP 2026, within 30 days of 3 OCT 2026 (listed)
 0 I88 INDI
-1 NAME David /FatherForMotherTest/
+1 NAME Arthur /RecentDeath/
 1 SEX M
 1 BIRT
-2 DATE 1 JAN 1970
-1 FAMS F44
+2 DATE 15 MAY 1940
+1 DEAT
+2 DATE 25 SEP 2026
 
-
-0 NOTE US12: Dad is 80 years old when kid is born
+0 NOTE US36: died 2 SEP 2026, 31 days before 3 OCT 2026 (not listed)
 0 I89 INDI
-1 NAME Geralt/TooOldFather/
-1 SEX M
-1 BIRT
-2 DATE 1 JAN 1920
-1 FAMS F45
-
-0 I90 INDI
-1 NAME Susan /FatherAgeTest/
+1 NAME Martha /NotRecentDeath/
 1 SEX F
 1 BIRT
-2 DATE 1 JAN 2000
-1 FAMC F45
-
-0 I91 INDI
-1 NAME Carol /MotherForFatherTest/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1970
-1 FAMS F45
-
-0 F45 FAM
-1 HUSB I89
-1 WIFE I91
-1 CHIL I90
-
-
-0 NOTE US12: Parents are within the allowed age limits
-0 I92 INDI
-1 NAME Robert /ValidFather/
-1 SEX M
-1 BIRT
-2 DATE 1 JAN 1950
-1 FAMS F46
-
-0 I93 INDI
-1 NAME Jennifer /ValidMother/
-1 SEX F
-1 BIRT
-2 DATE 1 JAN 1955
-1 FAMS F46
-
-0 I94 INDI
-1 NAME Kevin /ValidChild/
-1 SEX M
-1 BIRT
-2 DATE 1 JAN 2000
-1 FAMC F46
-
-0 F46 FAM
-1 HUSB I92
-1 WIFE I93
-1 CHIL I94
+2 DATE 10 MAR 1945
+1 DEAT
+2 DATE 2 SEP 2026
 
 
 0 TRLR
+
