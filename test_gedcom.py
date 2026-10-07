@@ -247,14 +247,14 @@ def buildReportTables(individuals, families):
 
     reportTables.append(build_us29_deceased_table(individuals))
     reportTables.append(build_us30_living_married_table(families, individuals))
+    reportTables.append(build_us35_recent_births_table(individuals))
+    reportTables.append(build_us36_recent_deaths_table(individuals))
 
     # Future list/report story examples:
     # reportTables.append(build_us31_living_single_table(individuals))
     # reportTables.append(build_us32_multiple_births_table(families, individuals))
     # reportTables.append(build_us33_orphans_table(families, individuals))
     # reportTables.append(build_us34_large_age_differences_table(families, individuals))
-    # reportTables.append(build_us35_recent_births_table(individuals))
-    # reportTables.append(build_us36_recent_deaths_table(individuals))
     # reportTables.append(build_us37_recent_survivors_table(families, individuals))
     # reportTables.append(build_us38_upcoming_birthdays_table(individuals))
     # reportTables.append(build_us39_upcoming_anniversaries_table(families, individuals))
@@ -728,13 +728,13 @@ def validate_us08_birth_before_marriage_of_parents(families, individuals):
 
             if married != "NA" and compareDates(childBirth, married) < 0:
                 errors.append(
-                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"ANOMALY: FAMILY: US08: {childBirthLine}: {familyId}: "
                     f"Child {childId} born {childBirth} before marriage on {married}"
                 )
 
             if divorced != "NA" and compareDates(childBirth, addMonthsToDate(divorced, 9)) > 0:
                 errors.append(
-                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"ANOMALY: FAMILY: US08: {childBirthLine}: {familyId}: "
                     f"Child {childId} born {childBirth} more than 9 months after divorce on {divorced}"
                 )
 
@@ -1152,6 +1152,116 @@ def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families):
 
             resultString = startString + personAString + personBString
             errors.append(resultString)
+
+
+############ USER STORY US35 & US36 LIST FUNCTIONS ##########
+
+def isWithinLastDays(dateString, today, days=30):
+    """
+    True if dateString is no more than `days` days before today.
+    Today itself counts as recent. Future dates are not recent
+    (those are already reported by US01).
+    """
+    if dateString == "NA":
+        return False
+
+    eventYear, eventMonth, eventDay = dateString.split('-')
+    todayYear, todayMonth, todayDay = today.split('-')
+
+    eventDate = date(int(eventYear), int(eventMonth), int(eventDay))
+    todayDate = date(int(todayYear), int(todayMonth), int(todayDay))
+
+    daysAgo = (todayDate - eventDate).days
+
+    return 0 <= daysAgo <= days
+
+
+def validate_us35_list_recent_births(individuals, today=None):
+    """
+    US35: List all people in a GEDCOM file who were born in the last 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns the IDs of all individuals born in the last 30 days.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    recentBirths = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if isWithinLastDays(individual.get("birthday", "NA"), today, 30):
+            recentBirths.append(indId)
+
+    return recentBirths
+
+
+def validate_us36_list_recent_deaths(individuals, today=None):
+    """
+    US36: List all people in a GEDCOM file who died in the last 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns the IDs of all individuals who died in the last 30 days.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    recentDeaths = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if isWithinLastDays(individual.get("death", "NA"), today, 30):
+            recentDeaths.append(indId)
+
+    return recentDeaths
+
+
+def build_us35_recent_births_table(individuals, today=None):
+    """
+    Build output table for US35: List all individuals born in the last 30 days.
+    """
+    rows = []
+
+    for indId in validate_us35_list_recent_births(individuals, today):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("birthday", "NA")
+        ])
+
+    return build_report_table(
+        "US35: Recent Births (Last 30 Days)",
+        ["ID", "Name", "Birthday"],
+        rows
+    )
+
+
+def build_us36_recent_deaths_table(individuals, today=None):
+    """
+    Build output table for US36: List all individuals who died in the last 30 days.
+    """
+    rows = []
+
+    for indId in validate_us36_list_recent_deaths(individuals, today):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("death", "NA")
+        ])
+
+    return build_report_table(
+        "US36: Recent Deaths (Last 30 Days)",
+        ["ID", "Name", "Death Date"],
+        rows
+    )
 
 
 ################
