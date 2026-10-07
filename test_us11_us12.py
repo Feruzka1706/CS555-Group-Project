@@ -1,5 +1,5 @@
 import unittest
-import Group_Project as Group_project
+import test_gedcom as Group_project
 
 
 class TestUS11(unittest.TestCase):
