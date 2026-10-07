@@ -816,6 +816,38 @@
 1 HUSB I79
 1 WIFE I76
 
+0 NOTE US35: born 20 SEP 2026, within 30 days of 3 OCT 2026 (listed)
+0 I86 INDI
+1 NAME Lily /RecentBirth/
+1 SEX F
+1 BIRT
+2 DATE 20 SEP 2026
+
+0 NOTE US35: born 2 SEP 2026, 31 days before 3 OCT 2026 (not listed)
+0 I87 INDI
+1 NAME Noah /NotRecentBirth/
+1 SEX M
+1 BIRT
+2 DATE 2 SEP 2026
+
+0 NOTE US36: died 25 SEP 2026, within 30 days of 3 OCT 2026 (listed)
+0 I88 INDI
+1 NAME Arthur /RecentDeath/
+1 SEX M
+1 BIRT
+2 DATE 15 MAY 1940
+1 DEAT
+2 DATE 25 SEP 2026
+
+0 NOTE US36: died 2 SEP 2026, 31 days before 3 OCT 2026 (not listed)
+0 I89 INDI
+1 NAME Martha /NotRecentDeath/
+1 SEX F
+1 BIRT
+2 DATE 10 MAR 1945
+1 DEAT
+2 DATE 2 SEP 2026
+
 
 0 TRLR
 
