@@ -301,14 +301,20 @@ def main():
     validate_us08_birth_before_marriage_of_parents(families, individuals)
     validate_us09_birth_before_death_of_parents(families, individuals)
 
-    # US11: No bigamy
+    # US11: No Bigamy
     # US12: Parents not too old
-    validate_us11_no_bigamy(families)
+    validate_us11_no_bigamy(families, individuals)
     validate_us12_parents_not_too_old(families, individuals)
+
     # US17: No marriages to descendants
     # US18: Siblings should not marry
     validate_us17_no_marriages_to_descendants(families)
     validate_us18_siblings_should_not_marry(families)
+
+    # US19: First cousins should not marry
+    # US20: Aunts and uncles should not marry their nieces or nephews
+    validate_us19_first_cousins_should_not_marry(families)
+    validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -774,6 +780,158 @@ def validate_us09_birth_before_death_of_parents(families, individuals):
                     f"Child {childId} born {childBirth} more than 9 months after father's ({husbandId}) death on {fatherDeath}"
                 )
 
+############ USER STORY US11 & US12 VALIDATIONS ##########
+
+def validate_us11_no_bigamy(families, individuals):
+    """
+    US11: Marriage should not occur during marriage to another spouse
+    """
+
+    #store every marriage for each person
+    marriages = {}
+
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+
+        if married == "NA":
+            continue
+
+        for spouseId in (family.get("HUSB", "NA"), family.get("WIFE", "NA")):
+            if spouseId == "NA":
+                continue
+
+            marriages.setdefault(spouseId, []).append((familyId, family))
+
+    #compare each person's marriages to look for overlaps
+    for spouseId, spouseMarriages in marriages.items():
+        for i in range(len(spouseMarriages)):
+            familyId1, family1 = spouseMarriages[i]
+            marriage1 = family1.get("MARR", "NA")
+
+            for j in range(i + 1, len(spouseMarriages)):
+                familyId2, family2 = spouseMarriages[j]
+                marriage2 = family2.get("MARR", "NA")
+
+                #which marriage happened first
+                if compareDates(marriage1, marriage2) <= 0:
+                    earlierFamilyId = familyId1
+                    earlierFamily = family1
+                    earlierMarriage = marriage1
+                    laterFamilyId = familyId2
+                    laterFamily = family2
+                    laterMarriage = marriage2
+                else:
+                    earlierFamilyId = familyId2
+                    earlierFamily = family2
+                    earlierMarriage = marriage2
+                    laterFamilyId = familyId1
+                    laterFamily = family1
+                    laterMarriage = marriage1
+
+                earlierDivorce = earlierFamily.get("DIV", "NA")
+
+                #find the other spouse in the earlier marriage
+                if earlierFamily.get("HUSB", "NA") == spouseId:
+                    otherSpouseId = earlierFamily.get("WIFE", "NA")
+                else:
+                    otherSpouseId = earlierFamily.get("HUSB", "NA")
+
+                #check whether the other spouse died
+                spouseDeath = "NA"
+
+                if otherSpouseId != "NA" and otherSpouseId in individuals:
+                    spouseDeath = individuals[otherSpouseId].get("DEAT", "NA")
+
+                #if there is no divorce and the other spouse has not died the earlier marriage is still active
+                if earlierDivorce == "NA" and spouseDeath == "NA":
+                    errors.append(
+                        f"ERROR: INDIVIDUAL: US11: "
+                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                        f"Marriage in {laterFamilyId} on {laterMarriage} "
+                        f"occurs while marriage in {earlierFamilyId} "
+                        f"on {earlierMarriage} is still active"
+                    )
+
+                #if the earlier marriage ended(divorce) make sure the later marriage did not happen before or on the divorce
+                elif earlierDivorce != "NA":
+                    if compareDates(laterMarriage, earlierDivorce) <= 0:
+                        errors.append(
+                            f"ERROR: INDIVIDUAL: US11: "
+                            f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                            f"Marriage in {laterFamilyId} on {laterMarriage} "
+                            f"occurs during marriage in {earlierFamilyId}, "
+                            f"which ended on {earlierDivorce}"
+                        )
+
+                #if the spouse died before the later marriage the marriage has ended and the marriage after is valid
+                elif spouseDeath != "NA":
+                    if compareDates(laterMarriage, spouseDeath) <= 0:
+                        errors.append(
+                            f"ERROR: INDIVIDUAL: US11: "
+                            f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                            f"Marriage in {laterFamilyId} on {laterMarriage} "
+                            f"occurs during marriage in {earlierFamilyId}, "
+                            f"which ended when spouse {otherSpouseId} died "
+                            f"on {spouseDeath}"
+                        )
+
+
+def validate_us12_parents_not_too_old(families, individuals):
+    """
+    US12: Mother should be less than 60 years older than her child
+    and father should be less than 80 years older than his child
+    """
+    for familyId, family in families.items():
+        motherId = family.get("WIFE", "NA")
+        fatherId = family.get("HUSB", "NA")
+
+        mother = individuals.get(motherId)
+        father = individuals.get(fatherId)
+
+        for childId in sorted(
+            family.get("CHIL", set()),
+            key=lambda x: (len(x), x)
+        ):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            childBirth = child.get("birthday", "NA")
+            childBirthLine = child.get("BIRT_LINE", "NA")
+
+            if childBirth == "NA":
+                continue
+
+            #check the moms age when the kid was born
+            if mother is not None:
+                motherBirth = mother.get("birthday", "NA")
+
+                if motherBirth != "NA":
+                    motherAge = getAgeOnDate(motherBirth, childBirth)
+
+                    if motherAge >= 60:
+                        errors.append(
+                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
+                            f"Mother ({motherId}) was {motherAge} years old when "
+                            f"child ({childId}) was born on {childBirth}"
+                        )
+
+            #dheck the dads age when the kid was born
+            if father is not None:
+                fatherBirth = father.get("birthday", "NA")
+
+                if fatherBirth != "NA":
+                    fatherAge = getAgeOnDate(fatherBirth, childBirth)
+
+                    if fatherAge >= 80:
+                        errors.append(
+                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
+                            f"Father ({fatherId}) was {fatherAge} years old when "
+                            f"child ({childId}) was born on {childBirth}"
+                        )
+
+
 
 ############ USER STORY US29 & US30 LIST FUNCTIONS ##########
 
@@ -915,125 +1073,6 @@ def build_us30_living_married_table(families, individuals):
         rows
     )
 
-############ USER STORY US11 & US12 LIST FUNCTIONS ##########
-def validate_us11_no_bigamy(families):
-    """US11:Marriage should not occur during marriage to another spouse"""
-    #store every marriage per person
-    marriages = {}
-
-    for familyId, family in families.items():
-        married = family.get("MARR", "NA")
-
-        if married == "NA":
-            continue
-
-        for spouseId in (family.get("HUSB", "NA"), family.get("WIFE", "NA")):
-            if spouseId == "NA":
-                continue
-
-            marriages.setdefault(spouseId, []).append((familyId, family))
-
-    #compare each persons marriages to identify overlaps
-    for spouseId, spouseMarriages in marriages.items():
-        for i in range(len(spouseMarriages)):
-            familyId1, family1 = spouseMarriages[i]
-            marriage1 = family1.get("MARR", "NA")
-            divorce1 = family1.get("DIV", "NA")
-
-            for j in range(i + 1, len(spouseMarriages)):
-                familyId2, family2 = spouseMarriages[j]
-                marriage2 = family2.get("MARR", "NA")
-                divorce2 = family2.get("DIV", "NA")
-
-                #check which marriage happened first
-                if compareDates(marriage1, marriage2) <= 0:
-                    earlierFamilyId = familyId1
-                    earlierFamily = family1
-                    earlierMarriage = marriage1
-                    laterFamilyId = familyId2
-                    laterFamily = family2
-                    laterMarriage = marriage2
-                else:
-                    earlierFamilyId = familyId2
-                    earlierFamily = family2
-                    earlierMarriage = marriage2
-                    laterFamilyId = familyId1
-                    laterFamily = family1
-                    laterMarriage = marriage1
-
-                earlierDivorce = earlierFamily.get("DIV", "NA")
-
-                #if no divorce, the later marriage is automatically during the earlier marriage
-                if earlierDivorce == "NA":
-                    errors.append(
-                        f"ERROR: INDIVIDUAL: US11: "
-                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
-                        f"Marriage in {laterFamilyId} on {laterMarriage} "
-                        f"occurs while marriage in {earlierFamilyId} "
-                        f"on {earlierMarriage} is still active"
-                    )
-
-                #if the later marriage occurs on or before the earlier divorce, then overlap
-            
-                elif compareDates(laterMarriage, earlierDivorce) <= 0:
-                    errors.append(
-                        f"ERROR: INDIVIDUAL: US11: "
-                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
-                        f"Marriage in {laterFamilyId} on {laterMarriage} "
-                        f"occurs during marriage in {earlierFamilyId}, "
-                        f"which ended on {earlierDivorce}"
-                    )
-
-
-def validate_us12_parents_not_too_old(families, individuals):
-    """US12: Mother should be less than 60 years older than her children,and father should be less than 80 years older than his children """
-    for familyId, family in families.items():
-        motherId = family.get("WIFE", "NA")
-        fatherId = family.get("HUSB", "NA")
-
-        mother = individuals.get(motherId)
-        father = individuals.get(fatherId)
-
-        for childId in sorted(family.get("CHIL", set()), key=lambda x: (len(x), x)):
-            child = individuals.get(childId)
-
-            if child is None:
-                continue
-
-            childBirth = child.get("birthday", "NA")
-            childBirthLine = child.get("BIRT_LINE", "NA")
-
-            if childBirth == "NA":
-                continue
-
-            #check the moms age when the kid was born
-            if mother is not None:
-                motherBirth = mother.get("birthday", "NA")
-
-                if motherBirth != "NA":
-                    motherAge = getAgeOnDate(motherBirth, childBirth)
-
-                    if motherAge >= 60:
-                        errors.append(
-                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
-                            f"Mother ({motherId}) was {motherAge} years old when "
-                            f"child ({childId}) was born on {childBirth}"
-                        )
-
-            #check the dads age when the kid was born
-            if father is not None:
-                fatherBirth = father.get("birthday", "NA")
-
-                if fatherBirth != "NA":
-                    fatherAge = getAgeOnDate(fatherBirth, childBirth)
-
-                    if fatherAge >= 80:
-                        errors.append(
-                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
-                            f"Father ({fatherId}) was {fatherAge} years old when "
-                            f"child ({childId}) was born on {childBirth}"
-                        )
-
 
 ############ USER STORY US17 & US18 VALIDATIONS ##########
 
@@ -1149,6 +1188,127 @@ def validate_us18_siblings_should_not_marry(families):
             f"ERROR: FAMILY: US18: {getFamilyLine(family)}: {familyId}: "
             f"Husband ({husbandId}) and wife ({wifeId}) are {relationship}"
         )
+
+############ USER STORY US19 & US20 VALIDATIONS ##########
+
+def getGrandparents(personId, families):
+    """IDs of all grandparents of personId (parents of their parents)."""
+    _, parentIds = getParents(personId, families)
+    grandparentIds = set()
+
+    for parentId in parentIds:
+        _, parentParentIds = getParents(parentId, families)
+        grandparentIds |= parentParentIds
+
+    return grandparentIds
+
+def validate_us19_first_cousins_should_not_marry(families):
+    """
+    US19: First cousins should not marry one another.
+    First cousins each have one parent with the same family id.
+    Half-first cousins don't have parents that share the same id, they each have a parent that share one parent.
+    """
+    for familyId, family in families.items():
+
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        husbandFamilyIds, husbandParentIds = getParents(husbandId, families)
+        wifeFamilyIds, wifeParentIds = getParents(wifeId, families)
+        husbandGrandparentIds = getGrandparents(husbandId, families)
+        wifeGrandparentIds = getGrandparents(wifeId, families)
+
+        #if siblings
+        if husbandFamilyIds & wifeFamilyIds or husbandParentIds & wifeParentIds:
+            continue
+
+        husbandParentFamilyIds = set()
+        wifeParentFamilyIds = set()
+
+        for husbandParentId in husbandParentIds:
+            parentFamilyIds, _ = getParents(husbandParentId, families)
+            husbandParentFamilyIds |= parentFamilyIds
+
+        for wifeParentId in wifeParentIds:
+            parentFamilyIds, _ = getParents(wifeParentId, families)
+            wifeParentFamilyIds |= parentFamilyIds
+
+        familyIntersect = husbandParentFamilyIds & wifeParentFamilyIds
+        grandparentsIntersect = wifeGrandparentIds & husbandGrandparentIds
+
+        if (len(familyIntersect) != 0):
+            errors.append(
+                f"ERROR: FAMILY: US19: {getFamilyLine(family)}: {familyId}: "
+                f"Husband ({husbandId}) and wife ({wifeId}) are first cousins"
+            )
+        elif (len(familyIntersect) == 0 and len(grandparentsIntersect) != 0):
+            errors.append(
+                f"ERROR: FAMILY: US19: {getFamilyLine(family)}: {familyId}: "
+                f"Husband ({husbandId}) and wife ({wifeId}) are half-first cousins"
+            )
+
+def isAuntOrUncleOf(candidateId, personId, families):
+    """
+    Checks if candidateId is a sibling or half-sibling of one of personId's parents
+    """
+    _, candidateParentIds = getParents(candidateId, families)
+    _, parentIds = getParents(personId, families)
+
+    for parentId in parentIds:
+        if parentId == candidateId: #candidate is the parent, skip
+            continue
+        _, parentParentIds = getParents(parentId, families)
+        if parentParentIds & candidateParentIds: #share at least one parent
+            return True
+
+    return False
+
+def getAuntUncleRelation(personAId, personBId, families):
+    """
+    Returns aunt/nephew, uncle/niece, or None (if no such relation exists)
+    """
+    if isAuntOrUncleOf(personAId, personBId, families):
+        return personAId, personBId
+    if isAuntOrUncleOf(personBId, personAId, families):
+        return personBId, personAId
+    return None
+
+def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families):
+    """
+    US20: Aunts and uncles should not marry their nieces or nephews.
+    """
+    for familyId, family in families.items():
+
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        if husbandId == "NA" or wifeId == "NA":
+            continue
+
+        auntUncleRelation = getAuntUncleRelation(husbandId, wifeId, families)
+
+        if auntUncleRelation:
+            personAId = auntUncleRelation[0]
+            personBId = auntUncleRelation[1]
+
+            #make error string
+            startString =  f"ERROR: FAMILY: US20: {getFamilyLine(family)}: {familyId}: "
+            personAString = f"An aunt or uncle ({personAId}) is married to his/her " #default string
+            personBString = f"niece or nephew ({personBId})" #default string
+
+            if (personAId == husbandId):
+                personAString = f"An uncle ({personAId}) is married to his "
+            elif (personAId == wifeId):
+                personAString = f"An aunt ({personAId}) is married to her "
+
+            if (personBId == husbandId):
+                personBString = f"nephew ({personBId})"
+            elif (personBId == wifeId):
+                personBString = f"niece ({personBId})"
+
+            resultString = startString + personAString + personBString
+            errors.append(resultString)
 
 
 ################
