@@ -802,7 +802,7 @@ def validate_us11_no_bigamy(families, individuals):
 
             marriages.setdefault(spouseId, []).append((familyId, family))
 
-    #compare each person's marriages to look for overlaps
+    #compare each persons marriages to identify overlaps
     for spouseId, spouseMarriages in marriages.items():
         for i in range(len(spouseMarriages)):
             familyId1, family1 = spouseMarriages[i]
@@ -812,23 +812,19 @@ def validate_us11_no_bigamy(families, individuals):
                 familyId2, family2 = spouseMarriages[j]
                 marriage2 = family2.get("MARR", "NA")
 
-                #which marriage happened first
+                #determine which marriage happened first
                 if compareDates(marriage1, marriage2) <= 0:
                     earlierFamilyId = familyId1
                     earlierFamily = family1
                     earlierMarriage = marriage1
                     laterFamilyId = familyId2
-                    laterFamily = family2
                     laterMarriage = marriage2
                 else:
                     earlierFamilyId = familyId2
                     earlierFamily = family2
                     earlierMarriage = marriage2
                     laterFamilyId = familyId1
-                    laterFamily = family1
                     laterMarriage = marriage1
-
-                earlierDivorce = earlierFamily.get("DIV", "NA")
 
                 #find the other spouse in the earlier marriage
                 if earlierFamily.get("HUSB", "NA") == spouseId:
@@ -836,14 +832,33 @@ def validate_us11_no_bigamy(families, individuals):
                 else:
                     otherSpouseId = earlierFamily.get("HUSB", "NA")
 
-                #check whether the other spouse died
-                spouseDeath = "NA"
+                #get the divorce date
+                divorceDate = earlierFamily.get("DIV", "NA")
+
+                #get the other spouse's death date
+                deathDate = "NA"
 
                 if otherSpouseId != "NA" and otherSpouseId in individuals:
-                    spouseDeath = individuals[otherSpouseId].get("DEAT", "NA")
+                    deathDate = individuals[otherSpouseId].get("death", "NA")
 
-                #if there is no divorce and the other spouse has not died the earlier marriage is still active
-                if earlierDivorce == "NA" and spouseDeath == "NA":
+                #determine when the earlier marriage actually ended
+                #divorce or death
+                marriageEnd = "NA"
+
+                if divorceDate != "NA" and deathDate != "NA":
+                    if compareDates(divorceDate, deathDate) <= 0:
+                        marriageEnd = divorceDate
+                    else:
+                        marriageEnd = deathDate
+
+                elif divorceDate != "NA":
+                    marriageEnd = divorceDate
+
+                elif deathDate != "NA":
+                    marriageEnd = deathDate
+
+                #if the earlier marriage has no ending date it is still active
+                if marriageEnd == "NA":
                     errors.append(
                         f"ERROR: INDIVIDUAL: US11: "
                         f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
@@ -852,28 +867,16 @@ def validate_us11_no_bigamy(families, individuals):
                         f"on {earlierMarriage} is still active"
                     )
 
-                #if the earlier marriage ended(divorce) make sure the later marriage did not happen before or on the divorce
-                elif earlierDivorce != "NA":
-                    if compareDates(laterMarriage, earlierDivorce) <= 0:
-                        errors.append(
-                            f"ERROR: INDIVIDUAL: US11: "
-                            f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
-                            f"Marriage in {laterFamilyId} on {laterMarriage} "
-                            f"occurs during marriage in {earlierFamilyId}, "
-                            f"which ended on {earlierDivorce}"
-                        )
-
-                #if the spouse died before the later marriage the marriage has ended and the marriage after is valid
-                elif spouseDeath != "NA":
-                    if compareDates(laterMarriage, spouseDeath) <= 0:
-                        errors.append(
-                            f"ERROR: INDIVIDUAL: US11: "
-                            f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
-                            f"Marriage in {laterFamilyId} on {laterMarriage} "
-                            f"occurs during marriage in {earlierFamilyId}, "
-                            f"which ended when spouse {otherSpouseId} died "
-                            f"on {spouseDeath}"
-                        )
+                #ff the later marriage occurs before or on the date then bigamy
+               
+                elif compareDates(laterMarriage, marriageEnd) <= 0:
+                    errors.append(
+                        f"ERROR: INDIVIDUAL: US11: "
+                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                        f"Marriage in {laterFamilyId} on {laterMarriage} "
+                        f"occurs during marriage in {earlierFamilyId} "
+                        f"on {earlierMarriage}, which ended on {marriageEnd}"
+                    )
 
 
 def validate_us12_parents_not_too_old(families, individuals):
@@ -917,7 +920,7 @@ def validate_us12_parents_not_too_old(families, individuals):
                             f"child ({childId}) was born on {childBirth}"
                         )
 
-            #dheck the dads age when the kid was born
+            #check the dads age when the kid was born
             if father is not None:
                 fatherBirth = father.get("birthday", "NA")
 
@@ -1312,6 +1315,116 @@ def validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families):
 
 
 ################
+
+############ USER STORY US35 & US36 LIST FUNCTIONS ##########
+
+def isWithinLastDays(dateString, today, days=30):
+    """
+    True if dateString is no more than `days` days before today.
+    Today itself counts as recent. Future dates are not recent
+    (those are already reported by US01).
+    """
+    if dateString == "NA":
+        return False
+
+    eventYear, eventMonth, eventDay = dateString.split('-')
+    todayYear, todayMonth, todayDay = today.split('-')
+
+    eventDate = date(int(eventYear), int(eventMonth), int(eventDay))
+    todayDate = date(int(todayYear), int(todayMonth), int(todayDay))
+
+    daysAgo = (todayDate - eventDate).days
+
+    return 0 <= daysAgo <= days
+
+
+def validate_us35_list_recent_births(individuals, today=None):
+    """
+    US35: List all people in a GEDCOM file who were born in the last 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns the IDs of all individuals born in the last 30 days.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    recentBirths = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if isWithinLastDays(individual.get("birthday", "NA"), today, 30):
+            recentBirths.append(indId)
+
+    return recentBirths
+
+
+def validate_us36_list_recent_deaths(individuals, today=None):
+    """
+    US36: List all people in a GEDCOM file who died in the last 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns the IDs of all individuals who died in the last 30 days.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    recentDeaths = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        if isWithinLastDays(individual.get("death", "NA"), today, 30):
+            recentDeaths.append(indId)
+
+    return recentDeaths
+
+
+def build_us35_recent_births_table(individuals, today=None):
+    """
+    Build output table for US35: List all individuals born in the last 30 days.
+    """
+    rows = []
+
+    for indId in validate_us35_list_recent_births(individuals, today):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("birthday", "NA")
+        ])
+
+    return build_report_table(
+        "US35: Recent Births (Last 30 Days)",
+        ["ID", "Name", "Birthday"],
+        rows
+    )
+
+
+def build_us36_recent_deaths_table(individuals, today=None):
+    """
+    Build output table for US36: List all individuals who died in the last 30 days.
+    """
+    rows = []
+
+    for indId in validate_us36_list_recent_deaths(individuals, today):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("death", "NA")
+        ])
+
+    return build_report_table(
+        "US36: Recent Deaths (Last 30 Days)",
+        ["ID", "Name", "Death Date"],
+        rows
+    )
+###################
 
 if __name__ == "__main__":
     main()
