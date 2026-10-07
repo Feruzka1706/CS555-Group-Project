@@ -247,14 +247,14 @@ def buildReportTables(individuals, families):
 
     reportTables.append(build_us29_deceased_table(individuals))
     reportTables.append(build_us30_living_married_table(families, individuals))
+    reportTables.append(build_us35_recent_births_table(individuals))
+    reportTables.append(build_us36_recent_deaths_table(individuals))
 
     # Future list/report story examples:
     # reportTables.append(build_us31_living_single_table(individuals))
     # reportTables.append(build_us32_multiple_births_table(families, individuals))
     # reportTables.append(build_us33_orphans_table(families, individuals))
     # reportTables.append(build_us34_large_age_differences_table(families, individuals))
-    # reportTables.append(build_us35_recent_births_table(individuals))
-    # reportTables.append(build_us36_recent_deaths_table(individuals))
     # reportTables.append(build_us37_recent_survivors_table(families, individuals))
     # reportTables.append(build_us38_upcoming_birthdays_table(individuals))
     # reportTables.append(build_us39_upcoming_anniversaries_table(families, individuals))
@@ -733,13 +733,13 @@ def validate_us08_birth_before_marriage_of_parents(families, individuals):
 
             if married != "NA" and compareDates(childBirth, married) < 0:
                 errors.append(
-                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"ANOMALY: FAMILY: US08: {childBirthLine}: {familyId}: "
                     f"Child {childId} born {childBirth} before marriage on {married}"
                 )
 
             if divorced != "NA" and compareDates(childBirth, addMonthsToDate(divorced, 9)) > 0:
                 errors.append(
-                    f"ERROR: FAMILY: US08: {childBirthLine}: {familyId}: "
+                    f"ANOMALY: FAMILY: US08: {childBirthLine}: {familyId}: "
                     f"Child {childId} born {childBirth} more than 9 months after divorce on {divorced}"
                 )
 
