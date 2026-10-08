@@ -849,5 +849,139 @@
 2 DATE 2 SEP 2026
 
 
+0 NOTE US11: valid remarriage after spouse dies
+0 I80 INDI
+1 NAME Robert /ValidRemarriage/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1970
+1 FAMS F40
+1 FAMS F41
+
+0 I81 INDI
+1 NAME Susan /DeceasedSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1972
+1 DEAT
+2 DATE 1 JAN 2005
+1 FAMS F40
+
+0 I82 INDI
+1 NAME Linda /SecondSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1975
+1 FAMS F41
+
+0 F40 FAM
+1 MARR
+2 DATE 1 JAN 2000
+1 HUSB I80
+1 WIFE I81
+
+0 F41 FAM
+1 MARR
+2 DATE 1 JAN 2010
+1 HUSB I80
+1 WIFE I82
+
+
+0 NOTE US12: parents are within the allowed age limits
+0 I83 INDI
+1 NAME Michael /ValidFather/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1950
+1 FAMS F42
+
+0 I84 INDI
+1 NAME Jennifer /ValidMother/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1955
+1 FAMS F42
+
+0 I85 INDI
+1 NAME Kevin /ValidChild/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F42
+
+0 F42 FAM
+1 HUSB I83
+1 WIFE I84
+1 CHIL I85
+1 MARR
+2 DATE 1 JAN 1999
+
+
+0 NOTE US11: invalid bigamy - second marriage occurs before first marriage ends
+0 I90 INDI
+1 NAME John /Bigamy/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1970
+1 FAMS F43
+1 FAMS F44
+
+0 I91 INDI
+1 NAME Mary /FirstSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1972
+1 FAMS F43
+
+0 I92 INDI
+1 NAME Susan /SecondSpouse/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1975
+1 FAMS F44
+
+0 F43 FAM
+1 MARR
+2 DATE 1 JAN 2000
+1 HUSB I90
+1 WIFE I91
+
+0 F44 FAM
+1 MARR
+2 DATE 1 JAN 2005
+1 HUSB I90
+1 WIFE I92
+
+0 NOTE US12: invalid parent age - father is 80 years older than child
+0 I93 INDI
+1 NAME Robert /TooOldFather/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1920
+1 FAMS F45
+
+0 I94 INDI
+1 NAME Linda /Mother/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1960
+1 FAMS F45
+
+0 I95 INDI
+1 NAME David /TooYoungChild/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F45
+
+0 F45 FAM
+1 HUSB I93
+1 WIFE I94
+1 CHIL I95
+1 MARR
+2 DATE 1 JAN 1985
+
+
+
 0 TRLR
 

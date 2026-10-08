@@ -301,6 +301,11 @@ def main():
     validate_us08_birth_before_marriage_of_parents(families, individuals)
     validate_us09_birth_before_death_of_parents(families, individuals)
 
+    # US11: No Bigamy
+    # US12: Parents not too old
+    validate_us11_no_bigamy(families, individuals)
+    validate_us12_parents_not_too_old(families, individuals)
+
     # US17: No marriages to descendants
     # US18: Siblings should not marry
     validate_us17_no_marriages_to_descendants(families)
@@ -776,6 +781,161 @@ def validate_us09_birth_before_death_of_parents(families, individuals):
                 )
 
 
+############ USER STORY US11 & US12 VALIDATIONS ##########
+
+def validate_us11_no_bigamy(families, individuals):
+    """
+    US11: Marriage should not occur during marriage to another spouse
+    """
+
+    #store every marriage for each person
+    marriages = {}
+
+    for familyId, family in families.items():
+        married = family.get("MARR", "NA")
+
+        if married == "NA":
+            continue
+
+        for spouseId in (family.get("HUSB", "NA"), family.get("WIFE", "NA")):
+            if spouseId == "NA":
+                continue
+
+            marriages.setdefault(spouseId, []).append((familyId, family))
+
+    #compare each persons marriages to identify overlaps
+    for spouseId, spouseMarriages in marriages.items():
+        for i in range(len(spouseMarriages)):
+            familyId1, family1 = spouseMarriages[i]
+            marriage1 = family1.get("MARR", "NA")
+
+            for j in range(i + 1, len(spouseMarriages)):
+                familyId2, family2 = spouseMarriages[j]
+                marriage2 = family2.get("MARR", "NA")
+
+                #determine which marriage happened first
+                if compareDates(marriage1, marriage2) <= 0:
+                    earlierFamilyId = familyId1
+                    earlierFamily = family1
+                    earlierMarriage = marriage1
+                    laterFamilyId = familyId2
+                    laterFamily=family2
+                    laterMarriage = marriage2
+                else:
+                    earlierFamilyId = familyId2
+                    earlierFamily = family2
+                    earlierMarriage = marriage2
+                    laterFamilyId = familyId1
+                    laterFamily=family1
+                    laterMarriage = marriage1
+
+                #find the other spouse in the earlier marriage
+                if earlierFamily.get("HUSB", "NA") == spouseId:
+                    otherSpouseId = earlierFamily.get("WIFE", "NA")
+                else:
+                    otherSpouseId = earlierFamily.get("HUSB", "NA")
+
+                #get the divorce date
+                divorceDate = earlierFamily.get("DIV", "NA")
+
+                #get the other spouse's death date
+                deathDate = "NA"
+
+                if otherSpouseId != "NA" and otherSpouseId in individuals:
+                    deathDate = individuals[otherSpouseId].get("death", "NA")
+
+                #determine when the earlier marriage actually ended
+                #divorce or death
+                marriageEnd = "NA"
+
+                if divorceDate != "NA" and deathDate != "NA":
+                    if compareDates(divorceDate, deathDate) <= 0:
+                        marriageEnd = divorceDate
+                    else:
+                        marriageEnd = deathDate
+
+                elif divorceDate != "NA":
+                    marriageEnd = divorceDate
+
+                elif deathDate != "NA":
+                    marriageEnd = deathDate
+
+                #if the earlier marriage has no ending date it is still active
+                if marriageEnd == "NA":
+                    errors.append(
+                        f"ERROR: INDIVIDUAL: US11: "
+                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                        f"Marriage in {laterFamilyId} on {laterMarriage} "
+                        f"occurs while marriage in {earlierFamilyId} "
+                        f"on {earlierMarriage} is still active"
+                    )
+
+                #ff the later marriage occurs before or on the date then bigamy
+               
+                elif compareDates(laterMarriage, marriageEnd) <= 0:
+                    errors.append(
+                        f"ERROR: INDIVIDUAL: US11: "
+                        f"{laterFamily.get('MARR_LINE', 'NA')}: {spouseId}: "
+                        f"Marriage in {laterFamilyId} on {laterMarriage} "
+                        f"occurs during marriage in {earlierFamilyId} "
+                        f"on {earlierMarriage}, which ended on {marriageEnd}"
+                    )
+
+
+def validate_us12_parents_not_too_old(families, individuals):
+    """
+    US12: Mother should be less than 60 years older than her child
+    and father should be less than 80 years older than his child
+    """
+    for familyId, family in families.items():
+        motherId = family.get("WIFE", "NA")
+        fatherId = family.get("HUSB", "NA")
+
+        mother = individuals.get(motherId)
+        father = individuals.get(fatherId)
+
+        for childId in sorted(
+            family.get("CHIL", set()),
+            key=lambda x: (len(x), x)
+        ):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            childBirth = child.get("birthday", "NA")
+            childBirthLine = child.get("BIRT_LINE", "NA")
+
+            if childBirth == "NA":
+                continue
+
+            #check the moms age when the kid was born
+            if mother is not None:
+                motherBirth = mother.get("birthday", "NA")
+
+                if motherBirth != "NA":
+                    motherAge = getAgeOnDate(motherBirth, childBirth)
+
+                    if motherAge >= 60:
+                        errors.append(
+                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
+                            f"Mother ({motherId}) was {motherAge} years old when "
+                            f"child ({childId}) was born on {childBirth}"
+                        )
+
+            #check the dads age when the kid was born
+            if father is not None:
+                fatherBirth = father.get("birthday", "NA")
+
+                if fatherBirth != "NA":
+                    fatherAge = getAgeOnDate(fatherBirth, childBirth)
+
+                    if fatherAge >= 80:
+                        errors.append(
+                            f"ERROR: FAMILY: US12: {childBirthLine}: {familyId}: "
+                            f"Father ({fatherId}) was {fatherAge} years old when "
+                            f"child ({childId}) was born on {childBirth}"
+                        )
 ############ USER STORY US29 & US30 LIST FUNCTIONS ##########
 
 def sortIds(ids):
