@@ -819,12 +819,14 @@ def validate_us11_no_bigamy(families, individuals):
                     earlierFamily = family1
                     earlierMarriage = marriage1
                     laterFamilyId = familyId2
+                    laterFamily=family2
                     laterMarriage = marriage2
                 else:
                     earlierFamilyId = familyId2
                     earlierFamily = family2
                     earlierMarriage = marriage2
                     laterFamilyId = familyId1
+                    laterFamily=family1
                     laterMarriage = marriage1
 
                 #find the other spouse in the earlier marriage
