@@ -57,7 +57,7 @@
 |     |    foreDivorce/    |        |            |     |       |            |         |                |
 | I36 | Vic /MarriageBefor |   M    | 1978-01-01 |  48 |   Y   |     NA     |    NA   |    {'F12'}     |
 |     |     eDivorce/      |        |            |     |       |            |         |                |
-| I37 |       George       |   M    | 1960-01-01 |  66 |   Y   |     NA     |    NA   | {'F14', 'F13'} |
+| I37 |       George       |   M    | 1960-01-01 |  66 |   Y   |     NA     |    NA   | {'F13', 'F14'} |
 |     | /MarriedDaughter/  |        |            |     |       |            |         |                |
 | I38 |   Karen /Smith/    |   F    | 1962-01-01 |  46 |   N   | 2008-01-01 |    NA   |    {'F13'}     |
 | I39 |       Julia        |   F    | 1990-01-01 |  36 |   Y   |     NA     | {'F13'} |    {'F14'}     |
@@ -118,6 +118,26 @@
 |     |   /RecentDeath/    |        |            |     |       |            |         |                |
 | I89 |       Martha       |   F    | 1945-03-10 |  81 |   N   | 2026-09-02 |    NA   |       NA       |
 |     |  /NotRecentDeath/  |        |            |     |       |            |         |                |
+| I80 |       Robert       |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F40', 'F41'} |
+|     | /ValidRemarriage/  |        |            |     |       |            |         |                |
+| I81 |       Susan        |   F    | 1972-01-01 |  33 |   N   | 2005-01-01 |    NA   |    {'F40'}     |
+|     |  /DeceasedSpouse/  |        |            |     |       |            |         |                |
+| I82 |       Linda        |   F    | 1975-01-01 |  51 |   Y   |     NA     |    NA   |    {'F41'}     |
+|     |   /SecondSpouse/   |        |            |     |       |            |         |                |
+| I83 |      Michael       |   M    | 1950-01-01 |  76 |   Y   |     NA     |    NA   |    {'F42'}     |
+|     |   /ValidFather/    |        |            |     |       |            |         |                |
+| I84 |      Jennifer      |   F    | 1955-01-01 |  71 |   Y   |     NA     |    NA   |    {'F42'}     |
+|     |   /ValidMother/    |        |            |     |       |            |         |                |
+| I85 | Kevin /ValidChild/ |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F42'} |       NA       |
+| I90 |   John /Bigamy/    |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F44', 'F43'} |
+| I91 | Mary /FirstSpouse/ |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F43'}     |
+| I92 |       Susan        |   F    | 1975-01-01 |  51 |   Y   |     NA     |    NA   |    {'F44'}     |
+|     |   /SecondSpouse/   |        |            |     |       |            |         |                |
+| I93 |       Robert       |   M    | 1920-01-01 | 106 |   Y   |     NA     |    NA   |    {'F45'}     |
+|     |   /TooOldFather/   |        |            |     |       |            |         |                |
+| I94 |   Linda /Mother/   |   F    | 1960-01-01 |  66 |   Y   |     NA     |    NA   |    {'F45'}     |
+| I95 |       David        |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F45'} |       NA       |
+|     |  /TooYoungChild/   |        |            |     |       |            |         |                |
 +-----+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -139,13 +159,13 @@
 |     |            |            |            |     terToday/      |         |                    |              |
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
-| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
-|     |            |            |            |                    |         |                    |    'I27',    |
+| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I27',    |
 |     |            |            |            |                    |         |                    |    'I28',    |
-|     |            |            |            |                    |         |                    |    'I26'}    |
-| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
-|     |            |            |            |                    |         |                    |    'I31',    |
-|     |            |            |            |                    |         |                    |    'I33'}    |
+|     |            |            |            |                    |         |                    |    'I26',    |
+|     |            |            |            |                    |         |                    |    'I25'}    |
+| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I31',    |
+|     |            |            |            |                    |         |                    |    'I33',    |
+|     |            |            |            |                    |         |                    |    'I32'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
 | F13 | 1985-06-01 |     NA     |    I37     |       George       |   I38   |   Karen /Smith/    |   {'I39'}    |
@@ -157,16 +177,16 @@
 | F16 | 1978-06-01 |     NA     |    I42     |   Frank /Clark/    |   I43   |   Nancy /White/    |   {'I44'}    |
 | F17 | 2005-06-01 |     NA     |    I44     | Kevin /MarriedGran |   I41   |      Dorothy       |      NA      |
 |     |            |            |            |      dmother/      |         | /MarriedGrandson/  |              |
-| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I47',    |
-|     |            |            |            |                    |         |                    |    'I48'}    |
+| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I48',    |
+|     |            |            |            |                    |         |                    |    'I47'}    |
 | F19 | 2000-06-01 |     NA     |    I47     |        Adam        |   I48   |       Grace        |      NA      |
 |     |            |            |            |  /MarriedSister/   |         |  /MarriedBrother/  |              |
 | F20 | 1960-06-01 | 1965-06-01 |    I49     |   Victor /King/    |   I50   |   Irene /Scott/    |   {'I51'}    |
 | F21 | 1967-06-01 |     NA     |    I49     |   Victor /King/    |   I52   |   Diane /Young/    |   {'I53'}    |
 | F22 | 1995-06-01 |     NA     |    I51     | Leo /MarriedHalfSi |   I53   | Mia /MarriedHalfBr |      NA      |
 |     |            |            |            |       ster/        |         |       other/       |              |
-| F30 | 1972-06-01 |     NA     |    I60     |   Kai /Grandpa/    |   I61   | Kristina /Grandma/ |   {'I62',    |
-|     |            |            |            |                    |         |                    |    'I63'}    |
+| F30 | 1972-06-01 |     NA     |    I60     |   Kai /Grandpa/    |   I61   | Kristina /Grandma/ |   {'I63',    |
+|     |            |            |            |                    |         |                    |    'I62'}    |
 | F31 | 2002-03-01 |     NA     |    I62     |  Perseus /Uncle/   |   I64   |     Thumbelina     |   {'I66'}    |
 |     |            |            |            |                    |         | /MarriedToPerseus/ |              |
 | F32 | 2002-02-01 |     NA     |    I65     |       Brody        |   I63   |   Athena /Aunt/    |   {'I67'}    |
@@ -179,12 +199,23 @@
 |     |            |            |            |  /StacieHusband/   |         |                    |              |
 | F36 | 2023-02-01 |     NA     |    I70     |   Adrian /Uncle/   |   I73   |      Kristen       |      NA      |
 |     |            |            |            |                    |         |  /MarriedToUncle/  |              |
-| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I76',    |
-|     |            |            |            |                    |         |                    |    'I77'}    |
+| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I77',    |
+|     |            |            |            |                    |         |                    |    'I76'}    |
 | F38 | 2002-02-01 |     NA     |    I77     |      Charley       |   I78   |      Barbara       |   {'I79'}    |
 |     |            |            |            |  /KarleeBrother/   |         |   /CharleyWife/    |              |
 | F39 | 2024-02-01 |     NA     |    I79     |      Patrick       |   I76   |   Karlee /Aunt/    |      NA      |
 |     |            |            |            |  /MarriedToAunt/   |         |                    |              |
+| F40 | 2000-01-01 |     NA     |    I80     |       Robert       |   I81   |       Susan        |      NA      |
+|     |            |            |            | /ValidRemarriage/  |         |  /DeceasedSpouse/  |              |
+| F41 | 2010-01-01 |     NA     |    I80     |       Robert       |   I82   |       Linda        |      NA      |
+|     |            |            |            | /ValidRemarriage/  |         |   /SecondSpouse/   |              |
+| F42 | 1999-01-01 |     NA     |    I83     |      Michael       |   I84   |      Jennifer      |   {'I85'}    |
+|     |            |            |            |   /ValidFather/    |         |   /ValidMother/    |              |
+| F43 | 2000-01-01 |     NA     |    I90     |   John /Bigamy/    |   I91   | Mary /FirstSpouse/ |      NA      |
+| F44 | 2005-01-01 |     NA     |    I90     |   John /Bigamy/    |   I92   |       Susan        |      NA      |
+|     |            |            |            |                    |         |   /SecondSpouse/   |              |
+| F45 | 1985-01-01 |     NA     |    I93     |       Robert       |   I94   |   Linda /Mother/   |   {'I95'}    |
+|     |            |            |            |   /TooOldFather/   |         |                    |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +---------------------------------------+
@@ -209,6 +240,8 @@
 |     | /BirthBeforeDeath/ |            |
 | I38 |   Karen /Smith/    | 2008-01-01 |
 | I40 |   Henry /Clark/    | 2000-01-01 |
+| I81 |       Susan        | 2005-01-01 |
+|     |  /DeceasedSpouse/  |            |
 | I88 |       Arthur       | 2026-09-25 |
 |     |   /RecentDeath/    |            |
 | I89 |       Martha       | 2026-09-02 |
@@ -280,6 +313,21 @@
 |     |   /CharleyWife/    |           |
 | I79 |      Patrick       |    F39    |
 |     |  /MarriedToAunt/   |           |
+| I80 |       Robert       |    F41    |
+|     | /ValidRemarriage/  |           |
+| I82 |       Linda        |    F41    |
+|     |   /SecondSpouse/   |           |
+| I83 |      Michael       |    F42    |
+|     |   /ValidFather/    |           |
+| I84 |      Jennifer      |    F42    |
+|     |   /ValidMother/    |           |
+| I90 |   John /Bigamy/    |  F43, F44 |
+| I91 | Mary /FirstSpouse/ |    F43    |
+| I92 |       Susan        |    F44    |
+|     |   /SecondSpouse/   |           |
+| I93 |       Robert       |    F45    |
+|     |   /TooOldFather/   |           |
+| I94 |   Linda /Mother/   |    F45    |
 +-----+--------------------+-----------+
 
 +---------------------------------------+
@@ -319,6 +367,8 @@ ANOMALY: FAMILY: US08: 288: F10: Child I28 born 2010-12-01 more than 9 months af
 ERROR: FAMILY: US09: 335: F11: Child I32 born 2001-03-01 more than 9 months after father's (I29) death on 2000-01-01
 ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 after mother's (I30) death on 2005-01-01
 ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 more than 9 months after father's (I29) death on 2000-01-01
+ERROR: INDIVIDUAL: US11: 953: I90: Marriage in F44 on 2005-01-01 occurs while marriage in F43 on 2000-01-01 is still active
+ERROR: FAMILY: US12: 976: F45: Father (I93) was 80 years old when child (I95) was born on 2000-01-01
 ERROR: FAMILY: US17: 422: F14: Husband (I37) is married to his descendant, wife (I39)
 ERROR: FAMILY: US17: 483: F17: Wife (I41) is married to her descendant, husband (I44)
 ERROR: FAMILY: US18: 528: F19: Husband (I47) and wife (I48) are siblings
