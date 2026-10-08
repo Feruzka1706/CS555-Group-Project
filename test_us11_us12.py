@@ -35,7 +35,8 @@ class TestUS11(unittest.TestCase):
             }
         }
 
-        Group_project.validate_us11_no_bigamy(families)
+        individuals={}
+        Group_project.validate_us11_no_bigamy(families, individuals)
 
         self.assertEqual(len(Group_project.errors), 1)
         self.assertIn("US11", Group_project.errors[0])
@@ -68,7 +69,8 @@ class TestUS11(unittest.TestCase):
             }
         }
 
-        Group_project.validate_us11_no_bigamy(families)
+        individuals={}
+        Group_project.validate_us11_no_bigamy(families, individuals)
 
         self.assertEqual(len(Group_project.errors), 0)
 
