@@ -983,5 +983,124 @@
 
 
 
+0 NOTE US25: parents of F46 (Ava twins share a first name and birth date)
+0 I96 INDI
+1 NAME Thomas /Twin/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1970
+1 FAMS F46
+
+0 I97 INDI
+1 NAME Grace /Twin/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1972
+1 FAMS F46
+
+0 NOTE US25: first Ava, born 1 JAN 2000 (valid)
+0 I98 INDI
+1 NAME Ava /Twin/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F46
+
+0 NOTE US25: second Ava with the same birth date (error)
+0 I99 INDI
+1 NAME Ava Marie /Twin/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F46
+
+0 NOTE US25: twin with a different first name (valid)
+0 I100 INDI
+1 NAME Mia /Twin/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F46
+
+0 NOTE US25: same first name, different birth date (valid)
+0 I101 INDI
+1 NAME Ava /Twin/
+1 SEX F
+1 BIRT
+2 DATE 5 MAY 2003
+1 FAMC F46
+
+0 F46 FAM
+1 MARR
+2 DATE 1 JUN 1995
+1 HUSB I96
+1 WIFE I97
+1 CHIL I98
+1 CHIL I99
+1 CHIL I100
+1 CHIL I101
+
+0 NOTE US26: husband of F47 (records match)
+0 I102 INDI
+1 NAME Oscar /Consistent/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1970
+1 FAMS F47
+
+0 NOTE US26: wife of F47 is missing her FAMS F47 line (family error)
+0 I103 INDI
+1 NAME Nina /MissingFams/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1972
+
+0 NOTE US26: child of F47 (records match)
+0 I104 INDI
+1 NAME Leo /Consistent/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 2000
+1 FAMC F47
+
+0 NOTE US26: F47 lists this child, but the child has no FAMC F47 line (family error)
+0 I105 INDI
+1 NAME Ivy /MissingFamc/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 2002
+
+0 NOTE US26: claims to be a child of F47, but F47 does not list them (individual error)
+0 I106 INDI
+1 NAME Max /NotListedChild/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 2001
+1 FAMC F47
+
+0 NOTE US26: claims to be a spouse in F47, but F47 does not list them (individual error)
+0 I107 INDI
+1 NAME Carl /NotListedSpouse/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1968
+1 FAMS F47
+
+0 F47 FAM
+1 MARR
+2 DATE 1 JUN 1995
+1 HUSB I102
+1 WIFE I103
+1 CHIL I104
+1 CHIL I105
+
+0 NOTE US26: claims to be a child of F48, which does not exist (individual error)
+0 I108 INDI
+1 NAME Rose /MissingFamily/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1990
+1 FAMC F48
+
 0 TRLR
 
