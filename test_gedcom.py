@@ -35,7 +35,9 @@ def newIndividual():
         "BIRT_LINE": "NA",  # line number of the birth DATE
         "DEAT_LINE": "NA",  # line number of the death DATE
         "child": set(),      # FAMC family IDs
-        "spouse": set()      # FAMS family IDs
+        "spouse": set(),     # FAMS family IDs
+        "FAMC_LINES": {},    # FAMC family ID -> line number
+        "FAMS_LINES": {}     # FAMS family ID -> line number
     }
 
 
@@ -49,7 +51,10 @@ def newFamily():
         "DIV": "NA",
         "MARR_LINE": "NA",
         "DIV_LINE": "NA",
-        "FAM_LINE": "NA"  # line number of the "0 Fxx FAM" line
+        "FAM_LINE": "NA",  # line number of the "0 Fxx FAM" line
+        "HUSB_LINE": "NA",
+        "WIFE_LINE": "NA",
+        "CHIL_LINES": {}   # child ID -> line number
     }
 
 
@@ -117,9 +122,11 @@ def parseGedcom(gedcomFileName, individuals, families):
 
                     case "FAMC":
                         individual["child"].add(arguments[0])
+                        individual["FAMC_LINES"][arguments[0]] = currLineNum
 
                     case "FAMS":
                         individual["spouse"].add(arguments[0])
+                        individual["FAMS_LINES"][arguments[0]] = currLineNum
 
                     case "BIRT" | "DEAT":
                         dateToUpdate = tag
@@ -148,12 +155,17 @@ def parseGedcom(gedcomFileName, individuals, families):
                 match tag:
                     case "HUSB":
                         family["HUSB"] = arguments[0]
+                        family["HUSB_LINE"] = currLineNum
 
                     case "WIFE":
                         family["WIFE"] = arguments[0]
+                        family["WIFE_LINE"] = currLineNum
 
                     case "CHIL":
                         family["CHIL"].update(arguments)
+
+                        for childId in arguments:
+                            family["CHIL_LINES"][childId] = currLineNum
 
                     case "MARR" | "DIV":
                         dateToUpdate = tag
@@ -315,6 +327,11 @@ def main():
     # US20: Aunts and uncles should not marry their nieces or nephews
     validate_us19_first_cousins_should_not_marry(families)
     validate_us20_aunts_and_uncles_not_married_to_nieces_and_nephews(families)
+
+    # US25: Unique first names in families
+    # US26: Corresponding entries
+    validate_us25_unique_first_names_in_families(families, individuals)
+    validate_us26_corresponding_entries(families, individuals)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -1422,6 +1439,156 @@ def build_us36_recent_deaths_table(individuals, today=None):
         ["ID", "Name", "Death Date"],
         rows
     )
+
+
+############ USER STORY US25 & US26 VALIDATIONS ##########
+
+def getFirstName(fullName):
+    """
+    First (given) name from a GEDCOM name, e.g. "Emma /Johnson/" -> "emma".
+    Lowercase, so "Emma" and "EMMA" count as the same name.
+    Returns "NA" if there is no name.
+    """
+    if fullName == "NA":
+        return "NA"
+
+    givenNames = fullName.split("/")[0].split()
+
+    if len(givenNames) == 0:
+        return "NA"
+
+    return givenNames[0].lower()
+
+
+def validate_us25_unique_first_names_in_families(families, individuals):
+    """
+    US25: No more than one child with the same first name and birth date
+    should appear in a family. Twins with different names are allowed.
+    Each repeated child is reported once, naming the first child it matches.
+    """
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        firstSeen = {}  # (first name, birthday) -> first child ID with that pair
+
+        for childId in sortIds(family.get("CHIL", set())):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            firstName = getFirstName(child.get("name", "NA"))
+            birthday = child.get("birthday", "NA")
+
+            # without both values a child cannot be compared
+            if firstName == "NA" or birthday == "NA":
+                continue
+
+            key = (firstName, birthday)
+
+            if key not in firstSeen:
+                firstSeen[key] = childId
+                continue
+
+            line = child.get("BIRT_LINE", "NA")
+
+            if line == "NA":
+                line = getFamilyLine(family)
+
+            # show the first name as written in the record, e.g. "Ava"
+            displayName = child["name"].split("/")[0].split()[0]
+
+            errors.append(
+                f"ERROR: FAMILY: US25: {line}: {familyId}: "
+                f"Children {firstSeen[key]} and {childId} have the same first name "
+                f"({displayName}) and birth date ({birthday})"
+            )
+
+
+def validate_us26_corresponding_entries(families, individuals):
+    """
+    US26: Individual and family records must agree.
+    - Every FAMS family in an individual record must list them as HUSB or WIFE.
+    - Every FAMC family in an individual record must list them as a CHIL.
+    - Every HUSB / WIFE in a family record must list that family as FAMS.
+    - Every CHIL in a family record must list that family as FAMC.
+    A reference to a record that does not exist is also reported.
+    """
+    # individual records -> family records
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+
+        for familyId in sortIds(individual.get("spouse", set())):
+            line = individual.get("FAMS_LINES", {}).get(familyId, "NA")
+            family = families.get(familyId)
+
+            if family is None:
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US26: {line}: {indId}: "
+                    f"Spouse in family {familyId} (FAMS), but family {familyId} does not exist"
+                )
+            elif indId not in (family.get("HUSB", "NA"), family.get("WIFE", "NA")):
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US26: {line}: {indId}: "
+                    f"Spouse in family {familyId} (FAMS), but {familyId} does not list "
+                    f"{indId} as husband or wife"
+                )
+
+        for familyId in sortIds(individual.get("child", set())):
+            line = individual.get("FAMC_LINES", {}).get(familyId, "NA")
+            family = families.get(familyId)
+
+            if family is None:
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US26: {line}: {indId}: "
+                    f"Child in family {familyId} (FAMC), but family {familyId} does not exist"
+                )
+            elif indId not in family.get("CHIL", set()):
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US26: {line}: {indId}: "
+                    f"Child in family {familyId} (FAMC), but {familyId} does not list "
+                    f"{indId} as a child"
+                )
+
+    # family records -> individual records
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+
+        for role, label in (("HUSB", "husband"), ("WIFE", "wife")):
+            spouseId = family.get(role, "NA")
+
+            if spouseId == "NA":
+                continue
+
+            line = family.get(f"{role}_LINE", "NA")
+            spouse = individuals.get(spouseId)
+
+            if spouse is None:
+                errors.append(
+                    f"ERROR: FAMILY: US26: {line}: {familyId}: "
+                    f"Lists {spouseId} as {label}, but individual {spouseId} does not exist"
+                )
+            elif familyId not in spouse.get("spouse", set()):
+                errors.append(
+                    f"ERROR: FAMILY: US26: {line}: {familyId}: "
+                    f"Lists {spouseId} as {label}, but {spouseId} does not list "
+                    f"{familyId} as a spouse family (FAMS)"
+                )
+
+        for childId in sortIds(family.get("CHIL", set())):
+            line = family.get("CHIL_LINES", {}).get(childId, "NA")
+            child = individuals.get(childId)
+
+            if child is None:
+                errors.append(
+                    f"ERROR: FAMILY: US26: {line}: {familyId}: "
+                    f"Lists {childId} as a child, but individual {childId} does not exist"
+                )
+            elif familyId not in child.get("child", set()):
+                errors.append(
+                    f"ERROR: FAMILY: US26: {line}: {familyId}: "
+                    f"Lists {childId} as a child, but {childId} does not list "
+                    f"{familyId} as a child family (FAMC)"
+                )
 
 
 ################
