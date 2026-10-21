@@ -1102,5 +1102,13 @@
 2 DATE 1 JAN 1990
 1 FAMC F48
 
+0 NOTE US31: Valid living single individual over 30 who has never been married
+0 I109 INDI
+1 NAME Olivia /NeverMarried/
+1 SEX F
+1 BIRT
+2 DATE 15 MAY 1985
+
+
 0 TRLR
 
