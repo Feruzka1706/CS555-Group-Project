@@ -261,15 +261,8 @@ def buildReportTables(individuals, families):
     reportTables.append(build_us30_living_married_table(families, individuals))
     reportTables.append(build_us35_recent_births_table(individuals))
     reportTables.append(build_us36_recent_deaths_table(individuals))
-
-    # Future list/report story examples:
-    # reportTables.append(build_us31_living_single_table(individuals))
-    # reportTables.append(build_us32_multiple_births_table(families, individuals))
-    # reportTables.append(build_us33_orphans_table(families, individuals))
-    # reportTables.append(build_us34_large_age_differences_table(families, individuals))
-    # reportTables.append(build_us37_recent_survivors_table(families, individuals))
-    # reportTables.append(build_us38_upcoming_birthdays_table(individuals))
-    # reportTables.append(build_us39_upcoming_anniversaries_table(families, individuals))
+    reportTables.append(build_us31_living_single_table(individuals, families))
+    reportTables.append(build_us32_multiple_births_table(families, individuals))
 
     return reportTables
 
@@ -893,7 +886,7 @@ def validate_us11_no_bigamy(families, individuals):
                     )
 
                 #ff the later marriage occurs before or on the date then bigamy
-               
+
                 elif compareDates(laterMarriage, marriageEnd) <= 0:
                     errors.append(
                         f"ERROR: INDIVIDUAL: US11: "
@@ -1693,6 +1686,83 @@ def validate_us26_corresponding_entries(families, individuals):
                     f"Lists {childId} as a child, but {childId} does not list "
                     f"{familyId} as a child family (FAMC)"
                 )
+
+
+############ USER STORY US31 & US32 LIST FUNCTIONS ##########
+
+def validate_us31_list_living_single(individuals, families=None, today=None):
+    """US31: List living people older than 30 who have never married.
+
+    A person is never married when there are no spouse-family (FAMS) records.
+    Calculate age using complete birthdays rather than the approximate age field.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    # Reconcile both sides of the relationship: some intentionally invalid US26
+    # records omit FAMS even though a family lists the person as a spouse.
+    familySpouseIds = set()
+    for family in (families or {}).values():
+        for field in ("HUSB", "WIFE"):
+            spouseId = family.get(field, "NA")
+            if spouseId != "NA":
+                familySpouseIds.add(spouseId)
+
+    livingSingle = []
+    for indId in sortIds(individuals.keys()):
+        person = individuals[indId]
+        birthday = person.get("birthday", "NA")
+        if person.get("death", "NA") != "NA" or person.get("alive", "Y") == "N":
+            continue
+        if birthday in ("NA", "") or person.get("spouse", set()) or indId in familySpouseIds:
+            continue
+        if getAgeOnDate(birthday, today) > 30:
+            livingSingle.append(indId)
+
+    return livingSingle
+
+
+def build_us31_living_single_table(individuals, families):
+    """Format the US31 report using the project's common PrettyTable helper."""
+    rows = [[indId, individuals[indId].get("name", "NA"),
+             individuals[indId].get("birthday", "NA")]
+            for indId in validate_us31_list_living_single(individuals, families)]
+    return build_report_table("US31: Living Single Individuals (Over 30)",
+                              ["ID", "Name", "Birth Date"], rows)
+
+
+def validate_us32_list_multiple_births(families, individuals):
+    """US32: List siblings sharing a birth date within the same family.
+
+    Returns sorted (family ID, birth date, tuple of child IDs) groups of size >= 2.
+    Shared dates in different families do not imply a multiple birth.
+    """
+    multipleBirths = []
+    for familyId in sortIds(families.keys()):
+        birthsByDate = {}
+        for childId in families[familyId].get("CHIL", set()):
+            person = individuals.get(childId)
+            if person is None:
+                continue
+            birthday = person.get("birthday", "NA")
+            if birthday in ("NA", ""):
+                continue
+            birthsByDate.setdefault(birthday, []).append(childId)
+
+        for birthday, childIds in sorted(birthsByDate.items()):
+            if len(childIds) >= 2:
+                multipleBirths.append((familyId, birthday, tuple(sortIds(childIds))))
+
+    return multipleBirths
+
+
+def build_us32_multiple_births_table(families, individuals):
+    """Format each multiple-birth group as one row, including its size."""
+    rows = [[familyId, birthday, ", ".join(childIds), len(childIds)]
+            for familyId, birthday, childIds
+            in validate_us32_list_multiple_births(families, individuals)]
+    return build_report_table("US32: Multiple Births",
+                              ["Family ID", "Birth Date", "Children IDs", "Count"], rows)
 
 
 ################
