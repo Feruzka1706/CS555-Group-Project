@@ -57,13 +57,13 @@
 |      |    foreDivorce/    |        |            |     |       |            |         |                |
 | I36  | Vic /MarriageBefor |   M    | 1978-01-01 |  48 |   Y   |     NA     |    NA   |    {'F12'}     |
 |      |     eDivorce/      |        |            |     |       |            |         |                |
-| I37  |       George       |   M    | 1960-01-01 |  66 |   Y   |     NA     |    NA   | {'F13', 'F14'} |
+| I37  |       George       |   M    | 1960-01-01 |  66 |   Y   |     NA     |    NA   | {'F14', 'F13'} |
 |      | /MarriedDaughter/  |        |            |     |       |            |         |                |
 | I38  |   Karen /Smith/    |   F    | 1962-01-01 |  46 |   N   | 2008-01-01 |    NA   |    {'F13'}     |
 | I39  |       Julia        |   F    | 1990-01-01 |  36 |   Y   |     NA     | {'F13'} |    {'F14'}     |
 |      |  /MarriedFather/   |        |            |     |       |            |         |                |
 | I40  |   Henry /Clark/    |   M    | 1930-01-01 |  70 |   N   | 2000-01-01 |    NA   |    {'F15'}     |
-| I41  |      Dorothy       |   F    | 1932-01-01 |  94 |   Y   |     NA     |    NA   | {'F17', 'F15'} |
+| I41  |      Dorothy       |   F    | 1932-01-01 |  94 |   Y   |     NA     |    NA   | {'F15', 'F17'} |
 |      | /MarriedGrandson/  |        |            |     |       |            |         |                |
 | I42  |   Frank /Clark/    |   M    | 1955-01-01 |  71 |   Y   |     NA     | {'F15'} |    {'F16'}     |
 | I43  |   Nancy /White/    |   F    | 1957-01-01 |  69 |   Y   |     NA     |    NA   |    {'F16'}     |
@@ -75,7 +75,7 @@
 |      |  /MarriedSister/   |        |            |     |       |            |         |                |
 | I48  |       Grace        |   F    | 1975-01-01 |  51 |   Y   |     NA     | {'F18'} |    {'F19'}     |
 |      |  /MarriedBrother/  |        |            |     |       |            |         |                |
-| I49  |   Victor /King/    |   M    | 1938-01-01 |  88 |   Y   |     NA     |    NA   | {'F20', 'F21'} |
+| I49  |   Victor /King/    |   M    | 1938-01-01 |  88 |   Y   |     NA     |    NA   | {'F21', 'F20'} |
 | I50  |   Irene /Scott/    |   F    | 1940-01-01 |  86 |   Y   |     NA     |    NA   |    {'F20'}     |
 | I51  | Leo /MarriedHalfSi |   M    | 1962-01-01 |  64 |   Y   |     NA     | {'F20'} |    {'F22'}     |
 |      |       ster/        |        |            |     |       |            |         |                |
@@ -129,7 +129,7 @@
 | I84  |      Jennifer      |   F    | 1955-01-01 |  71 |   Y   |     NA     |    NA   |    {'F42'}     |
 |      |   /ValidMother/    |        |            |     |       |            |         |                |
 | I85  | Kevin /ValidChild/ |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F42'} |       NA       |
-| I90  |   John /Bigamy/    |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F44', 'F43'} |
+| I90  |   John /Bigamy/    |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F43', 'F44'} |
 | I91  | Mary /FirstSpouse/ |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F43'}     |
 | I92  |       Susan        |   F    | 1975-01-01 |  51 |   Y   |     NA     |    NA   |    {'F44'}     |
 |      |   /SecondSpouse/   |        |            |     |       |            |         |                |
@@ -154,6 +154,8 @@
 |      | /NotListedSpouse/  |        |            |     |       |            |         |                |
 | I108 |        Rose        |   F    | 1990-01-01 |  36 |   Y   |     NA     | {'F48'} |       NA       |
 |      |  /MissingFamily/   |        |            |     |       |            |         |                |
+| I109 |       Olivia       |   F    | 1985-05-15 |  41 |   Y   |     NA     |    NA   |       NA       |
+|      |   /NeverMarried/   |        |            |     |       |            |         |                |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -175,12 +177,12 @@
 |     |            |            |            |     terToday/      |         |                    |              |
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
-| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I27',    |
-|     |            |            |            |                    |         |                    |    'I25',    |
+| F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
 |     |            |            |            |                    |         |                    |    'I28',    |
+|     |            |            |            |                    |         |                    |    'I27',    |
 |     |            |            |            |                    |         |                    |    'I26'}    |
-| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I31',    |
-|     |            |            |            |                    |         |                    |    'I32',    |
+| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
+|     |            |            |            |                    |         |                    |    'I31',    |
 |     |            |            |            |                    |         |                    |    'I33'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
@@ -201,22 +203,22 @@
 | F21 | 1967-06-01 |     NA     |    I49     |   Victor /King/    |   I52   |   Diane /Young/    |   {'I53'}    |
 | F22 | 1995-06-01 |     NA     |    I51     | Leo /MarriedHalfSi |   I53   | Mia /MarriedHalfBr |      NA      |
 |     |            |            |            |       ster/        |         |       other/       |              |
-| F30 | 1972-06-01 |     NA     |    I60     |   Kai /Grandpa/    |   I61   | Kristina /Grandma/ |   {'I62',    |
-|     |            |            |            |                    |         |                    |    'I63'}    |
+| F30 | 1972-06-01 |     NA     |    I60     |   Kai /Grandpa/    |   I61   | Kristina /Grandma/ |   {'I63',    |
+|     |            |            |            |                    |         |                    |    'I62'}    |
 | F31 | 2002-03-01 |     NA     |    I62     |  Perseus /Uncle/   |   I64   |     Thumbelina     |   {'I66'}    |
 |     |            |            |            |                    |         | /MarriedToPerseus/ |              |
 | F32 | 2002-02-01 |     NA     |    I65     |       Brody        |   I63   |   Athena /Aunt/    |   {'I67'}    |
 |     |            |            |            | /MarriedToAthena/  |         |                    |              |
 | F33 | 2024-02-01 |     NA     |    I66     | Christopher /Marri |   I67   | Wendy /AlsoMarried |      NA      |
 |     |            |            |            |  edToFirstCousin/  |         |   ToFirstCousin/   |              |
-| F34 | 1971-02-01 |     NA     |    I68     |  Robbie /Grandpa/  |   I69   |   Jade /Grandma/   |   {'I70',    |
-|     |            |            |            |                    |         |                    |    'I71'}    |
+| F34 | 1971-02-01 |     NA     |    I68     |  Robbie /Grandpa/  |   I69   |   Jade /Grandma/   |   {'I71',    |
+|     |            |            |            |                    |         |                    |    'I70'}    |
 | F35 | 2002-02-01 |     NA     |    I72     |       Davis        |   I71   |    Stacie /Mom/    |   {'I73'}    |
 |     |            |            |            |  /StacieHusband/   |         |                    |              |
 | F36 | 2023-02-01 |     NA     |    I70     |   Adrian /Uncle/   |   I73   |      Kristen       |      NA      |
 |     |            |            |            |                    |         |  /MarriedToUncle/  |              |
-| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I77',    |
-|     |            |            |            |                    |         |                    |    'I76'}    |
+| F37 | 1979-02-01 |     NA     |    I74     |   Finn /Grandpa/   |   I75   |  Charli /Grandma/  |   {'I76',    |
+|     |            |            |            |                    |         |                    |    'I77'}    |
 | F38 | 2002-02-01 |     NA     |    I77     |      Charley       |   I78   |      Barbara       |   {'I79'}    |
 |     |            |            |            |  /KarleeBrother/   |         |   /CharleyWife/    |              |
 | F39 | 2024-02-01 |     NA     |    I79     |      Patrick       |   I76   |   Karlee /Aunt/    |      NA      |
@@ -232,10 +234,10 @@
 |     |            |            |            |                    |         |   /SecondSpouse/   |              |
 | F45 | 1985-01-01 |     NA     |    I93     |       Robert       |   I94   |   Linda /Mother/   |   {'I95'}    |
 |     |            |            |            |   /TooOldFather/   |         |                    |              |
-| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I100',   |
+| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I101',   |
+|     |            |            |            |                    |         |                    |    'I99',    |
 |     |            |            |            |                    |         |                    |    'I98',    |
-|     |            |            |            |                    |         |                    |   'I101',    |
-|     |            |            |            |                    |         |                    |    'I99'}    |
+|     |            |            |            |                    |         |                    |   'I100'}    |
 | F47 | 1995-06-01 |     NA     |    I102    | Oscar /Consistent/ |   I103  | Nina /MissingFams/ |   {'I105',   |
 |     |            |            |            |                    |         |                    |   'I104'}    |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
@@ -371,6 +373,27 @@
 | I88 |       Arthur       | 2026-09-25 |
 |     |   /RecentDeath/    |            |
 +-----+--------------------+------------+
+
++-------------------------------------------+
+| US31: Living Single Individuals (Over 30) |
++------+---------------------+--------------+
+|  ID  |         Name        |  Birth Date  |
++------+---------------------+--------------+
+| I17  |        Martha       |  1850-01-01  |
+|      |    /TooOldAlive/    |              |
+| I108 |         Rose        |  1990-01-01  |
+|      |   /MissingFamily/   |              |
+| I109 |        Olivia       |  1985-05-15  |
+|      |    /NeverMarried/   |              |
++------+---------------------+--------------+
+
++-------------------------------------------------+
+|              US32: Multiple Births              |
++-----------+------------+----------------+-------+
+| Family ID | Birth Date |  Children IDs  | Count |
++-----------+------------+----------------+-------+
+|    F46    | 2000-01-01 | I98, I99, I100 |   3   |
++-----------+------------+----------------+-------+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
 ERROR: INDIVIDUAL: US01: 209: I20: Birthday 2029-03-10 occurs in the future
