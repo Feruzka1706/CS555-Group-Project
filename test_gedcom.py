@@ -311,6 +311,11 @@ def main():
     validate_us11_no_bigamy(families, individuals)
     validate_us12_parents_not_too_old(families, individuals)
 
+    # US13: Siblings spacing
+    # US14: No more than five multiple births
+    validate_us13_siblings_spacing(families, individuals)
+    validate_us14_multiple_births_max_five(families, individuals)
+
     # US17: No marriages to descendants
     # US18: Siblings should not marry
     validate_us17_no_marriages_to_descendants(families)
@@ -946,6 +951,105 @@ def validate_us12_parents_not_too_old(families, individuals):
                             f"Father ({fatherId}) was {fatherAge} years old when "
                             f"child ({childId}) was born on {childBirth}"
                         )
+############ USER STORY US13 & US14 ##########
+
+def validate_us13_siblings_spacing(families, individuals):
+    """ US13: Siblings should be more than 8 months apart or less than 2 days apart """
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        childrenWithBirthdays = []
+
+        #collect the birth dates of children in this family
+        for childId in family.get("CHIL", set()):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            birthday = child.get("birthday", "NA")
+
+            if birthday == "NA":
+                continue
+
+            childrenWithBirthdays.append(
+                (birthday, childId, child.get("BIRT_LINE", "NA"))
+            )
+
+        #sort children by birthday so we compare neighboring births
+        childrenWithBirthdays.sort()
+
+        for i in range(1, len(childrenWithBirthdays)):
+            earlierBirth, earlierId, earlierLine = childrenWithBirthdays[i - 1]
+            laterBirth, laterId, laterLine = childrenWithBirthdays[i]
+
+            #same day births and births one day apart are allowed
+            daysApart = (
+                date.fromisoformat(laterBirth)
+                - date.fromisoformat(earlierBirth)
+            ).days
+
+            if daysApart < 2:
+                continue
+
+            #births more than 8 calendar months apart are allowed
+            eightMonthsLater = addMonthsToDate(earlierBirth, 8)
+
+            if compareDates(laterBirth, eightMonthsLater) > 0:
+                continue
+
+            #use the later child's birth-date line for the error
+            if laterLine == "NA":
+                laterLine = getFamilyLine(family)
+
+            errors.append(
+                f"ERROR: FAMILY: US13: {laterLine}: {familyId}: "
+                f"Siblings {earlierId} and {laterId} were born "
+                f"{daysApart} days apart, which is not allowed"
+            )
+
+
+def validate_us14_multiple_births_max_five(families, individuals):
+    """ US14: No more than five siblings should be born at the same time """
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        birthsByDate = {}
+
+        #group the children by their recorded birth date
+        for childId in family.get("CHIL", set()):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            birthday = child.get("birthday", "NA")
+
+            if birthday == "NA":
+                continue
+
+            birthsByDate.setdefault(birthday, []).append(childId)
+
+        #report any group with more than five children
+        for birthday, childIds in sorted(birthsByDate.items()):
+            if len(childIds) > 5:
+                childIds = sortIds(childIds)
+
+                firstChild = individuals[childIds[0]]
+                line = firstChild.get("BIRT_LINE", "NA")
+
+                if line == "NA":
+                    line = getFamilyLine(family)
+
+                errors.append(
+                    f"ERROR: FAMILY: US14: {line}: {familyId}: "
+                    f"{len(childIds)} siblings were born on {birthday}; "
+                    f"the maximum allowed is 5. Children: "
+                    f"{', '.join(childIds)}"
+                )
+
+
+
+
 ############ USER STORY US29 & US30 LIST FUNCTIONS ##########
 
 def sortIds(ids):

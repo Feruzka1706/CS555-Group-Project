@@ -75,7 +75,7 @@
 |      |  /MarriedSister/   |        |            |     |       |            |         |                |
 | I48  |       Grace        |   F    | 1975-01-01 |  51 |   Y   |     NA     | {'F18'} |    {'F19'}     |
 |      |  /MarriedBrother/  |        |            |     |       |            |         |                |
-| I49  |   Victor /King/    |   M    | 1938-01-01 |  88 |   Y   |     NA     |    NA   | {'F21', 'F20'} |
+| I49  |   Victor /King/    |   M    | 1938-01-01 |  88 |   Y   |     NA     |    NA   | {'F20', 'F21'} |
 | I50  |   Irene /Scott/    |   F    | 1940-01-01 |  86 |   Y   |     NA     |    NA   |    {'F20'}     |
 | I51  | Leo /MarriedHalfSi |   M    | 1962-01-01 |  64 |   Y   |     NA     | {'F20'} |    {'F22'}     |
 |      |       ster/        |        |            |     |       |            |         |                |
@@ -156,6 +156,37 @@
 |      |  /MissingFamily/   |        |            |     |       |            |         |                |
 | I109 |       Olivia       |   F    | 1985-05-15 |  41 |   Y   |     NA     |    NA   |       NA       |
 |      |   /NeverMarried/   |        |            |     |       |            |         |                |
+| I110 | James /US13Parent/ |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F49'}     |
+| I111 | Maria /US13Parent/ |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F49'}     |
+| I112 | Alex /US13TooClose |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F49'} |       NA       |
+|      |   OlderSibling/    |        |            |     |       |            |         |                |
+| I113 | Jamie /US13TooClos |   F    | 2000-05-01 |  26 |   Y   |     NA     | {'F49'} |       NA       |
+|      |  eYoungerSibling/  |        |            |     |       |            |         |                |
+| I114 | Taytay/US13ValidSi |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F50'}     |
+|      |    blingParent/    |        |            |     |       |            |         |                |
+| I115 | Robin /US13ValidSi |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F50'}     |
+|      |    blingParent/    |        |            |     |       |            |         |                |
+| I116 | Anthony /US13Valid |   F    | 2000-01-01 |  26 |   Y   |     NA     | {'F50'} |       NA       |
+|      |    SiblingOne/     |        |            |     |       |            |         |                |
+| I117 | Eaden /US13ValidSi |   M    | 2000-01-02 |  26 |   Y   |     NA     | {'F50'} |       NA       |
+|      |     blingTwo/      |        |            |     |       |            |         |                |
+| I118 | Samuel /US13ValidS |   F    | 2000-10-10 |  26 |   Y   |     NA     | {'F50'} |       NA       |
+|      |    iblingThree/    |        |            |     |       |            |         |                |
+| I119 |      Danyboy       |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F51'}     |
+|      |    /US14Parent/    |        |            |     |       |            |         |                |
+| I120 | Angel /US14Parent/ |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F51'}     |
+| I121 | Hisoka /US14Multip |   M    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |    leBirthOne/     |        |            |     |       |            |         |                |
+| I122 | Gon /US14MultipleB |   F    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |      irthTwo/      |        |            |     |       |            |         |                |
+| I123 | Killua /US14Multip |   M    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |   leBirthThree/    |        |            |     |       |            |         |                |
+| I124 | Kurapika /US14Mult |   F    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |   ipleBirthFour/   |        |            |     |       |            |         |                |
+| I125 | Child /US14Multipl |   M    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |    eBirthFive/     |        |            |     |       |            |         |                |
+| I126 | Leorio /US14Multip |   F    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
+|      |    leBirthSix/     |        |            |     |       |            |         |                |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -178,12 +209,12 @@
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
 | F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
+|     |            |            |            |                    |         |                    |    'I26',    |
 |     |            |            |            |                    |         |                    |    'I28',    |
-|     |            |            |            |                    |         |                    |    'I27',    |
-|     |            |            |            |                    |         |                    |    'I26'}    |
-| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I32',    |
-|     |            |            |            |                    |         |                    |    'I31',    |
-|     |            |            |            |                    |         |                    |    'I33'}    |
+|     |            |            |            |                    |         |                    |    'I27'}    |
+| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I31',    |
+|     |            |            |            |                    |         |                    |    'I33',    |
+|     |            |            |            |                    |         |                    |    'I32'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
 | F13 | 1985-06-01 |     NA     |    I37     |       George       |   I38   |   Karen /Smith/    |   {'I39'}    |
@@ -234,12 +265,23 @@
 |     |            |            |            |                    |         |   /SecondSpouse/   |              |
 | F45 | 1985-01-01 |     NA     |    I93     |       Robert       |   I94   |   Linda /Mother/   |   {'I95'}    |
 |     |            |            |            |   /TooOldFather/   |         |                    |              |
-| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I101',   |
+| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I98',    |
 |     |            |            |            |                    |         |                    |    'I99',    |
-|     |            |            |            |                    |         |                    |    'I98',    |
-|     |            |            |            |                    |         |                    |   'I100'}    |
-| F47 | 1995-06-01 |     NA     |    I102    | Oscar /Consistent/ |   I103  | Nina /MissingFams/ |   {'I105',   |
-|     |            |            |            |                    |         |                    |   'I104'}    |
+|     |            |            |            |                    |         |                    |   'I100',    |
+|     |            |            |            |                    |         |                    |   'I101'}    |
+| F47 | 1995-06-01 |     NA     |    I102    | Oscar /Consistent/ |   I103  | Nina /MissingFams/ |   {'I104',   |
+|     |            |            |            |                    |         |                    |   'I105'}    |
+| F49 | 1995-01-01 |     NA     |    I110    | James /US13Parent/ |   I111  | Maria /US13Parent/ |   {'I113',   |
+|     |            |            |            |                    |         |                    |   'I112'}    |
+| F50 | 1995-01-01 |     NA     |    I114    | Taytay/US13ValidSi |   I115  | Robin /US13ValidSi |   {'I116',   |
+|     |            |            |            |    blingParent/    |         |    blingParent/    |   'I117',    |
+|     |            |            |            |                    |         |                    |   'I118'}    |
+| F51 | 1995-01-01 |     NA     |    I119    |      Danyboy       |   I120  | Angel /US14Parent/ |   {'I125',   |
+|     |            |            |            |    /US14Parent/    |         |                    |   'I126',    |
+|     |            |            |            |                    |         |                    |   'I124',    |
+|     |            |            |            |                    |         |                    |   'I121',    |
+|     |            |            |            |                    |         |                    |   'I122',    |
+|     |            |            |            |                    |         |                    |   'I123'}    |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +---------------------------------------+
@@ -355,15 +397,23 @@
 | I96  |   Thomas /Twin/    |    F46    |
 | I97  |    Grace /Twin/    |    F46    |
 | I102 | Oscar /Consistent/ |    F47    |
+| I110 | James /US13Parent/ |    F49    |
+| I111 | Maria /US13Parent/ |    F49    |
+| I114 | Taytay/US13ValidSi |    F50    |
+|      |    blingParent/    |           |
+| I115 | Robin /US13ValidSi |    F50    |
+|      |    blingParent/    |           |
+| I119 |      Danyboy       |    F51    |
+|      |    /US14Parent/    |           |
+| I120 | Angel /US14Parent/ |    F51    |
 +------+--------------------+-----------+
 
-+---------------------------------------+
-|   US35: Recent Births (Last 30 Days)  |
-+-----+--------------------+------------+
-|  ID |        Name        |  Birthday  |
-+-----+--------------------+------------+
-| I86 | Lily /RecentBirth/ | 2026-09-20 |
-+-----+--------------------+------------+
++------------------------------------+
+| US35: Recent Births (Last 30 Days) |
++------+----------+------------------+
+|  ID  |   Name   |     Birthday     |
++------+----------+------------------+
++------+----------+------------------+
 
 +---------------------------------------+
 |   US36: Recent Deaths (Last 30 Days)  |
@@ -373,27 +423,6 @@
 | I88 |       Arthur       | 2026-09-25 |
 |     |   /RecentDeath/    |            |
 +-----+--------------------+------------+
-
-+-------------------------------------------+
-| US31: Living Single Individuals (Over 30) |
-+------+---------------------+--------------+
-|  ID  |         Name        |  Birth Date  |
-+------+---------------------+--------------+
-| I17  |        Martha       |  1850-01-01  |
-|      |    /TooOldAlive/    |              |
-| I108 |         Rose        |  1990-01-01  |
-|      |   /MissingFamily/   |              |
-| I109 |        Olivia       |  1985-05-15  |
-|      |    /NeverMarried/   |              |
-+------+---------------------+--------------+
-
-+-------------------------------------------------+
-|              US32: Multiple Births              |
-+-----------+------------+----------------+-------+
-| Family ID | Birth Date |  Children IDs  | Count |
-+-----------+------------+----------------+-------+
-|    F46    | 2000-01-01 | I98, I99, I100 |   3   |
-+-----------+------------+----------------+-------+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
 ERROR: INDIVIDUAL: US01: 209: I20: Birthday 2029-03-10 occurs in the future
@@ -417,6 +446,11 @@ ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 after mother's (I30) de
 ERROR: FAMILY: US09: 343: F11: Child I33 born 2006-06-01 more than 9 months after father's (I29) death on 2000-01-01
 ERROR: INDIVIDUAL: US11: 951: I90: Marriage in F44 on 2005-01-01 occurs while marriage in F43 on 2000-01-01 is still active
 ERROR: FAMILY: US12: 974: F45: Father (I93) was 80 years old when child (I95) was born on 2000-01-01
+ERROR: FAMILY: US13: 288: F10: Siblings I27 and I28 were born 122 days apart, which is not allowed
+ERROR: FAMILY: US13: 621: F30: Siblings I62 and I63 were born 121 days apart, which is not allowed
+ERROR: FAMILY: US13: 779: F37: Siblings I76 and I77 were born 182 days apart, which is not allowed
+ERROR: FAMILY: US13: 1139: F49: Siblings I112 and I113 were born 121 days apart, which is not allowed
+ERROR: FAMILY: US14: 1216: F51: 6 siblings were born on 2000-05-15; the maximum allowed is 5. Children: I121, I122, I123, I124, I125, I126
 ERROR: FAMILY: US17: 422: F14: Husband (I37) is married to his descendant, wife (I39)
 ERROR: FAMILY: US17: 483: F17: Wife (I41) is married to her descendant, husband (I44)
 ERROR: FAMILY: US18: 528: F19: Husband (I47) and wife (I48) are siblings
