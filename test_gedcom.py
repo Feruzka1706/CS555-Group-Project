@@ -22,6 +22,12 @@ tags = {
 # these will be printed in the output.txt file.
 errors = []
 
+# ! allIndividuals and allFamilies are used in US22 to store duplicate families !
+# maps individual id -> array of line numbers for the corrresponding individual record(s)
+allIndividuals = dict() 
+# maps family id -> array of line numbers for the corrresponding family record(s)
+allFamilies = dict() 
+
 
 def newIndividual():
     """Default values for an individual record. Missing values are "NA"."""
@@ -103,10 +109,12 @@ def parseGedcom(gedcomFileName, individuals, families):
                 if tag == 'INDI':
                     currentInd = arguments[0]
                     individuals[currentInd] = newIndividual()
+                    allIndividuals.setdefault(currentInd, []).append(currLineNum) #for US22
                 elif tag == 'FAM':
                     currentFam = arguments[0]
                     families[currentFam] = newFamily()
                     families[currentFam]["FAM_LINE"] = currLineNum
+                    allFamilies.setdefault(currentFam, []).append(currLineNum) #for US22
                 continue
 
             # tags that belong to an individual record
@@ -325,6 +333,11 @@ def main():
     # US26: Corresponding entries
     validate_us25_unique_first_names_in_families(families, individuals)
     validate_us26_corresponding_entries(families, individuals)
+
+    # US21: Correct gender for role
+    # US22: Unique IDs
+    validate_us21_correct_gender_for_role(families, individuals)
+    validate_us22_unique_ids(allFamilies, allIndividuals)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -1659,6 +1672,86 @@ def build_us32_multiple_births_table(families, individuals):
             in validate_us32_list_multiple_births(families, individuals)]
     return build_report_table("US32: Multiple Births",
                               ["Family ID", "Birth Date", "Children IDs", "Count"], rows)
+
+############ USER STORY US21 & US22 VALIDATIONS ##########
+
+def validSpouse(individualId, spouse, individuals):
+    """
+    Returns True if the husband is male / the wife is female
+    Returns False if there is a gender mismatch
+    Returns None when the individual does not exist
+    """
+    individual = individuals.get(individualId, {})
+    if not individual:
+        return None 
+    gender = individual.get("gender", "NA")
+    if spouse == "HUSB" and gender != "M":
+        return False
+    elif spouse == "WIFE" and gender != "F":
+        return False
+    else:
+        return True
+
+def validate_us21_correct_gender_for_role(families, individuals):
+    """
+    US21: Husband in family should be male and wife in family should be female.
+    """
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        familyLine = getFamilyLine(family)
+        husbLine = family.get(f"HUSB_LINE", "NA")
+        wifeLine = family.get(f"WIFE_LINE", "NA")
+
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+
+        if husbandId != "NA":
+            # Corresponding entries are handled in US26. If validSpouse returns None, ignore
+            # it to avoid a redundant error.
+            if validSpouse(husbandId, "HUSB", individuals) == False:
+                husbErrorLine = familyLine if husbLine == "NA" else husbLine
+                errors.append(
+                    f"ERROR: FAMILY: US21: {husbErrorLine}: {familyId}: "
+                    f"Husband ({husbandId}) is not male."
+                )
+
+        if wifeId != "NA":
+            if validSpouse(wifeId, "WIFE", individuals) == False:
+                wifeErrorLine = familyLine if wifeLine == "NA" else wifeLine
+                errors.append(
+                    f"ERROR: FAMILY: US21: {wifeErrorLine}: {familyId}: "
+                    f"Wife ({wifeId}) is not female."
+                )
+
+def validate_us22_unique_ids(allFamilies, allIndividuals):
+    """
+    US22: All individual IDs should be unique and all family IDs should be unique.
+
+    The standard families and individuals dictionaries (used in all other stories) 
+    cannot store multiple families/individuals that have the same ID. Standard parsing stores the
+    most recent record in family_test.ged.
+    
+    Therefore, US22 uses allFamilies and allIndividuals to track records with duplicate IDs instead 
+
+    allFamilies maps family ID -> array of line numbers for the corresponding family record(s).
+    allIndividuals maps individual ID -> array of line numbers for the corresponding individual record(s).
+    """
+    for individualId, lineNumbers in allIndividuals.items():
+        if (len(lineNumbers) > 1):
+                repeatLineNums = ", ".join(map(str, lineNumbers))
+                errors.append(
+                    f"ERROR: INDIVIDUAL: US22: {repeatLineNums}: "
+                    f"{individualId} is not a unique individual ID."
+                )
+
+    for familyId, lineNumbers in allFamilies.items():
+        if (len(lineNumbers) > 1):
+                repeatLineNums = ", ".join(map(str, lineNumbers))
+                errors.append(
+                    f"ERROR: FAMILY: US22: {repeatLineNums}: "
+                    f"{familyId} is not a unique family ID."
+                )
 
 
 ################
