@@ -1676,6 +1676,11 @@ def build_us32_multiple_births_table(families, individuals):
 ############ USER STORY US21 & US22 VALIDATIONS ##########
 
 def validSpouse(individualId, spouse, individuals):
+    """
+    Returns True if the husband is male / the wife is female
+    Returns False if there is a gender mismatch
+    Returns None when the individual does not exist
+    """
     individual = individuals.get(individualId, {})
     if not individual:
         return None 
