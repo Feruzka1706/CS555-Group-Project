@@ -11,6 +11,9 @@ import test_gedcom as gedcom
 # fixed "today" so the tests do not depend on the day they are run
 TODAY = "2026-10-03"
 
+# "today" used for the family_test.ged records (I86 - I89)
+GEDCOM_TODAY = "2026-10-25"
+
 
 def makeIndividual(name="Test /Person/", birthday="NA", death="NA"):
     return {
@@ -127,7 +130,7 @@ class TestUS35ListRecentBirths(unittest.TestCase):
         families = {}
         gedcom.parseGedcom("family_test.ged", individuals, families)
 
-        recentBirths = gedcom.validate_us35_list_recent_births(individuals, TODAY)
+        recentBirths = gedcom.validate_us35_list_recent_births(individuals, GEDCOM_TODAY)
 
         self.assertIn("I86", recentBirths)
         self.assertNotIn("I87", recentBirths)
@@ -242,7 +245,7 @@ class TestUS36ListRecentDeaths(unittest.TestCase):
         families = {}
         gedcom.parseGedcom("family_test.ged", individuals, families)
 
-        recentDeaths = gedcom.validate_us36_list_recent_deaths(individuals, TODAY)
+        recentDeaths = gedcom.validate_us36_list_recent_deaths(individuals, GEDCOM_TODAY)
 
         self.assertIn("I88", recentDeaths)
         self.assertNotIn("I89", recentDeaths)
