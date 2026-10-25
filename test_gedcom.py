@@ -271,6 +271,8 @@ def buildReportTables(individuals, families):
     reportTables.append(build_us36_recent_deaths_table(individuals))
     reportTables.append(build_us31_living_single_table(individuals, families))
     reportTables.append(build_us32_multiple_births_table(families, individuals))
+    reportTables.append(build_us37_recent_survivors_table(families, individuals))
+    reportTables.append(build_us38_upcoming_birthdays_table(individuals))
 
     return reportTables
 
@@ -1856,6 +1858,185 @@ def validate_us22_unique_ids(allFamilies, allIndividuals):
                     f"ERROR: FAMILY: US22: {repeatLineNums}: "
                     f"{familyId} is not a unique family ID."
                 )
+
+
+############ USER STORY US37 & US38 LIST FUNCTIONS ##########
+
+def isLivingIndividual(indId, individuals):
+    """True if indId has an individual record and no death date."""
+    individual = individuals.get(indId)
+
+    if individual is None:
+        return False
+
+    return individual.get("death", "NA") == "NA"
+
+
+def validate_us37_list_recent_survivors(families, individuals, today=None):
+    """
+    US37: List all living spouses and descendants of people in a GEDCOM file
+    who died in the last 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns (deceased ID, survivor ID, relationship) tuples, where the
+    relationship is "Spouse" or "Descendant".
+    A spouse from a family with a divorce date is an ex-spouse, not a survivor.
+    Each survivor is listed once per deceased person.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    recentSurvivors = []
+
+    # US36 already finds the people who died in the last 30 days
+    for deceasedId in validate_us36_list_recent_deaths(individuals, today):
+        listed = set()
+
+        for familyId in sortIds(families.keys()):
+            family = families[familyId]
+            husbandId = family.get("HUSB", "NA")
+            wifeId = family.get("WIFE", "NA")
+
+            if husbandId == deceasedId:
+                spouseId = wifeId
+            elif wifeId == deceasedId:
+                spouseId = husbandId
+            else:
+                continue
+
+            if family.get("DIV", "NA") != "NA":
+                continue
+
+            if spouseId not in listed and isLivingIndividual(spouseId, individuals):
+                recentSurvivors.append((deceasedId, spouseId, "Spouse"))
+                listed.add(spouseId)
+
+        for descendantId in sortIds(getDescendants(deceasedId, families)):
+            # skip the deceased person, in case bad data has a cycle back to them
+            if descendantId == deceasedId or descendantId in listed:
+                continue
+
+            if isLivingIndividual(descendantId, individuals):
+                recentSurvivors.append((deceasedId, descendantId, "Descendant"))
+                listed.add(descendantId)
+
+    return recentSurvivors
+
+
+def build_us37_recent_survivors_table(families, individuals, today=None):
+    """
+    Build output table for US37: List living spouses and descendants of
+    people who died in the last 30 days.
+    """
+    rows = []
+
+    for deceasedId, survivorId, relationship in validate_us37_list_recent_survivors(families, individuals, today):
+        deceased = individuals[deceasedId]
+        survivor = individuals[survivorId]
+
+        rows.append([
+            deceasedId,
+            deceased.get("name", "NA"),
+            deceased.get("death", "NA"),
+            survivorId,
+            survivor.get("name", "NA"),
+            relationship
+        ])
+
+    return build_report_table(
+        "US37: Recent Survivors (Deaths in Last 30 Days)",
+        ["Deceased ID", "Deceased Name", "Death Date", "Survivor ID", "Survivor Name", "Relationship"],
+        rows
+    )
+
+
+def getNextBirthday(birthday, today):
+    """
+    Date (YYYY-MM-DD) of the first birthday on or after today.
+    A 29 FEB birthday falls on 28 FEB in years that are not leap years.
+    """
+    birthDate = date.fromisoformat(birthday)
+    todayDate = date.fromisoformat(today)
+
+    for year in (todayDate.year, todayDate.year + 1):
+        try:
+            nextBirthday = date(year, birthDate.month, birthDate.day)
+        except ValueError:
+            nextBirthday = date(year, 2, 28)
+
+        if nextBirthday >= todayDate:
+            return nextBirthday.isoformat()
+
+
+def isWithinNextDays(dateString, today, days=30):
+    """
+    True if dateString is no more than `days` days after today.
+    Today itself counts as upcoming. Past dates are not upcoming.
+    """
+    daysUntil = (date.fromisoformat(dateString) - date.fromisoformat(today)).days
+
+    return 0 <= daysUntil <= days
+
+
+def validate_us38_list_upcoming_birthdays(individuals, today=None):
+    """
+    US38: List all living people in a GEDCOM file whose birthdays occur
+    in the next 30 days.
+
+    This is a list/report story, not an error-validation story.
+    It returns the IDs of all living individuals with a birthday in the
+    next 30 days (today included).
+    People born today or in the future have no birthday yet, so they are
+    not listed (future births are already reported by US01).
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    upcomingBirthdays = []
+
+    for indId in sortIds(individuals.keys()):
+        individual = individuals[indId]
+        birthday = individual.get("birthday", "NA")
+
+        if birthday == "NA" or not isLivingIndividual(indId, individuals):
+            continue
+
+        if compareDates(birthday, today) >= 0:
+            continue
+
+        if isWithinNextDays(getNextBirthday(birthday, today), today, 30):
+            upcomingBirthdays.append(indId)
+
+    return upcomingBirthdays
+
+
+def build_us38_upcoming_birthdays_table(individuals, today=None):
+    """
+    Build output table for US38: List living individuals with a birthday
+    in the next 30 days.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    rows = []
+
+    for indId in validate_us38_list_upcoming_birthdays(individuals, today):
+        individual = individuals[indId]
+
+        rows.append([
+            indId,
+            individual.get("name", "NA"),
+            individual.get("birthday", "NA"),
+            getNextBirthday(individual["birthday"], today)
+        ])
+
+    return build_report_table(
+        "US38: Upcoming Birthdays (Next 30 Days)",
+        ["ID", "Name", "Birthday", "Next Birthday"],
+        rows
+    )
 
 
 ################
