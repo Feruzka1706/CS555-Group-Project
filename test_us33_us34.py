@@ -1,6 +1,6 @@
 """Sprint 4: US33 List Orphans and US34 List Large Age Differences.
 Run: python3 -m unittest test_us33_us34.py -v
-Requires I146-I148 and F58 - US33 test records in family_test.ged.
+Requires I146-I148/F58 for US33 and I149-I150/F59 for US34 in family_test.ged.
 """
 
 import unittest
@@ -130,6 +130,34 @@ class TestUS34ListLargeAgeDifferences(unittest.TestCase):
         )
         self.assertEqual(gedcom.errors, [])
 
+    def test_us34_exact_days_lists_40_year_11_month_old_vs_exactly_20(self):
+        people = {
+            "I1": person("1979-02-01"),
+            "I2": person("2000-01-01")
+        }
+        families = {"F1": family("I1", "I2", married="2020-01-01")}
+
+        # Whole-year ages are 40 and 20, but exact elapsed ages are about
+        # 40y11m and 20y, so the older spouse is actually more than 2x older.
+        self.assertEqual(
+            gedcom.validate_us34_list_large_age_differences(families, people),
+            ["F1"]
+        )
+
+    def test_us34_exact_days_excludes_41_year_old_vs_20_year_11_month_old(self):
+        people = {
+            "I1": person("1979-01-01"),
+            "I2": person("1999-02-01")
+        }
+        families = {"F1": family("I1", "I2", married="2020-01-01")}
+
+        # Whole-year ages are 41 and 20, but the younger spouse is almost 21,
+        # so the exact ratio is less than 2 and the family must not be listed.
+        self.assertEqual(
+            gedcom.validate_us34_list_large_age_differences(families, people),
+            []
+        )
+
     def test_us34_exactly_twice_as_old_is_not_listed(self):
         people = {
             "I1": person("1970-01-01"),
@@ -190,7 +218,7 @@ class TestUS34ListLargeAgeDifferences(unittest.TestCase):
             families, people
         )
 
-        for family_id in ("F14", "F17", "F36", "F39", "F45"):
+        for family_id in ("F14", "F17", "F36", "F39", "F45", "F59"):
             self.assertIn(family_id, result)
 
         self.assertNotIn("F1", result)

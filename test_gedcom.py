@@ -1781,6 +1781,7 @@ def build_us32_multiple_births_table(families, individuals):
     return build_report_table("US32: Multiple Births",
                               ["Family ID", "Birth Date", "Children IDs", "Count"], rows)
 
+
 ############ USER STORY US21 & US22 VALIDATIONS ##########
 
 def validSpouse(individualId, spouse, individuals):
@@ -1791,7 +1792,7 @@ def validSpouse(individualId, spouse, individuals):
     """
     individual = individuals.get(individualId, {})
     if not individual:
-        return None 
+        return None
     gender = individual.get("gender", "NA")
     if spouse == "HUSB" and gender != "M":
         return False
@@ -1836,11 +1837,11 @@ def validate_us22_unique_ids(allFamilies, allIndividuals):
     """
     US22: All individual IDs should be unique and all family IDs should be unique.
 
-    The standard families and individuals dictionaries (used in all other stories) 
+    The standard families and individuals dictionaries (used in all other stories)
     cannot store multiple families/individuals that have the same ID. Standard parsing stores the
     most recent record in family_test.ged.
-    
-    Therefore, US22 uses allFamilies and allIndividuals to track records with duplicate IDs instead 
+
+    Therefore, US22 uses allFamilies and allIndividuals to track records with duplicate IDs instead
 
     allFamilies maps family ID -> array of line numbers for the corresponding family record(s).
     allIndividuals maps individual ID -> array of line numbers for the corresponding individual record(s).
@@ -2041,7 +2042,6 @@ def build_us38_upcoming_birthdays_table(individuals, today=None):
     )
 
 
-
 ############ USER STORY US33 & US34 LIST FUNCTIONS ##########
 
 def validate_us33_list_orphans(families, individuals, today=None):
@@ -2155,13 +2155,13 @@ def validate_us34_list_large_age_differences(families, individuals):
         if compareDates(husbandBirth, married) >= 0 or compareDates(wifeBirth, married) >= 0:
             continue
 
-        husbandAge = getAgeOnDate(husbandBirth, married)
-        wifeAge = getAgeOnDate(wifeBirth, married)
+        # Use exact elapsed days for the US34 comparison. Whole-year ages
+        # can be off by almost a year and misclassify couples near the 2x boundary.
+        marriageDate = date.fromisoformat(married)
+        husbandDays = (marriageDate - date.fromisoformat(husbandBirth)).days
+        wifeDays = (marriageDate - date.fromisoformat(wifeBirth)).days
 
-        olderAge = max(husbandAge, wifeAge)
-        youngerAge = min(husbandAge, wifeAge)
-
-        if olderAge > 2 * youngerAge:
+        if max(husbandDays, wifeDays) > 2 * min(husbandDays, wifeDays):
             largeAgeDifferenceFamilies.append(familyId)
 
     return largeAgeDifferenceFamilies
@@ -2197,6 +2197,7 @@ def build_us34_large_age_differences_table(families, individuals):
         ["Family ID", "Husband ID", "Husband Age", "Wife ID", "Wife Age", "Married"],
         rows
     )
+
 
 ################
 
