@@ -271,6 +271,8 @@ def buildReportTables(individuals, families):
     reportTables.append(build_us36_recent_deaths_table(individuals))
     reportTables.append(build_us31_living_single_table(individuals, families))
     reportTables.append(build_us32_multiple_births_table(families, individuals))
+    reportTables.append(build_us33_orphans_table(families, individuals))
+    reportTables.append(build_us34_large_age_differences_table(families, individuals))
     reportTables.append(build_us37_recent_survivors_table(families, individuals))
     reportTables.append(build_us38_upcoming_birthdays_table(individuals))
 
@@ -1779,6 +1781,7 @@ def build_us32_multiple_births_table(families, individuals):
     return build_report_table("US32: Multiple Births",
                               ["Family ID", "Birth Date", "Children IDs", "Count"], rows)
 
+
 ############ USER STORY US21 & US22 VALIDATIONS ##########
 
 def validSpouse(individualId, spouse, individuals):
@@ -1789,7 +1792,7 @@ def validSpouse(individualId, spouse, individuals):
     """
     individual = individuals.get(individualId, {})
     if not individual:
-        return None 
+        return None
     gender = individual.get("gender", "NA")
     if spouse == "HUSB" and gender != "M":
         return False
@@ -1834,11 +1837,11 @@ def validate_us22_unique_ids(allFamilies, allIndividuals):
     """
     US22: All individual IDs should be unique and all family IDs should be unique.
 
-    The standard families and individuals dictionaries (used in all other stories) 
+    The standard families and individuals dictionaries (used in all other stories)
     cannot store multiple families/individuals that have the same ID. Standard parsing stores the
     most recent record in family_test.ged.
-    
-    Therefore, US22 uses allFamilies and allIndividuals to track records with duplicate IDs instead 
+
+    Therefore, US22 uses allFamilies and allIndividuals to track records with duplicate IDs instead
 
     allFamilies maps family ID -> array of line numbers for the corresponding family record(s).
     allIndividuals maps individual ID -> array of line numbers for the corresponding individual record(s).
@@ -2035,6 +2038,163 @@ def build_us38_upcoming_birthdays_table(individuals, today=None):
     return build_report_table(
         "US38: Upcoming Birthdays (Next 30 Days)",
         ["ID", "Name", "Birthday", "Next Birthday"],
+        rows
+    )
+
+
+############ USER STORY US33 & US34 LIST FUNCTIONS ##########
+
+def validate_us33_list_orphans(families, individuals, today=None):
+    """
+    US33: List all orphaned children.
+
+    An orphan is a living child younger than 18 whose father and mother
+    are both deceased as of `today`.
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    orphanIds = set()
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+
+        father = individuals.get(family.get("HUSB", "NA"))
+        mother = individuals.get(family.get("WIFE", "NA"))
+
+        if father is None or mother is None:
+            continue
+
+        fatherDeath = father.get("death", "NA")
+        motherDeath = mother.get("death", "NA")
+
+        # Both parents must actually be deceased by the comparison date.
+        if fatherDeath == "NA" or motherDeath == "NA":
+            continue
+
+        if compareDates(fatherDeath, today) > 0 or compareDates(motherDeath, today) > 0:
+            continue
+
+        for childId in family.get("CHIL", set()):
+            child = individuals.get(childId)
+
+            if child is None:
+                continue
+
+            birthday = child.get("birthday", "NA")
+            childDeath = child.get("death", "NA")
+
+            if birthday in ("NA", "") or childDeath != "NA":
+                continue
+
+            # Do not list a future birth as a current orphan.
+            if compareDates(birthday, today) > 0:
+                continue
+
+            if getAgeOnDate(birthday, today) < 18:
+                orphanIds.add(childId)
+
+    return sortIds(orphanIds)
+
+
+def build_us33_orphans_table(families, individuals, today=None):
+    """Build output table for US33: List all orphaned children."""
+    if today is None:
+        today = date.today().isoformat()
+
+    rows = []
+
+    for childId in validate_us33_list_orphans(families, individuals, today):
+        child = individuals[childId]
+
+        rows.append([
+            childId,
+            child.get("name", "NA"),
+            child.get("birthday", "NA"),
+            getAgeOnDate(child["birthday"], today)
+        ])
+
+    return build_report_table(
+        "US33: Orphaned Children",
+        ["ID", "Name", "Birthday", "Age"],
+        rows
+    )
+
+
+def validate_us34_list_large_age_differences(families, individuals):
+    """
+    US34: List couples who were married when the older spouse was
+    more than twice as old as the younger spouse.
+
+    Returns sorted family IDs that satisfy the rule.
+    """
+    largeAgeDifferenceFamilies = []
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        married = family.get("MARR", "NA")
+
+        if married in ("NA", ""):
+            continue
+
+        husband = individuals.get(family.get("HUSB", "NA"))
+        wife = individuals.get(family.get("WIFE", "NA"))
+
+        if husband is None or wife is None:
+            continue
+
+        husbandBirth = husband.get("birthday", "NA")
+        wifeBirth = wife.get("birthday", "NA")
+
+        if husbandBirth in ("NA", "") or wifeBirth in ("NA", ""):
+            continue
+
+        # Invalid birth/marriage ordering is handled by US02. Do not use it
+        # to create a misleading US34 report row.
+        if compareDates(husbandBirth, married) >= 0 or compareDates(wifeBirth, married) >= 0:
+            continue
+
+        # Use exact elapsed days for the US34 comparison. Whole-year ages
+        # can be off by almost a year and misclassify couples near the 2x boundary.
+        marriageDate = date.fromisoformat(married)
+        husbandDays = (marriageDate - date.fromisoformat(husbandBirth)).days
+        wifeDays = (marriageDate - date.fromisoformat(wifeBirth)).days
+
+        if max(husbandDays, wifeDays) > 2 * min(husbandDays, wifeDays):
+            largeAgeDifferenceFamilies.append(familyId)
+
+    return largeAgeDifferenceFamilies
+
+
+def build_us34_large_age_differences_table(families, individuals):
+    """Build output table for US34: List couples with large age differences."""
+    rows = []
+
+    for familyId in validate_us34_list_large_age_differences(families, individuals):
+        family = families[familyId]
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        married = family.get("MARR", "NA")
+
+        husband = individuals[husbandId]
+        wife = individuals[wifeId]
+
+        husbandAge = getAgeOnDate(husband["birthday"], married)
+        wifeAge = getAgeOnDate(wife["birthday"], married)
+
+        rows.append([
+            familyId,
+            husbandId,
+            husbandAge,
+            wifeId,
+            wifeAge,
+            married
+        ])
+
+    return build_report_table(
+        "US34: Large Age Differences",
+        ["Family ID", "Husband ID", "Husband Age", "Wife ID", "Wife Age", "Married"],
         rows
     )
 

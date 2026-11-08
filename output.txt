@@ -63,7 +63,7 @@
 | I39  |       Julia        |   F    | 1990-01-01 |  36 |   Y   |     NA     | {'F13'} |    {'F14'}     |
 |      |  /MarriedFather/   |        |            |     |       |            |         |                |
 | I40  |   Henry /Clark/    |   M    | 1930-01-01 |  70 |   N   | 2000-01-01 |    NA   |    {'F15'}     |
-| I41  |      Dorothy       |   F    | 1932-01-01 |  94 |   Y   |     NA     |    NA   | {'F15', 'F17'} |
+| I41  |      Dorothy       |   F    | 1932-01-01 |  94 |   Y   |     NA     |    NA   | {'F17', 'F15'} |
 |      | /MarriedGrandson/  |        |            |     |       |            |         |                |
 | I42  |   Frank /Clark/    |   M    | 1955-01-01 |  71 |   Y   |     NA     | {'F15'} |    {'F16'}     |
 | I43  |   Nancy /White/    |   F    | 1957-01-01 |  69 |   Y   |     NA     |    NA   |    {'F16'}     |
@@ -129,7 +129,7 @@
 | I84  |      Jennifer      |   F    | 1955-01-01 |  71 |   Y   |     NA     |    NA   |    {'F42'}     |
 |      |   /ValidMother/    |        |            |     |       |            |         |                |
 | I85  | Kevin /ValidChild/ |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F42'} |       NA       |
-| I90  |   John /Bigamy/    |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F44', 'F43'} |
+| I90  |   John /Bigamy/    |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   | {'F43', 'F44'} |
 | I91  | Mary /FirstSpouse/ |   F    | 1972-01-01 |  54 |   Y   |     NA     |    NA   |    {'F43'}     |
 | I92  |       Susan        |   F    | 1975-01-01 |  51 |   Y   |     NA     |    NA   |    {'F44'}     |
 |      |   /SecondSpouse/   |        |            |     |       |            |         |                |
@@ -218,12 +218,22 @@
 |      |  /NotRecentDeath/  |        |            |     |       |            |         |                |
 | I142 | Helen /NotRecentSu |   F    | 1947-02-02 |  79 |   Y   |     NA     |    NA   |    {'F57'}     |
 |      |      rvivor/       |        |            |     |       |            |         |                |
-| I143 |       Sophie       |   F    | 2000-11-10 |  25 |   Y   |     NA     |    NA   |       NA       |
+| I143 |       Sophie       |   F    | 2000-11-10 |  26 |   Y   |     NA     |    NA   |       NA       |
 |      | /UpcomingBirthday/ |        |            |     |       |            |         |                |
 | I144 | Mason /NotUpcoming |   M    | 2001-11-25 |  24 |   Y   |     NA     |    NA   |       NA       |
 |      |     Birthday/      |        |            |     |       |            |         |                |
 | I145 | Clara /DeceasedUpc |   F    | 1930-11-01 |  79 |   N   | 2010-05-05 |    NA   |       NA       |
 |      |   omingBirthday/   |        |            |     |       |            |         |                |
+| I146 | Ethan /US33Decease |   M    | 1975-01-01 |  45 |   N   | 2020-01-01 |    NA   |    {'F58'}     |
+|      |      dFather/      |        |            |     |       |            |         |                |
+| I147 | Sophia /US33Deceas |   F    | 1977-01-01 |  45 |   N   | 2022-01-01 |    NA   |    {'F58'}     |
+|      |     edMother/      |        |            |     |       |            |         |                |
+| I148 |       Oliver       |   M    | 2014-06-01 |  12 |   Y   |     NA     | {'F58'} |       NA       |
+|      | /US33OrphanChild/  |        |            |     |       |            |         |                |
+| I149 |       Marcus       |   M    | 1979-02-01 |  47 |   Y   |     NA     |    NA   |    {'F59'}     |
+|      | /US34OlderSpouse/  |        |            |     |       |            |         |                |
+| I150 | Elena /US34Younger |   F    | 2000-01-01 |  26 |   Y   |     NA     |    NA   |    {'F59'}     |
+|      |      Spouse/       |        |            |     |       |            |         |                |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -246,12 +256,12 @@
 |  F9 | 2009-06-01 |     NA     |    I22     |    Bruno /Mars/    |   I21   | Molly /BirthAfterM |      NA      |
 |     |            |            |            |                    |         |      arriage/      |              |
 | F10 | 2000-06-01 | 2010-01-01 |    I23     |   Peter /Walker/   |   I24   |   Emily /Harris/   |   {'I25',    |
-|     |            |            |            |                    |         |                    |    'I28',    |
 |     |            |            |            |                    |         |                    |    'I26',    |
-|     |            |            |            |                    |         |                    |    'I27'}    |
-| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I31',    |
+|     |            |            |            |                    |         |                    |    'I27',    |
+|     |            |            |            |                    |         |                    |    'I28'}    |
+| F11 | 1990-01-01 |     NA     |    I29     |   Thomas /Lewis/   |   I30   |   Sarah /Moore/    |   {'I33',    |
 |     |            |            |            |                    |         |                    |    'I32',    |
-|     |            |            |            |                    |         |                    |    'I33'}    |
+|     |            |            |            |                    |         |                    |    'I31'}    |
 | F12 | 2005-01-01 | 2000-01-01 |    I36     | Vic /MarriageBefor |   I35   | Susana /MarriageBe |      NA      |
 |     |            |            |            |     eDivorce/      |         |    foreDivorce/    |              |
 | F13 | 1985-06-01 |     NA     |    I37     |       George       |   I38   |   Karen /Smith/    |   {'I39'}    |
@@ -263,8 +273,8 @@
 | F16 | 1978-06-01 |     NA     |    I42     |   Frank /Clark/    |   I43   |   Nancy /White/    |   {'I44'}    |
 | F17 | 2005-06-01 |     NA     |    I44     | Kevin /MarriedGran |   I41   |      Dorothy       |      NA      |
 |     |            |            |            |      dmother/      |         | /MarriedGrandson/  |              |
-| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I47',    |
-|     |            |            |            |                    |         |                    |    'I48'}    |
+| F18 | 1970-06-01 |     NA     |    I45     |    Paul /Green/    |   I46   |    Ruth /Hall/     |   {'I48',    |
+|     |            |            |            |                    |         |                    |    'I47'}    |
 | F19 | 2000-06-01 |     NA     |    I47     |        Adam        |   I48   |       Grace        |      NA      |
 |     |            |            |            |  /MarriedSister/   |         |  /MarriedBrother/  |              |
 | F20 | 1960-06-01 | 1965-06-01 |    I49     |   Victor /King/    |   I50   |   Irene /Scott/    |   {'I51'}    |
@@ -279,8 +289,8 @@
 |     |            |            |            | /MarriedToAthena/  |         |                    |              |
 | F33 | 2024-02-01 |     NA     |    I66     | Christopher /Marri |   I67   | Wendy /AlsoMarried |      NA      |
 |     |            |            |            |  edToFirstCousin/  |         |   ToFirstCousin/   |              |
-| F34 | 1971-02-01 |     NA     |    I68     |  Robbie /Grandpa/  |   I69   |   Jade /Grandma/   |   {'I71',    |
-|     |            |            |            |                    |         |                    |    'I70'}    |
+| F34 | 1971-02-01 |     NA     |    I68     |  Robbie /Grandpa/  |   I69   |   Jade /Grandma/   |   {'I70',    |
+|     |            |            |            |                    |         |                    |    'I71'}    |
 | F35 | 2002-02-01 |     NA     |    I72     |       Davis        |   I71   |    Stacie /Mom/    |   {'I73'}    |
 |     |            |            |            |  /StacieHusband/   |         |                    |              |
 | F36 | 2023-02-01 |     NA     |    I70     |   Adrian /Uncle/   |   I73   |      Kristen       |      NA      |
@@ -302,9 +312,9 @@
 |     |            |            |            |                    |         |   /SecondSpouse/   |              |
 | F45 | 1985-01-01 |     NA     |    I93     |       Robert       |   I94   |   Linda /Mother/   |   {'I95'}    |
 |     |            |            |            |   /TooOldFather/   |         |                    |              |
-| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I101',   |
+| F46 | 1995-06-01 |     NA     |    I96     |   Thomas /Twin/    |   I97   |    Grace /Twin/    |   {'I99',    |
 |     |            |            |            |                    |         |                    |    'I98',    |
-|     |            |            |            |                    |         |                    |    'I99',    |
+|     |            |            |            |                    |         |                    |   'I101',    |
 |     |            |            |            |                    |         |                    |   'I100'}    |
 | F47 | 1995-06-01 |     NA     |    I102    | Oscar /Consistent/ |   I103  | Nina /MissingFams/ |   {'I104',   |
 |     |            |            |            |                    |         |                    |   'I105'}    |
@@ -314,23 +324,27 @@
 |     |            |            |            |     ghtGender/     |         | /WifeWrongGender/  |              |
 | F54 | 2024-01-01 |     NA     |    I134    |       Randy        |   I133  |      Shawwna       |      NA      |
 |     |            |            |            | /HusbandToShawna/  |         |   /WifeToRandy/    |              |
-| F49 | 1995-01-01 |     NA     |    I110    | James /US13Parent/ |   I111  | Maria /US13Parent/ |   {'I113',   |
-|     |            |            |            |                    |         |                    |   'I112'}    |
-| F50 | 1995-01-01 |     NA     |    I114    | Taytay/US13ValidSi |   I115  | Robin /US13ValidSi |   {'I117',   |
+| F49 | 1995-01-01 |     NA     |    I110    | James /US13Parent/ |   I111  | Maria /US13Parent/ |   {'I112',   |
+|     |            |            |            |                    |         |                    |   'I113'}    |
+| F50 | 1995-01-01 |     NA     |    I114    | Taytay/US13ValidSi |   I115  | Robin /US13ValidSi |   {'I116',   |
 |     |            |            |            |    blingParent/    |         |    blingParent/    |   'I118',    |
-|     |            |            |            |                    |         |                    |   'I116'}    |
-| F51 | 1995-01-01 |     NA     |    I119    |      Danyboy       |   I120  | Angel /US14Parent/ |   {'I126',   |
-|     |            |            |            |    /US14Parent/    |         |                    |   'I124',    |
-|     |            |            |            |                    |         |                    |   'I125',    |
-|     |            |            |            |                    |         |                    |   'I123',    |
+|     |            |            |            |                    |         |                    |   'I117'}    |
+| F51 | 1995-01-01 |     NA     |    I119    |      Danyboy       |   I120  | Angel /US14Parent/ |   {'I125',   |
+|     |            |            |            |    /US14Parent/    |         |                    |   'I123',    |
 |     |            |            |            |                    |         |                    |   'I122',    |
-|     |            |            |            |                    |         |                    |   'I121'}    |
+|     |            |            |            |                    |         |                    |   'I126',    |
+|     |            |            |            |                    |         |                    |   'I121',    |
+|     |            |            |            |                    |         |                    |   'I124'}    |
 | F55 | 1975-05-20 |     NA     |    I135    | Henry /RecentSurvi |   I136  | Grace /RecentSurvi |   {'I138',   |
 |     |            |            |            |    vorDeceased/    |         |     vorSpouse/     |   'I137'}    |
 | F56 | 2005-06-18 |     NA     |    I137    | Daniel /RecentSurv |   I139  |   Emily /InLaw/    |   {'I140'}   |
 |     |            |            |            |     ivorChild/     |         |                    |              |
 | F57 | 1970-08-08 |     NA     |    I141    |       Walter       |   I142  | Helen /NotRecentSu |      NA      |
 |     |            |            |            |  /NotRecentDeath/  |         |      rvivor/       |              |
+| F58 | 2000-01-01 |     NA     |    I146    | Ethan /US33Decease |   I147  | Sophia /US33Deceas |   {'I148'}   |
+|     |            |            |            |      dFather/      |         |     edMother/      |              |
+| F59 | 2020-01-01 |     NA     |    I149    |       Marcus       |   I150  | Elena /US34Younger |      NA      |
+|     |            |            |            | /US34OlderSpouse/  |         |      Spouse/       |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +----------------------------------------+
@@ -369,6 +383,10 @@
 |      |  /NotRecentDeath/  |            |
 | I145 | Clara /DeceasedUpc | 2010-05-05 |
 |      |   omingBirthday/   |            |
+| I146 | Ethan /US33Decease | 2020-01-01 |
+|      |      dFather/      |            |
+| I147 | Sophia /US33Deceas | 2022-01-01 |
+|      |     edMother/      |            |
 +------+--------------------+------------+
 
 +---------------------------------------+
@@ -478,6 +496,10 @@
 | I137 | Daniel /RecentSurv |    F56    |
 |      |     ivorChild/     |           |
 | I139 |   Emily /InLaw/    |    F56    |
+| I149 |       Marcus       |    F59    |
+|      | /US34OlderSpouse/  |           |
+| I150 | Elena /US34Younger |    F59    |
+|      |      Spouse/       |           |
 +------+--------------------+-----------+
 
 +---------------------------------------+
@@ -522,6 +544,28 @@
 |           |            |  I124, I125, I126  |       |
 +-----------+------------+--------------------+-------+
 
++----------------------------------------------+
+|           US33: Orphaned Children            |
++------+--------------------+------------+-----+
+|  ID  |        Name        |  Birthday  | Age |
++------+--------------------+------------+-----+
+| I148 |       Oliver       | 2014-06-01 |  12 |
+|      | /US33OrphanChild/  |            |     |
++------+--------------------+------------+-----+
+
++------------------------------------------------------------------------+
+|                      US34: Large Age Differences                       |
++-----------+------------+-------------+---------+----------+------------+
+| Family ID | Husband ID | Husband Age | Wife ID | Wife Age |  Married   |
++-----------+------------+-------------+---------+----------+------------+
+|    F14    |    I37     |      52     |   I39   |    22    | 2012-06-01 |
+|    F17    |    I44     |      25     |   I41   |    73    | 2005-06-01 |
+|    F36    |    I70     |      43     |   I73   |    19    | 2023-02-01 |
+|    F39    |    I79     |      20     |   I76   |    44    | 2024-02-01 |
+|    F45    |    I93     |      65     |   I94   |    25    | 1985-01-01 |
+|    F59    |    I149    |      40     |   I150  |    20    | 2020-01-01 |
++-----------+------------+-------------+---------+----------+------------+
+
 +-------------------------------------------------------------------------------------------------+
 |                         US37: Recent Survivors (Deaths in Last 30 Days)                         |
 +-------------+--------------------+------------+-------------+--------------------+--------------+
@@ -540,10 +584,15 @@
 +------+--------------------+------------+---------------+
 |  ID  |        Name        |  Birthday  | Next Birthday |
 +------+--------------------+------------+---------------+
+|  I6  |   Laura /Brown/    | 1975-11-30 |   2026-11-30  |
+| I28  | Ella /BornLateAfte | 2010-12-01 |   2026-12-01  |
+|      |     rDivorce/      |            |               |
 | I130 |      Patricia      | 1997-11-15 |   2026-11-15  |
 |      | /WifeWrongGender/  |            |               |
 | I143 |       Sophie       | 2000-11-10 |   2026-11-10  |
 |      | /UpcomingBirthday/ |            |               |
+| I144 | Mason /NotUpcoming | 2001-11-25 |   2026-11-25  |
+|      |     Birthday/      |            |               |
 +------+--------------------+------------+---------------+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
