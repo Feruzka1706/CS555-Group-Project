@@ -67,7 +67,8 @@ def newFamily():
 def displayValue(value):
     """Format a stored value for the tables: empty sets are shown as NA."""
     if isinstance(value, set):
-        return str(value) if value else "NA"
+        # sorted so the output is the same on every run (e.g. {'F13', 'F14'})
+        return "{" + ", ".join(f"'{item}'" for item in sortIds(value)) + "}" if value else "NA"
     return value
 
 
@@ -187,10 +188,9 @@ def parseGedcom(gedcomFileName, individuals, families):
                             family[dateToUpdate] = gedcomDate
                             family[f"{dateToUpdate}_LINE"] = currLineNum
 
-    # ages are calculated once every record has been read
+    # US27: ages are calculated once every record has been read
     for individual in individuals.values():
-        if individual["birthday"] != "NA":
-            individual["age"] = getAge(individual["birthday"], individual["death"])
+        individual["age"] = calculate_us27_age(individual)
 
 
 def buildTables(individuals, families):
@@ -226,7 +226,8 @@ def buildTables(individuals, families):
             husbandName,
             family["WIFE"],
             wifeName,
-            displayValue(family["CHIL"])
+            # US28: children are listed oldest first
+            ", ".join(validate_us28_list_siblings_by_age(family, individuals)) or "NA"
         ])
 
     # make long columns wrap so the table is not too wide
@@ -275,6 +276,7 @@ def buildReportTables(individuals, families):
     reportTables.append(build_us34_large_age_differences_table(families, individuals))
     reportTables.append(build_us37_recent_survivors_table(families, individuals))
     reportTables.append(build_us38_upcoming_birthdays_table(individuals))
+    reportTables.append(build_us28_siblings_by_age_table(families, individuals))
 
     return reportTables
 
@@ -2195,6 +2197,87 @@ def build_us34_large_age_differences_table(families, individuals):
     return build_report_table(
         "US34: Large Age Differences",
         ["Family ID", "Husband ID", "Husband Age", "Wife ID", "Wife Age", "Married"],
+        rows
+    )
+
+
+############ USER STORY US27 & US28 ##########
+
+def calculate_us27_age(individual, today=None):
+    """
+    US27: Include a person's current age when listing individuals.
+
+    Returns the exact age in whole years:
+    - living people: age today
+    - deceased people: age at death
+    Returns "NA" when no age can be given: no birthday, a birthday in the
+    future, or a death date before the birth date (US01 and US03 report those).
+    `today` can be passed in for testing.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    birthday = individual.get("birthday", "NA")
+
+    if birthday in ("NA", ""):
+        return "NA"
+
+    death = individual.get("death", "NA")
+    endDate = today if death in ("NA", "") else death
+
+    # not born yet, or died before being born: no meaningful age
+    if compareDates(birthday, endDate) > 0:
+        return "NA"
+
+    return getAgeOnDate(birthday, endDate)
+
+
+def validate_us28_list_siblings_by_age(family, individuals):
+    """
+    US28: List the children of one family by decreasing age (oldest first).
+
+    Children born on the same day (twins) are ordered by ID.
+    Children with no birthday, or with no individual record, are listed last.
+    """
+    def oldestFirst(childId):
+        birthday = individuals.get(childId, {}).get("birthday", "NA")
+        hasBirthday = birthday not in ("NA", "")
+
+        # YYYY-MM-DD strings sort in date order, so an earlier birthday comes first
+        return (0 if hasBirthday else 1, birthday if hasBirthday else "", len(childId), childId)
+
+    return sorted(family.get("CHIL", set()), key=oldestFirst)
+
+
+def build_us28_siblings_by_age_table(families, individuals, today=None):
+    """
+    Build output table for US28: siblings in each family, oldest first.
+    Only families with two or more children are listed. The Age column
+    uses the US27 age calculation.
+    """
+    rows = []
+
+    for familyId in sortIds(families.keys()):
+        siblings = validate_us28_list_siblings_by_age(families[familyId], individuals)
+
+        if len(siblings) < 2:
+            continue
+
+        for position, childId in enumerate(siblings, start=1):
+            child = individuals.get(childId, {})
+
+            rows.append([
+                familyId,
+                position,
+                childId,
+                child.get("name", "NA"),
+                child.get("birthday", "NA"),
+                calculate_us27_age(child, today) if child else "NA"
+            ])
+
+    return build_report_table(
+        "US28: Siblings by Age (Oldest First)",
+        ["Family ID", "Order", "Child ID", "Name", "Birthday", "Age"],
         rows
     )
 
