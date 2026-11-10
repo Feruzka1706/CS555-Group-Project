@@ -218,7 +218,7 @@
 |      |  /NotRecentDeath/  |        |            |     |       |            |         |                |
 | I142 | Helen /NotRecentSu |   F    | 1947-02-02 |  79 |   Y   |     NA     |    NA   |    {'F57'}     |
 |      |      rvivor/       |        |            |     |       |            |         |                |
-| I143 |       Sophie       |   F    | 2000-11-10 |  25 |   Y   |     NA     |    NA   |       NA       |
+| I143 |       Sophie       |   F    | 2000-11-10 |  26 |   Y   |     NA     |    NA   |       NA       |
 |      | /UpcomingBirthday/ |        |            |     |       |            |         |                |
 | I144 | Mason /NotUpcoming |   M    | 2001-11-25 |  24 |   Y   |     NA     |    NA   |       NA       |
 |      |     Birthday/      |        |            |     |       |            |         |                |
@@ -240,6 +240,18 @@
 |      |   /US28Youngest/   |        |            |     |       |            |         |                |
 | I154 | James /US28Oldest/ |   M    | 1988-05-10 |  38 |   Y   |     NA     | {'F60'} |       NA       |
 | I155 | Noah /US28Middle/  |   M    | 1994-07-20 |  32 |   Y   |     NA     | {'F60'} |       NA       |
+| I156 | Bob /US23SameNameA |   M    | 2000-05-20 |  26 |   Y   |     NA     |    NA   |       NA       |
+|      |      ndBday/       |        |            |     |       |            |         |                |
+| I157 | Bob /US23SameNameA |   M    | 2000-05-20 |  26 |   Y   |     NA     |    NA   |       NA       |
+|      |      ndBday/       |        |            |     |       |            |         |                |
+| I158 | Mario /US24NonUniq |   M    | 2000-01-20 |  26 |   Y   |     NA     |    NA   |    {'F61'}     |
+|      |     ueFamily/      |        |            |     |       |            |         |                |
+| I159 | Peach /US24NonUniq |   F    | 2000-02-25 |  26 |   Y   |     NA     |    NA   |    {'F61'}     |
+|      |     ueFamily/      |        |            |     |       |            |         |                |
+| I160 | Mario /US24NonUniq |   M    | 1990-03-20 |  36 |   Y   |     NA     |    NA   |    {'F62'}     |
+|      |     ueFamily/      |        |            |     |       |            |         |                |
+| I161 | Peach /US24NonUniq |   F    | 1990-11-25 |  35 |   Y   |     NA     |    NA   |    {'F62'}     |
+|      |     ueFamily/      |        |            |     |       |            |         |                |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -338,6 +350,10 @@
 |     |            |            |            | /US34OlderSpouse/  |         |      Spouse/       |              |
 | F60 | 1985-06-01 |     NA     |    I151    | Henry /US28Father/ |   I152  | Clara /US28Mother/ | I154, I155,  |
 |     |            |            |            |                    |         |                    |     I153     |
+| F61 | 2024-06-01 |     NA     |    I158    | Mario /US24NonUniq |   I159  | Peach /US24NonUniq |      NA      |
+|     |            |            |            |     ueFamily/      |         |     ueFamily/      |              |
+| F62 | 2024-06-01 |     NA     |    I160    | Mario /US24NonUniq |   I161  | Peach /US24NonUniq |      NA      |
+|     |            |            |            |     ueFamily/      |         |     ueFamily/      |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +----------------------------------------+
@@ -495,6 +511,14 @@
 |      |      Spouse/       |           |
 | I151 | Henry /US28Father/ |    F60    |
 | I152 | Clara /US28Mother/ |    F60    |
+| I158 | Mario /US24NonUniq |    F61    |
+|      |     ueFamily/      |           |
+| I159 | Peach /US24NonUniq |    F61    |
+|      |     ueFamily/      |           |
+| I160 | Mario /US24NonUniq |    F62    |
+|      |     ueFamily/      |           |
+| I161 | Peach /US24NonUniq |    F62    |
+|      |     ueFamily/      |           |
 +------+--------------------+-----------+
 
 +---------------------------------------+
@@ -590,6 +614,8 @@
 |      | /UpcomingBirthday/ |            |               |
 | I144 | Mason /NotUpcoming | 2001-11-25 |   2026-11-25  |
 |      |     Birthday/      |            |               |
+| I161 | Peach /US24NonUniq | 1990-11-25 |   2026-11-25  |
+|      |     ueFamily/      |            |               |
 +------+--------------------+------------+---------------+
 
 +----------------------------------------------------------------------+
@@ -703,3 +729,5 @@ ERROR: FAMILY: US21: 1209: F54: Husband (I134) is not male.
 ERROR: INDIVIDUAL: US22: 1156, 1176: I131 is not a unique individual ID.
 ERROR: INDIVIDUAL: US22: 1163, 1182, 1188: I132 is not a unique individual ID.
 ERROR: FAMILY: US22: 1170, 1208: F54 is not a unique family ID.
+ERROR: INDIVIDUAL: US23: 1585, 1591: Individuals I156 and I157 have the same first name (Bob /US23SameNameAndBday/) and birth date (2000-05-20)
+ERROR: FAMILY: US24: 1625, 1631: Families F61 and F62 share the same husband name (Mario /US24NonUniqueFamily/), wife name (Peach /US24NonUniqueFamily/), and marriage date (2024-06-01)

@@ -40,6 +40,7 @@ def newIndividual():
         "death": "NA",
         "BIRT_LINE": "NA",  # line number of the birth DATE
         "DEAT_LINE": "NA",  # line number of the death DATE
+        "INDI_LINE": "NA",  # line number of the "0 Ixx INDI" line
         "child": set(),      # FAMC family IDs
         "spouse": set(),     # FAMS family IDs
         "FAMC_LINES": {},    # FAMC family ID -> line number
@@ -110,6 +111,7 @@ def parseGedcom(gedcomFileName, individuals, families):
                 if tag == 'INDI':
                     currentInd = arguments[0]
                     individuals[currentInd] = newIndividual()
+                    individuals[currentInd]["INDI_LINE"] = currLineNum #for US23
                     allIndividuals.setdefault(currentInd, []).append(currLineNum) #for US22
                 elif tag == 'FAM':
                     currentFam = arguments[0]
@@ -349,6 +351,11 @@ def main():
     # US22: Unique IDs
     validate_us21_correct_gender_for_role(families, individuals)
     validate_us22_unique_ids(allFamilies, allIndividuals)
+
+    # US23: Unique name and birth date
+    # US24: Unique families by spouses
+    validate_us23_unique_name_and_birth_date(individuals)
+    validate_us24_unique_families_by_spouse(families, individuals)
 
     individualsTable, familiesTable = buildTables(individuals, families)
     reportTables = buildReportTables(individuals, families)
@@ -2280,6 +2287,75 @@ def build_us28_siblings_by_age_table(families, individuals, today=None):
         ["Family ID", "Order", "Child ID", "Name", "Birthday", "Age"],
         rows
     )
+
+############ USER STORY US23 & US24 VALIDATIONS ##########
+
+def validate_us23_unique_name_and_birth_date(individuals):
+    """
+    US23: No more than one individual with the same name and birth date should appear in a GEDCOM file
+
+    The IDs and line numbers of all repeated individuals are listed.
+    """
+    seen = dict()
+    for indId, individual in individuals.items():
+        name = individual.get("name", "NA")
+        birthday = individual.get("birthday", "NA")
+        lineNum = individual.get("INDI_LINE", "NA")
+        if name != "NA" and birthday != "NA":
+            seen.setdefault((name, birthday), {"ids": [], "lineNums": []})["ids"].append(str(indId))
+            seen[(name, birthday)]["lineNums"].append(str(lineNum))
+
+    for (name, birthday), idsAndLineNums in seen.items():
+        ids = idsAndLineNums.get("ids", [])
+        lineNums = idsAndLineNums.get("lineNums", [])
+        if ids and lineNums and len(ids) > 1:
+            idsStr = ", ".join(ids[:-1]) + f" and {ids[-1]}"
+            lineNumsStr = ", ".join(lineNums)
+            errors.append(
+                f"ERROR: INDIVIDUAL: US23: {lineNumsStr}: "
+                f"Individuals {idsStr} have the same first name ({name}) and birth date ({birthday})"
+            )
+
+def getIndividualName(indId, individuals):
+    individual = individuals.get(indId, {})
+    name = individual.get("name", "NA")
+    if name != "NA":
+        return name
+    return "NA"
+
+def validate_us24_unique_families_by_spouse(families, individuals):
+    """
+    US24: No more than one family with the same spouses by name and the same marriage date should appear in a GEDCOM file
+    
+    Spouse names are compared, not spouse IDs.
+
+    The IDs and line numbers of all repeated families are listed.
+    """
+    seen = dict()
+    for familyId, family in families.items():
+        husbandId = family.get("HUSB", "NA")
+        wifeId = family.get("WIFE", "NA")
+        husbandName = getIndividualName(husbandId, individuals)
+        wifeName = getIndividualName(wifeId, individuals)
+
+        marriageDate = family.get("MARR", "NA")
+        lineNum = family.get("FAM_LINE", "NA")
+
+        if husbandName != "NA" and wifeName != "NA" and marriageDate != "NA":
+            seen.setdefault((husbandName, wifeName, marriageDate), {"ids": [], "lineNums": []})["ids"].append(str(familyId))
+            seen[(husbandName, wifeName, marriageDate)]["lineNums"].append(str(lineNum))
+
+    for (husbandName, wifeName, marriageDate), idsAndLineNums in seen.items():
+        ids = idsAndLineNums.get("ids", [])
+        lineNums = idsAndLineNums.get("lineNums", [])
+
+        if ids and lineNums and len(ids) > 1:
+            idsStr = ", ".join(ids[:-1]) + f" and {ids[-1]}"
+            lineNumsStr = ", ".join(lineNums)
+            errors.append(
+                f"ERROR: FAMILY: US24: {lineNumsStr}: "
+                f"Families {idsStr} share the same husband name ({husbandName}), wife name ({wifeName}), and marriage date ({marriageDate})"
+            )
 
 
 ################
