@@ -1534,4 +1534,52 @@
 1 MARR
 2 DATE 1 JAN 2020
 
+0 NOTE US28: parents of F60 (children are listed youngest first in the CHIL lines)
+0 I151 INDI
+1 NAME Henry /US28Father/
+1 SEX M
+1 BIRT
+2 DATE 1 JAN 1960
+1 FAMS F60
+
+0 I152 INDI
+1 NAME Clara /US28Mother/
+1 SEX F
+1 BIRT
+2 DATE 1 JAN 1962
+1 FAMS F60
+
+0 NOTE US28: youngest child (listed 3rd)
+0 I153 INDI
+1 NAME Lucy /US28Youngest/
+1 SEX F
+1 BIRT
+2 DATE 1 MAR 2000
+1 FAMC F60
+
+0 NOTE US28: oldest child (listed 1st)
+0 I154 INDI
+1 NAME James /US28Oldest/
+1 SEX M
+1 BIRT
+2 DATE 10 MAY 1988
+1 FAMC F60
+
+0 NOTE US28: middle child (listed 2nd)
+0 I155 INDI
+1 NAME Noah /US28Middle/
+1 SEX M
+1 BIRT
+2 DATE 20 JUL 1994
+1 FAMC F60
+
+0 F60 FAM
+1 MARR
+2 DATE 1 JUN 1985
+1 HUSB I151
+1 WIFE I152
+1 CHIL I153
+1 CHIL I155
+1 CHIL I154
+
 0 TRLR
