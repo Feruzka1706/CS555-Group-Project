@@ -161,7 +161,7 @@ class TestUS24UniqueFamiliesBySpouses(unittest.TestCase):
             "ERROR: FAMILY: US24: 50, 70, 90: Families F1, F2 and F3 share the same husband name (Bob /Potter/), wife name (Ginny /Potter/), and marriage date (2025-03-03)"
         ])
 
-    def only_two_families_match_is_error(self):
+    def test_only_two_families_match_is_error(self):
         individuals = {
             "H1": makeIndividual("Bob /Potter/", "2000-01-01", gender="M"),
             "W1": makeIndividual("Ginny /Potter/", "2001-01-01", gender="F"),
