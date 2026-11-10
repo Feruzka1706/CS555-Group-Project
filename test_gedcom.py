@@ -2317,6 +2317,9 @@ def validate_us23_unique_name_and_birth_date(individuals):
             )
 
 def getIndividualName(indId, individuals):
+    """
+    Returns individual's name if it exists. Returns "NA" otherwise.
+    """
     individual = individuals.get(indId, {})
     name = individual.get("name", "NA")
     if name != "NA":
