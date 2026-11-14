@@ -816,30 +816,30 @@
 1 HUSB I79
 1 WIFE I76
 
-0 NOTE US35: born 15 OCT 2026, within 30 days of 25 OCT 2026 (listed)
+0 NOTE US35: born 10 NOV 2026, within 30 days of any date from 10 NOV to 10 DEC 2026 (listed)
 0 I86 INDI
 1 NAME Lily /RecentBirth/
 1 SEX F
 1 BIRT
-2 DATE 15 OCT 2026
+2 DATE 10 NOV 2026
 
-0 NOTE US35: born 24 SEP 2026, 31 days before 25 OCT 2026 (not listed)
+0 NOTE US35: born 24 SEP 2026, more than 30 days before any date from 25 OCT 2026 on (not listed)
 0 I87 INDI
 1 NAME Noah /NotRecentBirth/
 1 SEX M
 1 BIRT
 2 DATE 24 SEP 2026
 
-0 NOTE US36: died 15 OCT 2026, within 30 days of 25 OCT 2026 (listed)
+0 NOTE US36: died 10 NOV 2026, within 30 days of any date from 10 NOV to 10 DEC 2026 (listed)
 0 I88 INDI
 1 NAME Arthur /RecentDeath/
 1 SEX M
 1 BIRT
 2 DATE 15 MAY 1940
 1 DEAT
-2 DATE 15 OCT 2026
+2 DATE 10 NOV 2026
 
-0 NOTE US36: died 24 SEP 2026, 31 days before 25 OCT 2026 (not listed)
+0 NOTE US36: died 24 SEP 2026, more than 30 days before any date from 25 OCT 2026 on (not listed)
 0 I89 INDI
 1 NAME Martha /NotRecentDeath/
 1 SEX F
@@ -1366,14 +1366,14 @@
 1 MARR
 2 DATE 1 JAN 1995
 
-0 NOTE US37: Henry died 15 OCT 2026, within 30 days of 25 OCT 2026 (his survivors are listed)
+0 NOTE US37: Henry died 10 NOV 2026, within 30 days of any date from 10 NOV to 10 DEC 2026 (his survivors are listed)
 0 I135 INDI
 1 NAME Henry /RecentSurvivorDeceased/
 1 SEX M
 1 BIRT
 2 DATE 10 MAR 1950
 1 DEAT
-2 DATE 15 OCT 2026
+2 DATE 10 NOV 2026
 1 FAMS F55
 
 0 NOTE US37: Grace is Henry's living wife (listed as spouse)
@@ -1434,7 +1434,7 @@
 1 MARR
 2 DATE 18 JUN 2005
 
-0 NOTE US37: Walter died 24 SEP 2026, 31 days before 25 OCT 2026 (his wife Helen is not listed)
+0 NOTE US37: Walter died 24 SEP 2026, more than 30 days before any date from 25 OCT 2026 on (his wife Helen is not listed)
 0 I141 INDI
 1 NAME Walter /NotRecentDeath/
 1 SEX M
@@ -1457,19 +1457,19 @@
 1 MARR
 2 DATE 8 AUG 1970
 
-0 NOTE US38: birthday 10 NOV, 16 days after 25 OCT 2026 (listed)
+0 NOTE US38: birthday 5 DEC, within the next 30 days for any date from 5 NOV to 5 DEC (listed)
 0 I143 INDI
 1 NAME Sophie /UpcomingBirthday/
 1 SEX F
 1 BIRT
-2 DATE 10 NOV 2000
+2 DATE 5 DEC 2000
 
-0 NOTE US38: birthday 25 NOV, 31 days after 25 OCT 2026 (not listed)
+0 NOTE US38: birthday 15 JAN, more than 30 days away for any date from 15 JAN to 15 DEC (not listed)
 0 I144 INDI
 1 NAME Mason /NotUpcomingBirthday/
 1 SEX M
 1 BIRT
-2 DATE 25 NOV 2001
+2 DATE 15 JAN 2001
 
 0 NOTE US38: birthday 1 NOV but she is deceased (not listed)
 0 I145 INDI
@@ -1633,5 +1633,125 @@
 2 DATE 1 JUN 2024
 1 HUSB I160
 1 WIFE I161
+
+0 NOTE US39: anniversary 1 DEC, within the next 30 days for any date from 1 NOV to 1 DEC, both spouses living (listed)
+0 I162 INDI
+1 NAME Arthur /UpcomingAnniversary/
+1 SEX M
+1 BIRT
+2 DATE 5 MAR 1960
+1 FAMS F63
+
+0 I163 INDI
+1 NAME Martha /UpcomingAnniversary/
+1 SEX F
+1 BIRT
+2 DATE 12 JUL 1962
+1 FAMS F63
+
+0 F63 FAM
+1 HUSB I162
+1 WIFE I163
+1 MARR
+2 DATE 1 DEC 1985
+
+0 NOTE US39: anniversary 15 JAN, more than 30 days away for any date from 15 JAN to 15 DEC (not listed)
+0 I164 INDI
+1 NAME George /LateAnniversary/
+1 SEX M
+1 BIRT
+2 DATE 9 APR 1958
+1 FAMS F64
+
+0 I165 INDI
+1 NAME Alice /LateAnniversary/
+1 SEX F
+1 BIRT
+2 DATE 22 JUN 1959
+1 FAMS F64
+
+0 F64 FAM
+1 HUSB I164
+1 WIFE I165
+1 MARR
+2 DATE 15 JAN 1985
+
+0 NOTE US39: anniversary 25 NOV but the couple is divorced (not listed)
+0 I166 INDI
+1 NAME Frank /DivorcedAnniversary/
+1 SEX M
+1 BIRT
+2 DATE 3 FEB 1965
+1 FAMS F65
+
+0 I167 INDI
+1 NAME Diana /DivorcedAnniversary/
+1 SEX F
+1 BIRT
+2 DATE 17 AUG 1966
+1 FAMS F65
+
+0 F65 FAM
+1 HUSB I166
+1 WIFE I167
+1 MARR
+2 DATE 25 NOV 1990
+1 DIV
+2 DATE 3 MAR 2005
+
+0 NOTE US39: anniversary 28 NOV but the husband is deceased (not listed)
+0 I168 INDI
+1 NAME Albert /WidowedAnniversary/
+1 SEX M
+1 BIRT
+2 DATE 14 MAY 1945
+1 DEAT
+2 DATE 10 JAN 2020
+1 FAMS F66
+
+0 I169 INDI
+1 NAME Edith /WidowedAnniversary/
+1 SEX F
+1 BIRT
+2 DATE 30 SEP 1948
+1 FAMS F66
+
+0 F66 FAM
+1 HUSB I168
+1 WIFE I169
+1 MARR
+2 DATE 28 NOV 1970
+
+0 NOTE US41: Oscar has a birth date with only a year (read as 1 JAN 1970)
+0 I170 INDI
+1 NAME Oscar /PartialDates/
+1 SEX M
+1 BIRT
+2 DATE 1970
+1 FAMS F67
+
+0 NOTE US41: Nina has a birth date with only a month and year (read as 1 APR 1972)
+0 I171 INDI
+1 NAME Nina /PartialDates/
+1 SEX F
+1 BIRT
+2 DATE APR 1972
+1 FAMS F67
+
+0 NOTE US41: F67 has a marriage date with only a month and year (read as 1 JUN 1995)
+0 F67 FAM
+1 HUSB I170
+1 WIFE I171
+1 MARR
+2 DATE JUN 1995
+
+0 NOTE US41: Hugo has a partial birth date (read as 1 MAR 1920) and a year-only death date (read as 1 JAN 2001)
+0 I172 INDI
+1 NAME Hugo /PartialDeath/
+1 SEX M
+1 BIRT
+2 DATE MAR 1920
+1 DEAT
+2 DATE 2001
 
 0 TRLR
