@@ -111,10 +111,10 @@
 |      |   /CharleyWife/    |        |            |     |       |            |         |                |
 | I79  |      Patrick       |   M    | 2003-08-01 |  23 |   Y   |     NA     | {'F38'} |    {'F39'}     |
 |      |  /MarriedToAunt/   |        |            |     |       |            |         |                |
-| I86  | Lily /RecentBirth/ |   F    | 2026-10-15 |  0  |   Y   |     NA     |    NA   |       NA       |
+| I86  | Lily /RecentBirth/ |   F    | 2026-11-10 |  0  |   Y   |     NA     |    NA   |       NA       |
 | I87  |        Noah        |   M    | 2026-09-24 |  0  |   Y   |     NA     |    NA   |       NA       |
 |      |  /NotRecentBirth/  |        |            |     |       |            |         |                |
-| I88  |       Arthur       |   M    | 1940-05-15 |  86 |   N   | 2026-10-15 |    NA   |       NA       |
+| I88  |       Arthur       |   M    | 1940-05-15 |  86 |   N   | 2026-11-10 |    NA   |       NA       |
 |      |   /RecentDeath/    |        |            |     |       |            |         |                |
 | I89  |       Martha       |   F    | 1945-03-10 |  81 |   N   | 2026-09-24 |    NA   |       NA       |
 |      |  /NotRecentDeath/  |        |            |     |       |            |         |                |
@@ -203,7 +203,7 @@
 |      |    eBirthFive/     |        |            |     |       |            |         |                |
 | I126 | Leorio /US14Multip |   F    | 2000-05-15 |  26 |   Y   |     NA     | {'F51'} |       NA       |
 |      |    leBirthSix/     |        |            |     |       |            |         |                |
-| I135 | Henry /RecentSurvi |   M    | 1950-03-10 |  76 |   N   | 2026-10-15 |    NA   |    {'F55'}     |
+| I135 | Henry /RecentSurvi |   M    | 1950-03-10 |  76 |   N   | 2026-11-10 |    NA   |    {'F55'}     |
 |      |    vorDeceased/    |        |            |     |       |            |         |                |
 | I136 | Grace /RecentSurvi |   F    | 1952-06-01 |  74 |   Y   |     NA     |    NA   |    {'F55'}     |
 |      |     vorSpouse/     |        |            |     |       |            |         |                |
@@ -218,9 +218,9 @@
 |      |  /NotRecentDeath/  |        |            |     |       |            |         |                |
 | I142 | Helen /NotRecentSu |   F    | 1947-02-02 |  79 |   Y   |     NA     |    NA   |    {'F57'}     |
 |      |      rvivor/       |        |            |     |       |            |         |                |
-| I143 |       Sophie       |   F    | 2000-11-10 |  26 |   Y   |     NA     |    NA   |       NA       |
+| I143 |       Sophie       |   F    | 2000-12-05 |  25 |   Y   |     NA     |    NA   |       NA       |
 |      | /UpcomingBirthday/ |        |            |     |       |            |         |                |
-| I144 | Mason /NotUpcoming |   M    | 2001-11-25 |  24 |   Y   |     NA     |    NA   |       NA       |
+| I144 | Mason /NotUpcoming |   M    | 2001-01-15 |  25 |   Y   |     NA     |    NA   |       NA       |
 |      |     Birthday/      |        |            |     |       |            |         |                |
 | I145 | Clara /DeceasedUpc |   F    | 1930-11-01 |  79 |   N   | 2010-05-05 |    NA   |       NA       |
 |      |   omingBirthday/   |        |            |     |       |            |         |                |
@@ -252,6 +252,28 @@
 |      |     ueFamily/      |        |            |     |       |            |         |                |
 | I161 | Peach /US24NonUniq |   F    | 1990-11-25 |  35 |   Y   |     NA     |    NA   |    {'F62'}     |
 |      |     ueFamily/      |        |            |     |       |            |         |                |
+| I162 | Arthur /UpcomingAn |   M    | 1960-03-05 |  66 |   Y   |     NA     |    NA   |    {'F63'}     |
+|      |     niversary/     |        |            |     |       |            |         |                |
+| I163 | Martha /UpcomingAn |   F    | 1962-07-12 |  64 |   Y   |     NA     |    NA   |    {'F63'}     |
+|      |     niversary/     |        |            |     |       |            |         |                |
+| I164 |       George       |   M    | 1958-04-09 |  68 |   Y   |     NA     |    NA   |    {'F64'}     |
+|      | /LateAnniversary/  |        |            |     |       |            |         |                |
+| I165 |       Alice        |   F    | 1959-06-22 |  67 |   Y   |     NA     |    NA   |    {'F64'}     |
+|      | /LateAnniversary/  |        |            |     |       |            |         |                |
+| I166 | Frank /DivorcedAnn |   M    | 1965-02-03 |  61 |   Y   |     NA     |    NA   |    {'F65'}     |
+|      |     iversary/      |        |            |     |       |            |         |                |
+| I167 | Diana /DivorcedAnn |   F    | 1966-08-17 |  60 |   Y   |     NA     |    NA   |    {'F65'}     |
+|      |     iversary/      |        |            |     |       |            |         |                |
+| I168 | Albert /WidowedAnn |   M    | 1945-05-14 |  74 |   N   | 2020-01-10 |    NA   |    {'F66'}     |
+|      |     iversary/      |        |            |     |       |            |         |                |
+| I169 | Edith /WidowedAnni |   F    | 1948-09-30 |  78 |   Y   |     NA     |    NA   |    {'F66'}     |
+|      |      versary/      |        |            |     |       |            |         |                |
+| I170 |       Oscar        |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F67'}     |
+|      |   /PartialDates/   |        |            |     |       |            |         |                |
+| I171 |        Nina        |   F    | 1972-04-01 |  54 |   Y   |     NA     |    NA   |    {'F67'}     |
+|      |   /PartialDates/   |        |            |     |       |            |         |                |
+| I172 |        Hugo        |   M    | 1920-03-01 |  80 |   N   | 2001-01-01 |    NA   |       NA       |
+|      |   /PartialDeath/   |        |            |     |       |            |         |                |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -354,6 +376,16 @@
 |     |            |            |            |     ueFamily/      |         |     ueFamily/      |              |
 | F62 | 2024-06-01 |     NA     |    I160    | Mario /US24NonUniq |   I161  | Peach /US24NonUniq |      NA      |
 |     |            |            |            |     ueFamily/      |         |     ueFamily/      |              |
+| F63 | 1985-12-01 |     NA     |    I162    | Arthur /UpcomingAn |   I163  | Martha /UpcomingAn |      NA      |
+|     |            |            |            |     niversary/     |         |     niversary/     |              |
+| F64 | 1985-01-15 |     NA     |    I164    |       George       |   I165  |       Alice        |      NA      |
+|     |            |            |            | /LateAnniversary/  |         | /LateAnniversary/  |              |
+| F65 | 1990-11-25 | 2005-03-03 |    I166    | Frank /DivorcedAnn |   I167  | Diana /DivorcedAnn |      NA      |
+|     |            |            |            |     iversary/      |         |     iversary/      |              |
+| F66 | 1970-11-28 |     NA     |    I168    | Albert /WidowedAnn |   I169  | Edith /WidowedAnni |      NA      |
+|     |            |            |            |     iversary/      |         |      versary/      |              |
+| F67 | 1995-06-01 |     NA     |    I170    |       Oscar        |   I171  |        Nina        |      NA      |
+|     |            |            |            |   /PartialDates/   |         |   /PartialDates/   |              |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +----------------------------------------+
@@ -380,11 +412,11 @@
 | I40  |   Henry /Clark/    | 2000-01-01 |
 | I81  |       Susan        | 2005-01-01 |
 |      |  /DeceasedSpouse/  |            |
-| I88  |       Arthur       | 2026-10-15 |
+| I88  |       Arthur       | 2026-11-10 |
 |      |   /RecentDeath/    |            |
 | I89  |       Martha       | 2026-09-24 |
 |      |  /NotRecentDeath/  |            |
-| I135 | Henry /RecentSurvi | 2026-10-15 |
+| I135 | Henry /RecentSurvi | 2026-11-10 |
 |      |    vorDeceased/    |            |
 | I138 |        Ruth        | 2020-01-05 |
 |      |  /DeceasedChild/   |            |
@@ -396,6 +428,10 @@
 |      |      dFather/      |            |
 | I147 | Sophia /US33Deceas | 2022-01-01 |
 |      |     edMother/      |            |
+| I168 | Albert /WidowedAnn | 2020-01-10 |
+|      |     iversary/      |            |
+| I172 |        Hugo        | 2001-01-01 |
+|      |   /PartialDeath/   |            |
 +------+--------------------+------------+
 
 +---------------------------------------+
@@ -519,6 +555,18 @@
 |      |     ueFamily/      |           |
 | I161 | Peach /US24NonUniq |    F62    |
 |      |     ueFamily/      |           |
+| I162 | Arthur /UpcomingAn |    F63    |
+|      |     niversary/     |           |
+| I163 | Martha /UpcomingAn |    F63    |
+|      |     niversary/     |           |
+| I164 |       George       |    F64    |
+|      | /LateAnniversary/  |           |
+| I165 |       Alice        |    F64    |
+|      | /LateAnniversary/  |           |
+| I170 |       Oscar        |    F67    |
+|      |   /PartialDates/   |           |
+| I171 |        Nina        |    F67    |
+|      |   /PartialDates/   |           |
 +------+--------------------+-----------+
 
 +---------------------------------------+
@@ -526,7 +574,7 @@
 +-----+--------------------+------------+
 |  ID |        Name        |  Birthday  |
 +-----+--------------------+------------+
-| I86 | Lily /RecentBirth/ | 2026-10-15 |
+| I86 | Lily /RecentBirth/ | 2026-11-10 |
 +-----+--------------------+------------+
 
 +----------------------------------------+
@@ -534,9 +582,9 @@
 +------+--------------------+------------+
 |  ID  |        Name        | Death Date |
 +------+--------------------+------------+
-| I88  |       Arthur       | 2026-10-15 |
+| I88  |       Arthur       | 2026-11-10 |
 |      |   /RecentDeath/    |            |
-| I135 | Henry /RecentSurvi | 2026-10-15 |
+| I135 | Henry /RecentSurvi | 2026-11-10 |
 |      |    vorDeceased/    |            |
 +------+--------------------+------------+
 
@@ -592,11 +640,11 @@
 +-------------+--------------------+------------+-------------+--------------------+--------------+
 | Deceased ID |   Deceased Name    | Death Date | Survivor ID |   Survivor Name    | Relationship |
 +-------------+--------------------+------------+-------------+--------------------+--------------+
-|     I135    | Henry /RecentSurvi | 2026-10-15 |     I136    | Grace /RecentSurvi |    Spouse    |
+|     I135    | Henry /RecentSurvi | 2026-11-10 |     I136    | Grace /RecentSurvi |    Spouse    |
 |             |    vorDeceased/    |            |             |     vorSpouse/     |              |
-|     I135    | Henry /RecentSurvi | 2026-10-15 |     I137    | Daniel /RecentSurv |  Descendant  |
+|     I135    | Henry /RecentSurvi | 2026-11-10 |     I137    | Daniel /RecentSurv |  Descendant  |
 |             |    vorDeceased/    |            |             |     ivorChild/     |              |
-|     I135    | Henry /RecentSurvi | 2026-10-15 |     I140    | Leo /RecentSurvivo |  Descendant  |
+|     I135    | Henry /RecentSurvi | 2026-11-10 |     I140    | Leo /RecentSurvivo |  Descendant  |
 |             |    vorDeceased/    |            |             |    rGrandchild/    |              |
 +-------------+--------------------+------------+-------------+--------------------+--------------+
 
@@ -610,13 +658,20 @@
 |      |     rDivorce/      |            |               |
 | I130 |      Patricia      | 1997-11-15 |   2026-11-15  |
 |      | /WifeWrongGender/  |            |               |
-| I143 |       Sophie       | 2000-11-10 |   2026-11-10  |
+| I143 |       Sophie       | 2000-12-05 |   2026-12-05  |
 |      | /UpcomingBirthday/ |            |               |
-| I144 | Mason /NotUpcoming | 2001-11-25 |   2026-11-25  |
-|      |     Birthday/      |            |               |
 | I161 | Peach /US24NonUniq | 1990-11-25 |   2026-11-25  |
 |      |     ueFamily/      |            |               |
 +------+--------------------+------------+---------------+
+
++------------------------------------------------------------------------------------------------------------+
+|                                US39: Upcoming Anniversaries (Next 30 Days)                                 |
++-----------+------------+--------------------+---------+--------------------+------------+------------------+
+| Family ID | Husband ID |    Husband Name    | Wife ID |     Wife Name      |  Married   | Next Anniversary |
++-----------+------------+--------------------+---------+--------------------+------------+------------------+
+|    F63    |    I162    | Arthur /UpcomingAn |   I163  | Martha /UpcomingAn | 1985-12-01 |    2026-12-01    |
+|           |            |     niversary/     |         |     niversary/     |            |                  |
++-----------+------------+--------------------+---------+--------------------+------------+------------------+
 
 +----------------------------------------------------------------------+
 |                 US28: Siblings by Age (Oldest First)                 |

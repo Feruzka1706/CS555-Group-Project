@@ -144,7 +144,7 @@ def parseGedcom(gedcomFileName, individuals, families):
                         prevDateLine = currLineNum
 
                     case "DATE":
-                        gedcomDate = getDate(arguments)
+                        gedcomDate = parse_us41_partial_date(arguments)  # US41: also accepts partial dates
                         isEventDate = prevDateLine == currLineNum - 1
 
                         match dateToUpdate:
@@ -183,7 +183,7 @@ def parseGedcom(gedcomFileName, individuals, families):
                         prevDateLine = currLineNum
 
                     case "DATE":
-                        gedcomDate = getDate(arguments)
+                        gedcomDate = parse_us41_partial_date(arguments)  # US41: also accepts partial dates
 
                         # only keep the date if it directly follows MARR / DIV
                         if prevDateLine == currLineNum - 1 and dateToUpdate in ("MARR", "DIV"):
@@ -278,6 +278,7 @@ def buildReportTables(individuals, families):
     reportTables.append(build_us34_large_age_differences_table(families, individuals))
     reportTables.append(build_us37_recent_survivors_table(families, individuals))
     reportTables.append(build_us38_upcoming_birthdays_table(individuals))
+    reportTables.append(build_us39_upcoming_anniversaries_table(families, individuals))
     reportTables.append(build_us28_siblings_by_age_table(families, individuals))
 
     return reportTables
@@ -2359,6 +2360,89 @@ def validate_us24_unique_families_by_spouse(families, individuals):
                 f"ERROR: FAMILY: US24: {lineNumsStr}: "
                 f"Families {idsStr} share the same husband name ({husbandName}), wife name ({wifeName}), and marriage date ({marriageDate})"
             )
+
+
+############ USER STORY US39 & US41 ##########
+
+def validate_us39_list_upcoming_anniversaries(families, individuals, today=None):
+    """
+    US39: List all living couples in a GEDCOM file whose marriage
+    anniversaries occur in the next 30 days.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    upcomingAnniversaries = []
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+        married = family.get("MARR", "NA")
+
+        if married == "NA" or family.get("DIV", "NA") != "NA":
+            continue
+
+        if not isLivingIndividual(family.get("HUSB", "NA"), individuals):
+            continue
+
+        if not isLivingIndividual(family.get("WIFE", "NA"), individuals):
+            continue
+
+        if compareDates(married, today) >= 0:
+            continue
+
+        # an anniversary repeats every year on the marriage day, like a birthday
+        if isWithinNextDays(getNextBirthday(married, today), today, 30):
+            upcomingAnniversaries.append(familyId)
+
+    return upcomingAnniversaries
+
+
+def build_us39_upcoming_anniversaries_table(families, individuals, today=None):
+    """
+    Build output table for US39: List living couples with a marriage
+    anniversary in the next 30 days.
+    """
+    if today is None:
+        today = date.today().isoformat()
+
+    rows = []
+
+    for familyId in validate_us39_list_upcoming_anniversaries(families, individuals, today):
+        family = families[familyId]
+        husbandId = family["HUSB"]
+        wifeId = family["WIFE"]
+
+        rows.append([
+            familyId,
+            husbandId,
+            individuals[husbandId].get("name", "NA"),
+            wifeId,
+            individuals[wifeId].get("name", "NA"),
+            family["MARR"],
+            getNextBirthday(family["MARR"], today)
+        ])
+
+    return build_report_table(
+        "US39: Upcoming Anniversaries (Next 30 Days)",
+        ["Family ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Married", "Next Anniversary"],
+        rows
+    )
+
+
+def parse_us41_partial_date(arguments):
+    """
+    US41: Accept and use dates without days or without days and months.
+    Partial dates are filled in so they can be used by every other user
+    story, which all expect a full YYYY-MM-DD date.
+    """
+    if len(arguments) == 2:
+        month, year = arguments
+        return getDate(["1", month, year])
+
+    if len(arguments) == 1:
+        return getDate(["1", "JAN", arguments[0]])
+
+    return getDate(arguments)
 
 
 ################

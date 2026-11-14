@@ -11,6 +11,9 @@ import test_gedcom as gedcom
 # fixed "today" so the tests do not depend on the day they are run
 TODAY = "2026-10-25"
 
+# "today" used for the family_test.ged records (I135 - I145)
+GEDCOM_TODAY = "2026-11-13"
+
 
 def makeIndividual(name="Test /Person/", birthday="NA", death="NA"):
     return {
@@ -206,7 +209,7 @@ class TestUS37ListRecentSurvivors(unittest.TestCase):
         families = {}
         gedcom.parseGedcom("family_test.ged", individuals, families)
 
-        survivors = gedcom.validate_us37_list_recent_survivors(families, individuals, TODAY)
+        survivors = gedcom.validate_us37_list_recent_survivors(families, individuals, GEDCOM_TODAY)
         henrySurvivors = [s for s in survivors if s[0] == "I135"]
 
         self.assertEqual(henrySurvivors, [
@@ -217,7 +220,7 @@ class TestUS37ListRecentSurvivors(unittest.TestCase):
         survivorIds = [survivorId for _, survivorId, _ in survivors]
         self.assertNotIn("I138", survivorIds)  # deceased daughter
         self.assertNotIn("I139", survivorIds)  # daughter-in-law
-        self.assertNotIn("I142", survivorIds)  # wife of a death 31 days ago
+        self.assertNotIn("I142", survivorIds)  # wife of a death more than 30 days ago
         self.assertEqual(gedcom.errors, [])
 
 
@@ -360,10 +363,10 @@ class TestUS38ListUpcomingBirthdays(unittest.TestCase):
         families = {}
         gedcom.parseGedcom("family_test.ged", individuals, families)
 
-        upcoming = gedcom.validate_us38_list_upcoming_birthdays(individuals, TODAY)
+        upcoming = gedcom.validate_us38_list_upcoming_birthdays(individuals, GEDCOM_TODAY)
 
-        self.assertIn("I143", upcoming)     # birthday in 16 days
-        self.assertNotIn("I144", upcoming)  # birthday in 31 days
+        self.assertIn("I143", upcoming)     # birthday in 22 days
+        self.assertNotIn("I144", upcoming)  # birthday in 63 days
         self.assertNotIn("I145", upcoming)  # deceased
         self.assertEqual(gedcom.errors, [])
 

@@ -12,7 +12,7 @@ import test_gedcom as gedcom
 TODAY = "2026-10-03"
 
 # "today" used for the family_test.ged records (I86 - I89)
-GEDCOM_TODAY = "2026-10-25"
+GEDCOM_TODAY = "2026-11-13"
 
 
 def makeIndividual(name="Test /Person/", birthday="NA", death="NA"):
