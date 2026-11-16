@@ -735,8 +735,6 @@
 |  I6  |   Laura /Brown/    | 1975-11-30 |   2026-11-30  |
 | I28  | Ella /BornLateAfte | 2010-12-01 |   2026-12-01  |
 |      |     rDivorce/      |            |               |
-| I130 |      Patricia      | 1997-11-15 |   2026-11-15  |
-|      | /WifeWrongGender/  |            |               |
 | I143 |       Sophie       | 2000-12-05 |   2026-12-05  |
 |      | /UpcomingBirthday/ |            |               |
 | I161 | Peach /US24NonUniq | 1990-11-25 |   2026-11-25  |
