@@ -2445,6 +2445,94 @@ def parse_us41_partial_date(arguments):
     return getDate(arguments)
 
 
+######## USER STORY US15 & US16 VALIDATIONS ########
+
+def validate_us15_fewer_than_15_siblings(families):
+    """US15 there should be fewer than 15 siblings so a family with 15 or more children is an error"""
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+
+        children = family.get("CHIL", set())
+
+        if len(children) >= 15:
+            errors.append(
+                f"ERROR: FAMILY: US15: {getFamilyLine(family)}: {familyId}: "
+                f"Family has {len(children)} siblings; "
+                f"the maximum allowed is 14"
+            )
+
+
+def getLastName(fullName):
+    """US16 helper extract the last name from a GEDCOM name"""
+
+    if fullName == "NA":
+        return "NA"
+
+    if "/" not in fullName:
+        return "NA"
+
+    nameParts = fullName.split("/")
+
+    if len(nameParts) < 2 or nameParts[1].strip() == "":
+        return "NA"
+
+    return nameParts[1].strip().lower()
+
+
+def validate_us16_male_members_same_last_name(families, individuals):
+    """US16 all male members of a family should have the same last name so check the husband and all male children"""
+
+    for familyId in sortIds(families.keys()):
+        family = families[familyId]
+
+        maleMembers = []
+
+        #add the husband if he is male and has an individual record
+        husbandId = family.get("HUSB", "NA")
+        husband = individuals.get(husbandId)
+
+        if husband is not None and husband.get("gender") == "M":
+            maleMembers.append(husbandId)
+
+        #add all male children in the family
+        for childId in sortIds(family.get("CHIL", set())):
+            child = individuals.get(childId)
+
+            if child is not None and child.get("gender") == "M":
+                maleMembers.append(childId)
+
+        #at least two male members are needed for comparison
+        if len(maleMembers) < 2:
+            continue
+
+        #use the first male member as the reference last name
+        referenceId = maleMembers[0]
+        referenceName = individuals[referenceId].get("name", "NA")
+        referenceLastName = getLastName(referenceName)
+
+        #cannot compare if the reference last name is missing
+        if referenceLastName == "NA":
+            continue
+
+        #check the remaining male members
+        for maleId in maleMembers[1:]:
+            maleName = individuals[maleId].get("name", "NA")
+            maleLastName = getLastName(maleName)
+
+            if maleLastName == "NA":
+                continue
+
+            if maleLastName != referenceLastName:
+                errors.append(
+                    f"ERROR: FAMILY: US16: {getFamilyLine(family)}: {familyId}: "
+                    f"Male member ({maleId}) has last name "
+                    f"{maleLastName}, which does not match "
+                    f"{referenceId}'s last name {referenceLastName}"
+                )
+
+
+
 ################
 
 if __name__ == "__main__":
