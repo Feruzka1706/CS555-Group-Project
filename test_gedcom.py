@@ -333,6 +333,11 @@ def main():
     validate_us13_siblings_spacing(families, individuals)
     validate_us14_multiple_births_max_five(families, individuals)
 
+    # US15: Fewer than 15 siblings
+    # US16: Male last names
+    validate_us15_fewer_than_15_siblings(families)
+    validate_us16_male_members_same_last_name(families, individuals)
+
     # US17: No marriages to descendants
     # US18: Siblings should not marry
     validate_us17_no_marriages_to_descendants(families)
