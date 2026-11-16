@@ -162,7 +162,7 @@
 |      | /WifeRightGender/  |        |            |     |       |            |         |                |
 | I129 | Richard /HusbandRi |   M    | 1990-02-25 |  36 |   Y   |     NA     |    NA   |    {'F53'}     |
 |      |     ghtGender/     |        |            |     |       |            |         |                |
-| I130 |      Patricia      |   M    | 1997-11-15 |  28 |   Y   |     NA     |    NA   |    {'F53'}     |
+| I130 |      Patricia      |   M    | 1997-11-15 |  29 |   Y   |     NA     |    NA   |    {'F53'}     |
 |      | /WifeWrongGender/  |        |            |     |       |            |         |                |
 | I131 |       Alice        |   M    | 1999-05-24 |  27 |   Y   |     NA     |    NA   |       NA       |
 |      |   /RepeatedOnce/   |        |            |     |       |            |         |                |
@@ -274,6 +274,68 @@
 |      |   /PartialDates/   |        |            |     |       |            |         |                |
 | I172 |        Hugo        |   M    | 1920-03-01 |  80 |   N   | 2001-01-01 |    NA   |       NA       |
 |      |   /PartialDeath/   |        |            |     |       |            |         |                |
+| I173 |      Child173      |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I174 |      Child174      |   F    | 2001-01-01 |  25 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I175 |      Child175      |   M    | 2002-01-01 |  24 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I176 |      Child176      |   F    | 2003-01-01 |  23 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I177 |      Child177      |   M    | 2004-01-01 |  22 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I178 |      Child178      |   F    | 2005-01-01 |  21 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I179 |      Child179      |   M    | 2006-01-01 |  20 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I180 |      Child180      |   F    | 2007-01-01 |  19 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I181 |      Child181      |   M    | 2008-01-01 |  18 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I182 |      Child182      |   F    | 2009-01-01 |  17 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I183 |      Child183      |   M    | 2010-01-01 |  16 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I184 |      Child184      |   F    | 2011-01-01 |  15 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I185 |      Child185      |   M    | 2012-01-01 |  14 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I186 |      Child186      |   F    | 2013-01-01 |  13 |   Y   |     NA     | {'F68'} |       NA       |
+|      |    /US15Valid/     |        |            |     |       |            |         |                |
+| I187 |      Child187      |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I188 |      Child188      |   F    | 2001-01-01 |  25 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I189 |      Child189      |   M    | 2002-01-01 |  24 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I190 |      Child190      |   F    | 2003-01-01 |  23 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I191 |      Child191      |   M    | 2004-01-01 |  22 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I192 |      Child192      |   F    | 2005-01-01 |  21 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I193 |      Child193      |   M    | 2006-01-01 |  20 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I194 |      Child194      |   F    | 2007-01-01 |  19 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I195 |      Child195      |   M    | 2008-01-01 |  18 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I196 |      Child196      |   F    | 2009-01-01 |  17 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I197 |      Child197      |   M    | 2010-01-01 |  16 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I198 |      Child198      |   F    | 2011-01-01 |  15 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I199 |      Child199      |   M    | 2012-01-01 |  14 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I200 |      Child200      |   F    | 2013-01-01 |  13 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I201 |      Child201      |   M    | 2014-01-01 |  12 |   Y   |     NA     | {'F69'} |       NA       |
+|      |   /US15Invalid/    |        |            |     |       |            |         |                |
+| I202 |   Robert /Brown/   |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F70'}     |
+| I203 |   James /Brown/    |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F70'} |       NA       |
+| I204 |  Michael /Smith/   |   M    | 1970-01-01 |  56 |   Y   |     NA     |    NA   |    {'F71'}     |
+| I205 |  Daniel /Johnson/  |   M    | 2000-01-01 |  26 |   Y   |     NA     | {'F71'} |       NA       |
 +------+--------------------+--------+------------+-----+-------+------------+---------+----------------+
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -386,6 +448,23 @@
 |     |            |            |            |     iversary/      |         |      versary/      |              |
 | F67 | 1995-06-01 |     NA     |    I170    |       Oscar        |   I171  |        Nina        |      NA      |
 |     |            |            |            |   /PartialDates/   |         |   /PartialDates/   |              |
+| F68 |     NA     |     NA     |     NA     |         NA         |    NA   |         NA         | I173, I174,  |
+|     |            |            |            |                    |         |                    | I175, I176,  |
+|     |            |            |            |                    |         |                    | I177, I178,  |
+|     |            |            |            |                    |         |                    | I179, I180,  |
+|     |            |            |            |                    |         |                    | I181, I182,  |
+|     |            |            |            |                    |         |                    | I183, I184,  |
+|     |            |            |            |                    |         |                    |  I185, I186  |
+| F69 |     NA     |     NA     |     NA     |         NA         |    NA   |         NA         | I187, I188,  |
+|     |            |            |            |                    |         |                    | I189, I190,  |
+|     |            |            |            |                    |         |                    | I191, I192,  |
+|     |            |            |            |                    |         |                    | I193, I194,  |
+|     |            |            |            |                    |         |                    | I195, I196,  |
+|     |            |            |            |                    |         |                    | I197, I198,  |
+|     |            |            |            |                    |         |                    | I199, I200,  |
+|     |            |            |            |                    |         |                    |     I201     |
+| F70 |     NA     |     NA     |    I202    |   Robert /Brown/   |    NA   |         NA         |     I203     |
+| F71 |     NA     |     NA     |    I204    |  Michael /Smith/   |    NA   |         NA         |     I205     |
 +-----+------------+------------+------------+--------------------+---------+--------------------+--------------+
 
 +----------------------------------------+
@@ -656,8 +735,6 @@
 |  I6  |   Laura /Brown/    | 1975-11-30 |   2026-11-30  |
 | I28  | Ella /BornLateAfte | 2010-12-01 |   2026-12-01  |
 |      |     rDivorce/      |            |               |
-| I130 |      Patricia      | 1997-11-15 |   2026-11-15  |
-|      | /WifeWrongGender/  |            |               |
 | I143 |       Sophie       | 2000-12-05 |   2026-12-05  |
 |      | /UpcomingBirthday/ |            |               |
 | I161 | Peach /US24NonUniq | 1990-11-25 |   2026-11-25  |
@@ -736,6 +813,64 @@
 |    F60    |   2   |   I155   | Noah /US28Middle/  | 1994-07-20 |  32 |
 |    F60    |   3   |   I153   |        Lucy        | 2000-03-01 |  26 |
 |           |       |          |   /US28Youngest/   |            |     |
+|    F68    |   1   |   I173   |      Child173      | 2000-01-01 |  26 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   2   |   I174   |      Child174      | 2001-01-01 |  25 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   3   |   I175   |      Child175      | 2002-01-01 |  24 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   4   |   I176   |      Child176      | 2003-01-01 |  23 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   5   |   I177   |      Child177      | 2004-01-01 |  22 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   6   |   I178   |      Child178      | 2005-01-01 |  21 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   7   |   I179   |      Child179      | 2006-01-01 |  20 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   8   |   I180   |      Child180      | 2007-01-01 |  19 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   9   |   I181   |      Child181      | 2008-01-01 |  18 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   10  |   I182   |      Child182      | 2009-01-01 |  17 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   11  |   I183   |      Child183      | 2010-01-01 |  16 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   12  |   I184   |      Child184      | 2011-01-01 |  15 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   13  |   I185   |      Child185      | 2012-01-01 |  14 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F68    |   14  |   I186   |      Child186      | 2013-01-01 |  13 |
+|           |       |          |    /US15Valid/     |            |     |
+|    F69    |   1   |   I187   |      Child187      | 2000-01-01 |  26 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   2   |   I188   |      Child188      | 2001-01-01 |  25 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   3   |   I189   |      Child189      | 2002-01-01 |  24 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   4   |   I190   |      Child190      | 2003-01-01 |  23 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   5   |   I191   |      Child191      | 2004-01-01 |  22 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   6   |   I192   |      Child192      | 2005-01-01 |  21 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   7   |   I193   |      Child193      | 2006-01-01 |  20 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   8   |   I194   |      Child194      | 2007-01-01 |  19 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   9   |   I195   |      Child195      | 2008-01-01 |  18 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   10  |   I196   |      Child196      | 2009-01-01 |  17 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   11  |   I197   |      Child197      | 2010-01-01 |  16 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   12  |   I198   |      Child198      | 2011-01-01 |  15 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   13  |   I199   |      Child199      | 2012-01-01 |  14 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   14  |   I200   |      Child200      | 2013-01-01 |  13 |
+|           |       |          |   /US15Invalid/    |            |     |
+|    F69    |   15  |   I201   |      Child201      | 2014-01-01 |  12 |
+|           |       |          |   /US15Invalid/    |            |     |
 +-----------+-------+----------+--------------------+------------+-----+
 
 ERROR: INDIVIDUAL: US01: 193: I18: Death 2075-01-01 occurs in the future
@@ -763,8 +898,32 @@ ERROR: FAMILY: US12: 974: F45: Father (I93) was 80 years old when child (I95) wa
 ERROR: FAMILY: US13: 288: F10: Siblings I27 and I28 were born 122 days apart, which is not allowed
 ERROR: FAMILY: US13: 621: F30: Siblings I62 and I63 were born 121 days apart, which is not allowed
 ERROR: FAMILY: US13: 779: F37: Siblings I76 and I77 were born 182 days apart, which is not allowed
-ERROR: FAMILY: US13: 1242: F49: Siblings I112 and I113 were born 121 days apart, which is not allowed
-ERROR: FAMILY: US14: 1319: F51: 6 siblings were born on 2000-05-15; the maximum allowed is 5. Children: I121, I122, I123, I124, I125, I126
+ERROR: FAMILY: US13: 1240: F49: Siblings I112 and I113 were born 121 days apart, which is not allowed
+ERROR: FAMILY: US14: 1317: F51: 6 siblings were born on 2000-05-15; the maximum allowed is 5. Children: I121, I122, I123, I124, I125, I126
+ERROR: FAMILY: US15: 1976: F69: Family has 15 siblings; the maximum allowed is 14
+ERROR: FAMILY: US16: 293: F10: Male member (I25) has last name bornbeforemarriage, which does not match I23's last name walker
+ERROR: FAMILY: US16: 348: F11: Male member (I33) has last name bornafterparentsdied, which does not match I29's last name lewis
+ERROR: FAMILY: US16: 476: F16: Male member (I44) has last name marriedgrandmother, which does not match I42's last name clark
+ERROR: FAMILY: US16: 520: F18: Male member (I47) has last name marriedsister, which does not match I45's last name green
+ERROR: FAMILY: US16: 573: F20: Male member (I51) has last name marriedhalfsister, which does not match I49's last name king
+ERROR: FAMILY: US16: 657: F30: Male member (I62) has last name uncle, which does not match I60's last name grandpa
+ERROR: FAMILY: US16: 665: F31: Male member (I66) has last name marriedtofirstcousin, which does not match I62's last name uncle
+ERROR: FAMILY: US16: 732: F34: Male member (I70) has last name uncle, which does not match I68's last name grandpa
+ERROR: FAMILY: US16: 800: F37: Male member (I77) has last name karleebrother, which does not match I74's last name grandpa
+ERROR: FAMILY: US16: 808: F38: Male member (I79) has last name marriedtoaunt, which does not match I77's last name karleebrother
+ERROR: FAMILY: US16: 917: F42: Male member (I85) has last name validchild, which does not match I83's last name validfather
+ERROR: FAMILY: US16: 982: F45: Male member (I95) has last name tooyoungchild, which does not match I93's last name toooldfather
+ERROR: FAMILY: US16: 1249: F49: Male member (I112) has last name us13toocloseoldersibling, which does not match I110's last name us13parent
+ERROR: FAMILY: US16: 1295: F50: Male member (I117) has last name us13validsiblingtwo, which does not match I114's last name us13validsiblingparent
+ERROR: FAMILY: US16: 1365: F51: Male member (I121) has last name us14multiplebirthone, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1365: F51: Male member (I123) has last name us14multiplebirththree, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1365: F51: Male member (I125) has last name us14multiplebirthfive, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1426: F55: Male member (I137) has last name recentsurvivorchild, which does not match I135's last name recentsurvivordeceased
+ERROR: FAMILY: US16: 1433: F56: Male member (I140) has last name recentsurvivorgrandchild, which does not match I137's last name recentsurvivorchild
+ERROR: FAMILY: US16: 1512: F58: Male member (I148) has last name us33orphanchild, which does not match I146's last name us33deceasedfather
+ERROR: FAMILY: US16: 1576: F60: Male member (I154) has last name us28oldest, which does not match I151's last name us28father
+ERROR: FAMILY: US16: 1576: F60: Male member (I155) has last name us28middle, which does not match I151's last name us28father
+ERROR: FAMILY: US16: 2027: F71: Male member (I205) has last name johnson, which does not match I204's last name smith
 ERROR: FAMILY: US17: 422: F14: Husband (I37) is married to his descendant, wife (I39)
 ERROR: FAMILY: US17: 483: F17: Wife (I41) is married to her descendant, husband (I44)
 ERROR: FAMILY: US18: 528: F19: Husband (I47) and wife (I48) are siblings
@@ -784,5 +943,5 @@ ERROR: FAMILY: US21: 1209: F54: Husband (I134) is not male.
 ERROR: INDIVIDUAL: US22: 1156, 1176: I131 is not a unique individual ID.
 ERROR: INDIVIDUAL: US22: 1163, 1182, 1188: I132 is not a unique individual ID.
 ERROR: FAMILY: US22: 1170, 1208: F54 is not a unique family ID.
-ERROR: INDIVIDUAL: US23: 1585, 1591: Individuals I156 and I157 have the same first name (Bob /US23SameNameAndBday/) and birth date (2000-05-20)
-ERROR: FAMILY: US24: 1625, 1631: Families F61 and F62 share the same husband name (Mario /US24NonUniqueFamily/), wife name (Peach /US24NonUniqueFamily/), and marriage date (2024-06-01)
+ERROR: INDIVIDUAL: US23: 1583, 1589: Individuals I156 and I157 have the same first name (Bob /US23SameNameAndBday/) and birth date (2000-05-20)
+ERROR: FAMILY: US24: 1623, 1629: Families F61 and F62 share the same husband name (Mario /US24NonUniqueFamily/), wife name (Peach /US24NonUniqueFamily/), and marriage date (2024-06-01)
