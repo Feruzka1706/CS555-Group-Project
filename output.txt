@@ -898,9 +898,9 @@ ERROR: FAMILY: US12: 974: F45: Father (I93) was 80 years old when child (I95) wa
 ERROR: FAMILY: US13: 288: F10: Siblings I27 and I28 were born 122 days apart, which is not allowed
 ERROR: FAMILY: US13: 621: F30: Siblings I62 and I63 were born 121 days apart, which is not allowed
 ERROR: FAMILY: US13: 779: F37: Siblings I76 and I77 were born 182 days apart, which is not allowed
-ERROR: FAMILY: US13: 1241: F49: Siblings I112 and I113 were born 121 days apart, which is not allowed
-ERROR: FAMILY: US14: 1318: F51: 6 siblings were born on 2000-05-15; the maximum allowed is 5. Children: I121, I122, I123, I124, I125, I126
-ERROR: FAMILY: US15: 1977: F69: Family has 15 siblings; the maximum allowed is 14
+ERROR: FAMILY: US13: 1240: F49: Siblings I112 and I113 were born 121 days apart, which is not allowed
+ERROR: FAMILY: US14: 1317: F51: 6 siblings were born on 2000-05-15; the maximum allowed is 5. Children: I121, I122, I123, I124, I125, I126
+ERROR: FAMILY: US15: 1976: F69: Family has 15 siblings; the maximum allowed is 14
 ERROR: FAMILY: US16: 293: F10: Male member (I25) has last name bornbeforemarriage, which does not match I23's last name walker
 ERROR: FAMILY: US16: 348: F11: Male member (I33) has last name bornafterparentsdied, which does not match I29's last name lewis
 ERROR: FAMILY: US16: 476: F16: Male member (I44) has last name marriedgrandmother, which does not match I42's last name clark
@@ -913,17 +913,17 @@ ERROR: FAMILY: US16: 800: F37: Male member (I77) has last name karleebrother, wh
 ERROR: FAMILY: US16: 808: F38: Male member (I79) has last name marriedtoaunt, which does not match I77's last name karleebrother
 ERROR: FAMILY: US16: 917: F42: Male member (I85) has last name validchild, which does not match I83's last name validfather
 ERROR: FAMILY: US16: 982: F45: Male member (I95) has last name tooyoungchild, which does not match I93's last name toooldfather
-ERROR: FAMILY: US16: 1250: F49: Male member (I112) has last name us13toocloseoldersibling, which does not match I110's last name us13parent
-ERROR: FAMILY: US16: 1296: F50: Male member (I117) has last name us13validsiblingtwo, which does not match I114's last name us13validsiblingparent
-ERROR: FAMILY: US16: 1366: F51: Male member (I121) has last name us14multiplebirthone, which does not match I119's last name us14parent
-ERROR: FAMILY: US16: 1366: F51: Male member (I123) has last name us14multiplebirththree, which does not match I119's last name us14parent
-ERROR: FAMILY: US16: 1366: F51: Male member (I125) has last name us14multiplebirthfive, which does not match I119's last name us14parent
-ERROR: FAMILY: US16: 1427: F55: Male member (I137) has last name recentsurvivorchild, which does not match I135's last name recentsurvivordeceased
-ERROR: FAMILY: US16: 1434: F56: Male member (I140) has last name recentsurvivorgrandchild, which does not match I137's last name recentsurvivorchild
-ERROR: FAMILY: US16: 1513: F58: Male member (I148) has last name us33orphanchild, which does not match I146's last name us33deceasedfather
-ERROR: FAMILY: US16: 1577: F60: Male member (I154) has last name us28oldest, which does not match I151's last name us28father
-ERROR: FAMILY: US16: 1577: F60: Male member (I155) has last name us28middle, which does not match I151's last name us28father
-ERROR: FAMILY: US16: 2028: F71: Male member (I205) has last name johnson, which does not match I204's last name smith
+ERROR: FAMILY: US16: 1249: F49: Male member (I112) has last name us13toocloseoldersibling, which does not match I110's last name us13parent
+ERROR: FAMILY: US16: 1295: F50: Male member (I117) has last name us13validsiblingtwo, which does not match I114's last name us13validsiblingparent
+ERROR: FAMILY: US16: 1365: F51: Male member (I121) has last name us14multiplebirthone, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1365: F51: Male member (I123) has last name us14multiplebirththree, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1365: F51: Male member (I125) has last name us14multiplebirthfive, which does not match I119's last name us14parent
+ERROR: FAMILY: US16: 1426: F55: Male member (I137) has last name recentsurvivorchild, which does not match I135's last name recentsurvivordeceased
+ERROR: FAMILY: US16: 1433: F56: Male member (I140) has last name recentsurvivorgrandchild, which does not match I137's last name recentsurvivorchild
+ERROR: FAMILY: US16: 1512: F58: Male member (I148) has last name us33orphanchild, which does not match I146's last name us33deceasedfather
+ERROR: FAMILY: US16: 1576: F60: Male member (I154) has last name us28oldest, which does not match I151's last name us28father
+ERROR: FAMILY: US16: 1576: F60: Male member (I155) has last name us28middle, which does not match I151's last name us28father
+ERROR: FAMILY: US16: 2027: F71: Male member (I205) has last name johnson, which does not match I204's last name smith
 ERROR: FAMILY: US17: 422: F14: Husband (I37) is married to his descendant, wife (I39)
 ERROR: FAMILY: US17: 483: F17: Wife (I41) is married to her descendant, husband (I44)
 ERROR: FAMILY: US18: 528: F19: Husband (I47) and wife (I48) are siblings
@@ -943,5 +943,5 @@ ERROR: FAMILY: US21: 1209: F54: Husband (I134) is not male.
 ERROR: INDIVIDUAL: US22: 1156, 1176: I131 is not a unique individual ID.
 ERROR: INDIVIDUAL: US22: 1163, 1182, 1188: I132 is not a unique individual ID.
 ERROR: FAMILY: US22: 1170, 1208: F54 is not a unique family ID.
-ERROR: INDIVIDUAL: US23: 1584, 1590: Individuals I156 and I157 have the same first name (Bob /US23SameNameAndBday/) and birth date (2000-05-20)
-ERROR: FAMILY: US24: 1624, 1630: Families F61 and F62 share the same husband name (Mario /US24NonUniqueFamily/), wife name (Peach /US24NonUniqueFamily/), and marriage date (2024-06-01)
+ERROR: INDIVIDUAL: US23: 1583, 1589: Individuals I156 and I157 have the same first name (Bob /US23SameNameAndBday/) and birth date (2000-05-20)
+ERROR: FAMILY: US24: 1623, 1629: Families F61 and F62 share the same husband name (Mario /US24NonUniqueFamily/), wife name (Peach /US24NonUniqueFamily/), and marriage date (2024-06-01)
